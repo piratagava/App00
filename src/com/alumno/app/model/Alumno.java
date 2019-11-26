@@ -1,6 +1,7 @@
 package com.alumno.app.model;
 
-import java.util.Date;
+import java.sql.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,12 +11,9 @@ import javax.persistence.Transient;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="alumno")
+@Table(name="Alumno")
 public class Alumno {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id_alumno;
 
 	@Column(name="nombre")
 	private String nombre;
@@ -29,7 +27,7 @@ public class Alumno {
 	@Column(name="fechaNacimiento")
 	private Date fechaNacimiento;
 	
-	@Column(name="correoElectronico")
+	@Column(name="correoElectronico",  unique=true)
 	private String correoElectronico;
 	
 	@Column(name="edad")
@@ -38,17 +36,25 @@ public class Alumno {
 	@Column(name="ruta")
 	private String ruta;
 
+	@Column(name="ultimaModificacion")
+	private Date ultimaModificacion;
+	
 	@Transient
 	private String contenido;
+	
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private int id_alumno;
 	
 	public Alumno() {
 		
 	}
-		
-	public Alumno(int id_alumno, String nombre, String apellidoPaterno, String apellidoMaterno, Date fechaNacimiento,
-			String correoElectronico, int edad, String ruta, String contenido) {
+
+
+	public Alumno(String nombre, String apellidoPaterno, String apellidoMaterno, Date fechaNacimiento,
+			String correoElectronico, int edad, String ruta, Date ultimaModificacion, String contenido, int id_alumno) {
 		super();
-		this.id_alumno = id_alumno;
 		this.nombre = nombre;
 		this.apellidoPaterno = apellidoPaterno;
 		this.apellidoMaterno = apellidoMaterno;
@@ -56,8 +62,11 @@ public class Alumno {
 		this.correoElectronico = correoElectronico;
 		this.edad = edad;
 		this.ruta = ruta;
+		this.ultimaModificacion = ultimaModificacion;
 		this.contenido = contenido;
+		this.id_alumno = id_alumno;
 	}
+
 
 	public int getId_alumno() {
 		return id_alumno;
@@ -123,6 +132,14 @@ public class Alumno {
 		this.ruta = ruta;
 	}
 
+	public Date getUltimaModificacion() {
+		return ultimaModificacion;
+	}
+
+	public void setUltimaModificacion(Date ultimaModificacion) {
+		this.ultimaModificacion = ultimaModificacion;
+	}
+
 	public String getContenido() {
 		return contenido;
 	}
@@ -130,5 +147,7 @@ public class Alumno {
 	public void setContenido(String contenido) {
 		this.contenido = contenido;
 	}
+		
+	
 
 }
