@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+        <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    </head>
+    <body>
+        <!--Página Principal-->
+        <div data-role="page" id="principal">
+            
+            <!--Menú Lateral Principal-->
+            <nav data-role="panel" id="menu" data-display="overlay">
+                <h2>Menú Principal</h2>
+                <ul data-role="listview">
+                    <li data-role="list-divider">Alumnos</li>
+                    <li><a href="#registrar_alumno">Dar de alta Alumno</a></li>
+                    <li><a href="#registrar_alumno_materia" id="alumno_materia">Asignar Materia</a></li>
+                    <li data-role="list-divider">Materias</li>
+                    <li><a href="#registrar_materia">Registrar Materia</a></li>
+                    <li><a>Editar Materia</a></li>
+                </ul>
+            </nav>
+            
+            <!--Encabezado-->
+            <header data-role="header" data-theme="b">
+                <a href="#menu" data-icon="bars" data-iconpos="notext"> </a>
+                <h1>APP00</h1>
+            </header>    
+            
+            <!--Contenido-->
+            <main data-role="content">
+            </main>
+
+
+            <!--Pie de página-->
+            <footer style="text-align:center" data-role="footer" data-theme="b" data-position="fixed" >
+                <small>2019 &copy; PMXGROUP </small>
+                <br />
+                <small>Todos los derechos reservados.</small>
+            </footer>
+        </div>
+        
+        <!--Página registar materia-->
+        <div data-role="page" id="registrar_materia">
+            <!--Encabezado-->
+            <header data-role="header" data-theme="b">
+                <a href="#principal" data-icon="back" data-iconpos="notext"> </a>
+                <h1>APP00</h1>
+            </header>
+
+            <!--Contenido-->
+            <section data-role="content">
+                <form data-ajax="false">
+                    <label>Nombre de la materia:</label>
+                    <input type="text" id="iptMateria" required="required"/>
+                    <label>Número máximo ocupación</label>
+                    <input type="number" id="iptNumMaxCupo" required="required"/>
+                    <input data-icon="edit" data-theme="b" type="button" id="btnGuardarMateria" value="Guardar">
+                </form>
+            </section>    
+        </div>
+
+        <!--Página alumno-materia -->
+        <div data-role="page" id="registrar_alumno_materia">
+            <!--Encabezado-->
+            <header data-role="header" data-theme="b">
+                <a href="#principal" data-icon="back" data-iconpos="notext"> </a>
+                <h1>APP00</h1>
+            </header>
+
+            <section data-role="content">
+                    <label> Seleccione el alumno:</label>
+                    <select id="comboAlumnos">                                        
+                    </select>
+
+                    <form id="fieldMaterias">
+                    </form>
+            </section>
+        </div>
+
+
+        <!--Página registrar alumno-->
+        <div data-role="page" id="registrar_alumno">
+            <!--Encabezado-->
+            <header data-role="header" data-theme="b">
+                <a href="#principal" data-icon="back" data-iconpos="notext"> </a>
+                <h1>APP00</h1>
+            </header>
+
+            <!--Contenido-->
+            <section data-role="content">
+                <div class="ui-grid-a">
+                    <form class="ui-block-a" data-ajax="false" autocomplete="on">                    
+                        <label> Nombre: </label>
+                        <input id="iptNombre" type="text" placeholder="Nombre del alumno" required="required"/>
+                    
+                        <label> Apellido Paterno:</label>
+                        <input id="iptApellido1" type="text" placeholder="Primer apellido" required="required"/>
+                    
+                        <label> Apellido Materno:</label>
+                        <input id="iptApellido2" type="text" placeholder="Segundo apellido" required="required"/>
+                    
+                        <label> Fecha de Nacimiento:</label>
+                        <input id="iptFechaNacimiento" type="date" required="required"/>
+                    
+                        <label> Correo Electrónico:</label>
+                        <input id="iptCorreo" type="email" required="required"/>
+                    
+                        <label> Edad: </label>
+                        <input id="iptEdad" type="text" readonly/>
+
+                        <input id="iptFoto" type="file" accept="image/jpeg" required="required" />
+                        <input id="btnGuardar" type="button" data-theme="b" data-icon="check" value="Guardar"/>
+                    </form>
+                    <aside id="divLienzo" class="ui-block-b"> 
+                        <img width="100%" src=".."/>    
+                    </aside>        
+                    </div>                
+            </section>
+        </div>
+    <script>
+    'use strict'
+
+    window.addEventListener('load', () => {
+        //
+        let entradaFoto = document.querySelector('#iptFoto');
+        entradaFoto.addEventListener('change', desplegarFoto);
+        
+        //
+        let accionGuardar = document.querySelector("#btnGuardar");  
+        accionGuardar.addEventListener('click', () => {
+            capturarDatos();
+        });
+        
+        //
+        let accionEdad = document.querySelector("#iptFechaNacimiento");    
+        accionEdad.addEventListener("blur", () => {
+            let fechaNacimiento = document.getElementById("iptFechaNacimiento").value;
+            let edad = new Date().getFullYear() - new Date(fechaNacimiento).getFullYear();
+                document.getElementById("iptEdad").value = edad;
+        });
+
+        //
+        let accionGuardarMateria = document.querySelector("#btnGuardarMateria");
+        accionGuardarMateria.addEventListener('click',capturarDatosMateria);
+
+        //
+        let paginaAlumnoMateria = document.querySelector("#alumno_materia");
+        paginaAlumnoMateria.addEventListener('click', ()=>{
+            recibirDatosMaterias("listarMateria");
+            recibirDatosAlumnos("listarAlumno");
+        });
+
+        //
+        let alumnoSeleccionado = document.querySelector("#comboAlumnos");
+        alumnoSeleccionado.addEventListener('change', () => {
+            let id_alumno = alumnoSeleccionado.value;
+            buscarAlumnoMateria("consultarAlumno/"+id_alumno);
+        });
+
+    });
+
+    //recibirDatosAlumnos
+    let recibirDatosAlumnos = (ruta) => {
+        fetch(ruta, {
+            method : 'GET',
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        }).
+        then(respuesta => {
+            return respuesta.json();
+        }).
+        then(data => {
+            desplegarAlumnos(data);
+        }).
+        catch(error => {
+            alert(error);
+        });
+    }
+
+    //despl}egarAlumnos
+    let desplegarAlumnos = (lstAlumnos) => {
+        /**
+        * Desplegará los alumnos que esten registrados en un componente combox.
+        */
+        let otnAlumno = ``;
+        
+        lstAlumnos.forEach(alumno => {
+            let nombreCompleto = alumno.nombre + " " + alumno.apellidoPaterno + " " + alumno.apellidoMaterno;
+            otnAlumno += `<option value="${alumno.id_alumno}">${nombreCompleto}</option>`
+        });
+
+        let sltAlumnos = `<select>${otnAlumno}</select>`;
+        let comboAlumnos = document.querySelector("#comboAlumnos");
+        comboAlumnos.innerHTML = sltAlumnos;
+    }
+
+    //buscarAlumnoMateria
+    let buscarAlumnoMateria = (ruta) => {
+        /**
+        * Busca las materias las cuales esten asociadas al alumno.
+        * Si no tiene asociada materias, el sistema deberá regresar una lista vacia.
+        */
+        fetch(ruta, {
+            method : 'GET',
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        }).
+        then(respuesta => {
+            return respuesta.json();
+        }).
+        then((data) => {
+            desplegarAlumnoMaterias(data);
+        }).
+        catch(error => {
+            alert(error);
+        });
+    }
+
+    //desplegarMaterias
+    let desplegarMaterias = (lstMaterias) => {
+        /**
+        * Desplegará las materias que esten registrados en un componenye
+        */
+        
+        let iptMaterias = ``;
+        let fieldMaterias = document.querySelector("#fieldMaterias");
+        lstMaterias.forEach((materia) => {
+            iptMaterias += `
+            <input type="checkbox" name=${materia.nombre} id=${materia.id_materia} />
+            <label for=${materia.id_materia}>${materia.nombre}</label> `
+        });
+        
+        let fdtMaterias = `
+            <fieldset data-role="controlgroup" >
+            <legend>Seleccione la materia:</legend>
+            ${iptMaterias}
+        `
+        
+        fieldMaterias.innerHTML = fdtMaterias;
+        $("#fieldMaterias").trigger("create");
+    }
+
+    //recibirDatosMateria
+    let recibirDatosMaterias = (ruta) => {
+        /**
+        * 
+        */
+        fetch(ruta, {
+            method : 'GET',
+        // mode : "no-cors",
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        }).
+        then(respuesta => {
+            return respuesta.json();
+        }).then ((data) => {
+            desplegarMaterias(data);
+        }).
+        catch(error => {
+            alert(error);
+        });
+    }
+
+    //desplegarDatosMaterias
+    let desplegarAlumnoMaterias = (lstAlumnoMaterias) => {
+        /**
+        * 
+        */
+        let fieldMaterias = document.querySelector("#fieldMaterias");
+        let w = fieldMaterias.getElementsByTagName('input');
+
+        for (let i=0; i < w.length; i ++) {
+            console.log(w[i])
+            delete w[i].checked
+            delete w[i].disabled
+            console.log(w[i])
+        }
+        $("#fieldMaterias").trigger("create");
+
+        if (lstAlumnoMaterias.length > 0 ) {
+            lstAlumnoMaterias.forEach(alumnoMateria => {
+                let idMateria = alumnoMateria.id_materia;
+                let input = document.getElementById(idMateria);
+                input.setAttribute("checked", "checked")
+                input.setAttribute("disabled", "disabled");
+                
+                $("#fieldMaterias").trigger("create");
+            });
+        } else {
+            alert("EL alumno aun no tiene materias asociadas.")
+        }
+    } 
+
+    //caputurarDatosMateria
+    let capturarDatosMateria = () => {
+        /**
+        * Captura los datos de las materia y confirma que al menos hayan sido capturados los datos.
+        */
+        let nombre = document.getElementById("iptMateria").value;
+        let numMaxCupo = document.getElementById("iptNumMaxCupo").value;
+        let materia = {
+            "nombre" : nombre,
+            "numMaxCupo" : numMaxCupo
+        }
+
+        let valido = validarDatosMateria(materia);
+            
+        if (valido === 1 ) {
+            enviarDatosMateria("agregarMateria", materia);
+        } else {
+            alert("Capture todos los campos.")
+        }
+
+    }
+
+    //capturarDatos
+    let capturarDatos = () => {
+        /**
+        * Captura los datos de los alumno, y valida que al menos hayan sido capturados los datos.
+        */
+        let nombre = document.getElementById("iptNombre").value;
+        let apellidoPaterno = document.getElementById("iptApellido1").value;
+        let apellidoMaterno = document.getElementById("iptApellido2").value;
+        let fechaNacimiento = document.getElementById("iptFechaNacimiento").value;
+        let correoElectronico = document.getElementById("iptCorreo").value;
+        
+
+        let lector = new FileReader();
+        let entradaFoto = document.querySelector('#iptFoto');
+        let archivo = entradaFoto.files;
+        let blob = new Blob(archivo, {type : 'image/jpeg'})
+        
+        lector.readAsBinaryString(blob);
+        lector.onload = () => {
+            let jpge64 = window.btoa(lector.result);
+            
+            let alumno = {
+                "nombre" : nombre,
+                "apellidoPaterno" : apellidoPaterno,
+                "apellidoMaterno" : apellidoMaterno,
+                "fechaNacimiento" : new Date(fechaNacimiento),
+                "correoElectronico" : correoElectronico,
+                "contenido" : jpge64
+            }
+
+            let valido = validarDatos(alumno);
+            
+            if (valido === 1 ) {
+                enviarDatos("agregarAlumno", alumno);
+            } else {
+                alert("Capture todos los campos.")
+            }
+        };
+    }
+
+    let validarDatosMateria = (materia) => {
+        /**
+        * Valida que los datos de la materia no esten vacios.
+        */
+        let valido = 4;
+
+        if (materia["nombre"].length > 0) valido >>= 1;
+        if (materia["numMaxCupo"].length > 0) valido >>= 1;
+
+        console.log(valido);
+        return valido;
+    }
+
+    let validarDatos = (alumno) => {
+        /**
+        * Valida que los datos del alumno no esten vacios.
+        */
+        let valido = 32;
+
+        if (alumno["nombre"].length > 0 ) valido >>= 1; 
+        if (alumno["apellidoPaterno"].length > 0) valido >>= 1;
+        if (alumno["apellidoMaterno"].length > 0) valido >>= 1;
+        if (alumno["fechaNacimiento"].length > 0 ) {    
+            alert(alumno["fechaNacimiento"]);
+            valido >>= 1 ;
+        }
+        if (alumno["correoElectronico"].length > 0) valido >>= 1;
+        if (alumno["contenido"].length > 0) valido >>= 1;
+        console.log(valido);
+
+        return valido;
+    }
+
+    let enviarDatosMateria = (ruta,datosMateria) => {
+        /**
+        * Envia un objecto json al servidor con los datos de la materia.
+        */
+        fetch(ruta, {
+            method : "POST",
+            body : JSON.stringify(datosMateria),
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        }).
+        then(respuesta => alert(respuesta.status)).
+        catch(error => alert(error));
+    } 
+
+    let enviarDatos = (ruta, datosAlumno) => {
+        /**
+        * Envia un objecto json al servidor con los datos del alumno.
+        */
+        console.log(datosAlumno)
+        fetch(ruta, {
+            method : 'POST',
+            body : JSON.stringify(datosAlumno),
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        }).
+        then(respuesta => alert(respuesta.status)).
+        catch(error => alert(error));
+    }
+
+    let desplegarFoto = () => {
+        /**
+        * Despliega la foto de alumno una vez haya sido seleccionada.
+        */
+        let entradaFoto = document.querySelector('#iptFoto');
+        let lienzo = document.querySelector("#divLienzo");
+        while (lienzo.firstChild) {
+            lienzo.removeChild(lienzo.firstChild);
+        }
+
+        /**
+        * Contiene la información de todos los archivos seleccionado
+        */
+        let archivo = entradaFoto.files;    
+        let foto = document.createElement('img');
+        foto.setAttribute("width", "100%");
+        foto.src = URL.createObjectURL(archivo[0]);
+        lienzo.appendChild(foto);
+    }
+    </script>  
+    </body>
+</html>

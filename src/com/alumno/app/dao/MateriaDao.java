@@ -11,4 +11,5 @@ public interface MateriaDao {
 	public void crearMateria(Materia materia);
 
 	public List<Materia> getAllMateria();
+
 }

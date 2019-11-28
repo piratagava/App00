@@ -6,8 +6,8 @@ import com.alumno.app.model.Alumno;
 
 public interface AlumnoBo {
 
+	//metodo que crea alumno
 	public void crearAlumno(Alumno alumno);
-	
+	//creando lista para obtener todos los alumnos
 	public List<Alumno> getAllAlumnos();
-	
 }

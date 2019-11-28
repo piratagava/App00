@@ -30,5 +30,4 @@ public class AlumnoDaoImpl implements AlumnoDao {
 		Session session = entity.unwrap(Session.class);
 		return session.createQuery("from Alumno").list();	
 	}
-
 }

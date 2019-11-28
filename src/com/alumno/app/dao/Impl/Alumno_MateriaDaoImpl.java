@@ -22,10 +22,18 @@ public class Alumno_MateriaDaoImpl implements Alumno_MateriaDao{
 		entity.persist(alumno_materia);
 	}
 	
+	
 	@SuppressWarnings("unchecked")
 	public List<AlumnoMateria> getAllAlumnos_Materias() {
 		Session session = entity.unwrap(Session.class);
 		return session.createQuery("from AlumnoMateria").list();
+	}
+
+	//consulta especifica para obtener las materias del alumno que tiene asociado  
+	@SuppressWarnings("unchecked")
+	public List<AlumnoMateria> getIDAllAlumnosMAterias(int id_alumno) {
+		Session session = entity.unwrap(Session.class);
+		return session.createQuery("from AlumnoMateria where id_alumno="+id_alumno).list();
 	}
 
 }
