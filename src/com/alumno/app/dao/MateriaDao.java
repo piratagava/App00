@@ -20,7 +20,7 @@ public interface MateriaDao {
 	public List<Materia> ObtieneMateriasOcupadasPorAlumno();
 	
 	//regresa lista consultada por id
-	public List<Materia> consultarMateria(int id_materia);
+	public Materia consultarMateria(int id_materia);
 	
 	//metodo que permite la actualizacion de datos
 	public void actualizar(Materia materia);

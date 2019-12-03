@@ -44,16 +44,16 @@ public class controladorMateria {
 			return false;
 		}
 	}
-	
-	//metodo que actualiza el registro materia por objeto que llega del json
-	@RequestMapping(value = "/actualizarMateria" , method = RequestMethod.POST)
+
+	// metodo que actualiza el registro materia por objeto que llega del json
+	@RequestMapping(value = "/actualizarMateria", method = RequestMethod.POST)
 	public @ResponseBody Boolean actualizarMateria(@RequestBody Materia materia) {
 		try {
 			materiaBo.actualizar(materia);
 			return true;
 		} catch (Exception e) {
 			e.getMessage();
-			return false;			
+			return false;
 		}
 	}
 
@@ -71,18 +71,18 @@ public class controladorMateria {
 		return lista;
 	}
 
-	// regresa lista de acuerdo con join de id_alumno y id_materia que tengan los alumnos con materias en status 0
+	// regresa lista de acuerdo con join de id_alumno y id_materia que tengan los
+	// alumnos con materias en status 0
 	@RequestMapping(value = "/listarCupoMaximoPorAlumno", method = RequestMethod.GET)
 	public @ResponseBody List<Materia> numMaxCupoPorAlumno() {
 		List<Materia> lista = materiaBo.ObtieneMateriasOcupadasPorAlumno();
 		return lista;
 	}
-	
-	//regresa el registro de la materia seleccionada especificamente
-	@RequestMapping(value="/listarConsultaMateria",method = RequestMethod.GET)
-	public @ResponseBody List<Materia> consultaMateria(@PathVariable int id_materia){
-		List<Materia> lista= materiaBo.consultarMateria(id_materia);		
-		return lista;
-		
+
+	// regresa el registro de la materia seleccionada especificamente
+	@RequestMapping(value = "/listarConsultaMateria/{id_materia}", method = RequestMethod.GET)
+	public @ResponseBody Materia consultaMaterias(@PathVariable int id_materia) {
+		return materiaBo.consultarMateria(id_materia);
 	}
+
 }

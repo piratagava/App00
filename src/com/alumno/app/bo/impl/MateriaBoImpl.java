@@ -42,7 +42,7 @@ public class MateriaBoImpl implements MateriaBo {
 	}
 
 	@Override
-	public List<Materia> consultarMateria(int id_materia) {
+	public Materia consultarMateria(int id_materia) {
 		return dao.consultarMateria(id_materia);
 	}
 
