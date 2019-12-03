@@ -14,5 +14,5 @@ public interface MateriaDao {
 	
 	//consulta por todos 0
 	public List<Materia> ObtieneMateriasOcupadas();
- 
+	public List<Materia> ObtieneMateriasOcupadasPorAlumno();
 }

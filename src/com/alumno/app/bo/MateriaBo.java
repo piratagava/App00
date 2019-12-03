@@ -13,4 +13,5 @@ public interface MateriaBo {
 	public List<Materia> getAllMateria();
 
 	public List<Materia> ObtieneMateriasOcupadas();
+	public List<Materia> ObtieneMateriasOcupadasPorAlumno();
 }

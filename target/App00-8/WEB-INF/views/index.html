@@ -173,15 +173,16 @@
             recibirDatosMaterias("listarMateria");
         	let materias = JSON.parse(m);
         	
+        	let id_alumno = alumnoSeleccionado.value
         	//limpiar el fieldset :P
         	desplegarMaterias(materias);	
-            //buscarMateriasOcupadas("listarCupoMaximos")
-        	buscarAlumnoMateria("consultarAlumno/"+id_alumno);
+            buscarMateriasOcupadas("listarCupoMaximoPorAlumno", id_alumno)
+            if (id_alumno > 0)	buscarAlumnoMateria("consultarAlumno/"+id_alumno);
         });
     });
     
 
-    let buscarMateriasOcupadas = (ruta) => {
+    let buscarMateriasOcupadas = (ruta, id_alumno) => {
         fetch(ruta, {
             method: "GET",
             headers : {
@@ -193,14 +194,15 @@
         }). 
         then( data => {
             
-            data.forEach(materia => {
-                let idMateria = materia.id_materia;
-                let input = document.getElementById(idMateria);
-                input.removeAttribute("checked");
-                input.setAttribute("disabled","disabled");
+        	 
+            data.forEach(alumnoMateria => {
+               	if (id_alumno !=  alumnoMateria[1]) {
+               		let input = document.getElementById(alumnoMateria[0]);
+               		input.setAttribute("disabled","disabled");
+               	}
             });
             
-            $("#fieldMaterias").trigger("create");
+            //$("#fieldMaterias").trigger("create");
         })
         .catch( error => alert(error));
     }
@@ -273,8 +275,8 @@
        		AlumnoMaterias.push(alumnoMateria);	
        }
        
-       console.log("CLIENTE ENVIA-> " + AlumnoMaterias)
-       enviarDatosAlumnoMateria("agregarAlumnoMateria", AlumnoMaterias);
+       if (id_alumno == 0) alert("Aun no se ha seleccionado el alumno.");
+       else enviarDatosAlumnoMateria("agregarAlumnoMateria", AlumnoMaterias);
     }
 
     //enviarDatosAlumnoMateria
@@ -291,13 +293,15 @@
             return respuesta.json();                    	
         }). 
         then( data => {
-        	console.log(data);
-            if (data.length <= 0) alert("Se han actualizado las materias del alumno.")
-            data.forEach(materia => {
-                alert("La " + materia.nombre + " ha exedido el número de cupos.");
-            });
+        	//console.log(data);
+            //if (data.length <= 0) 
+            	alert("Se han actualizado las materias del alumno.")
             
-            $("#fieldMaterias").trigger("create");
+            //data.forEach(materia => {
+            //    alert("La " + materia.nombre + " ha exedido el número de cupos.");
+            //});
+            //location.reload("/");
+            //$("#fieldMaterias").trigger("create");
         })
         .catch( error => alert(error));
     }

@@ -57,4 +57,11 @@ public class controladorMateria {
 			return false;
 		}
 	}
+	
+	// regresa lista de todas las materias
+	@RequestMapping(value = "/listarCupoMaximoPorAlumno", method = RequestMethod.GET)
+	public @ResponseBody List<Materia> numMaxCupoPorAlumno() {
+		List<Materia> lista = materiaBo.ObtieneMateriasOcupadasPorAlumno();
+		return lista;
+	}
 }

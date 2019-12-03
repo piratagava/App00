@@ -36,5 +36,8 @@ public class MateriaBoImpl implements MateriaBo {
 		return dao.ObtieneMateriasOcupadas();
 	}
 	
-	
+	@Override
+	public List<Materia> ObtieneMateriasOcupadasPorAlumno() {
+		return dao.ObtieneMateriasOcupadasPorAlumno();
+	}
 }
