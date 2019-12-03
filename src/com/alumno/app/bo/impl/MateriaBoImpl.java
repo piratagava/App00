@@ -40,4 +40,14 @@ public class MateriaBoImpl implements MateriaBo {
 	public List<Materia> ObtieneMateriasOcupadasPorAlumno() {
 		return dao.ObtieneMateriasOcupadasPorAlumno();
 	}
+
+	@Override
+	public List<Materia> consultarMateria(int id_materia) {
+		return dao.consultarMateria(id_materia);
+	}
+
+	@Override
+	public void actualizar(Materia materia) {
+		dao.actualizar(materia);
+	}
 }

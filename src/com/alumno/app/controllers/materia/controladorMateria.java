@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,20 +21,6 @@ public class controladorMateria {
 	private MateriaBo materiaBo;
 
 	private ModelAndView mav = new ModelAndView();
-
-	// regresa lista de todas las materias
-	@RequestMapping(value = "/listarMateria", method = RequestMethod.GET)
-	public @ResponseBody List<Materia> muestraMaterias() {
-		List<Materia> lista = materiaBo.getAllMateria();
-		return lista;
-	}
-
-	// regresa lista de todas las materias
-	@RequestMapping(value = "/listarCupoMaximos", method = RequestMethod.GET)
-	public @ResponseBody List<Materia> numMaxCupo() {
-		List<Materia> lista = materiaBo.ObtieneMateriasOcupadas();
-		return lista;
-	}
 
 	// prepara la vista index para agregar nuevo objeto de tipo materia
 	@RequestMapping(value = "/agregarMateria", method = RequestMethod.GET)
@@ -58,10 +45,44 @@ public class controladorMateria {
 		}
 	}
 	
-	// regresa lista de todas las materias
+	//metodo que actualiza el registro materia por objeto que llega del json
+	@RequestMapping(value = "/actualizarMateria" , method = RequestMethod.POST)
+	public @ResponseBody Boolean actualizarMateria(@RequestBody Materia materia) {
+		try {
+			materiaBo.actualizar(materia);
+			return true;
+		} catch (Exception e) {
+			e.getMessage();
+			return false;			
+		}
+	}
+
+	// consulta lista que obtiene todos los registros de la materia
+	@RequestMapping(value = "/listarMateria", method = RequestMethod.GET)
+	public @ResponseBody List<Materia> muestraMaterias() {
+		List<Materia> lista = materiaBo.getAllMateria();
+		return lista;
+	}
+
+	// regresa lista de todas las materias que estan en 0
+	@RequestMapping(value = "/listarCupoMaximos", method = RequestMethod.GET)
+	public @ResponseBody List<Materia> numMaxCupo() {
+		List<Materia> lista = materiaBo.ObtieneMateriasOcupadas();
+		return lista;
+	}
+
+	// regresa lista de acuerdo con join de id_alumno y id_materia que tengan los alumnos con materias en status 0
 	@RequestMapping(value = "/listarCupoMaximoPorAlumno", method = RequestMethod.GET)
 	public @ResponseBody List<Materia> numMaxCupoPorAlumno() {
 		List<Materia> lista = materiaBo.ObtieneMateriasOcupadasPorAlumno();
 		return lista;
+	}
+	
+	//regresa el registro de la materia seleccionada especificamente
+	@RequestMapping(value="/listarConsultaMateria",method = RequestMethod.GET)
+	public @ResponseBody List<Materia> consultaMateria(@PathVariable int id_materia){
+		List<Materia> lista= materiaBo.consultarMateria(id_materia);		
+		return lista;
+		
 	}
 }

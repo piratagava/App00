@@ -9,9 +9,16 @@ public interface MateriaBo {
 
 	// crea materia.
 	public void crearMateria(Materia materia);
-	//lista que regresa todos los registros de la tabla de la BD.
+
+	// lista que regresa todos los registros de la tabla de la BD.
 	public List<Materia> getAllMateria();
 
 	public List<Materia> ObtieneMateriasOcupadas();
+
 	public List<Materia> ObtieneMateriasOcupadasPorAlumno();
+	
+	public List<Materia> consultarMateria(int id_materia);
+	
+	//metodo que permite la actualizacion de datos
+	public void actualizar(Materia materia);
 }
