@@ -31,4 +31,10 @@ public class MateriaBoImpl implements MateriaBo {
 		return dao.getAllMateria();
 	}
 
+	@Override
+	public List<Materia> ObtieneMateriasOcupadas() {
+		return dao.ObtieneMateriasOcupadas();
+	}
+	
+	
 }

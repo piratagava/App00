@@ -17,6 +17,7 @@ public class MateriaDaoImpl implements MateriaDao {
 	
 	@Override
 	public void crearMateria(Materia materia) {
+		
 		entity.persist(materia);
 	}
 
@@ -24,6 +25,12 @@ public class MateriaDaoImpl implements MateriaDao {
 	public List<Materia> getAllMateria() {
 		Session session = entity.unwrap(Session.class);		
 		return session.createQuery("from Materia").list();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Materia> ObtieneMateriasOcupadas() {
+		Session session = entity.unwrap(Session.class);
+		return session.createQuery("from Materia where numMaxCupo=0").list();
 	}
 
 }

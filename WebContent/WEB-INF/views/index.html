@@ -7,27 +7,27 @@
         <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
         <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
     </head>
+
     <body>
         <!--Página Principal-->
         <div data-role="page" id="principal">
             
             <!--Menú Lateral Principal-->
             <nav data-role="panel" id="menu" data-display="overlay">
-                <h2>Menú Principal</h2>
+                <h2>Men&uacute Principal</h2>
                 <ul data-role="listview">
                     <li data-role="list-divider">Alumnos</li>
                     <li><a href="#registrar_alumno">Dar de alta Alumno</a></li>
-                    <li><a href="#registrar_alumno_materia" id="alumno_materia">Asignar Materia</a></li>
+                    <li><a href="#registrar_alumno_materia" id="registrar_alumno_materia">Asignar Materias</a></li>
                     <li data-role="list-divider">Materias</li>
                     <li><a href="#registrar_materia">Registrar Materia</a></li>
-                    <li><a>Editar Materia</a></li>
                 </ul>
             </nav>
             
             <!--Encabezado-->
             <header data-role="header" data-theme="b">
                 <a href="#menu" data-icon="bars" data-iconpos="notext"> </a>
-                <h1>APP00</h1>
+                <h1>APP ID-00</h1>
             </header>    
             
             <!--Contenido-->
@@ -37,9 +37,9 @@
 
             <!--Pie de página-->
             <footer style="text-align:center" data-role="footer" data-theme="b" data-position="fixed" >
-                <small>2019 &copy; PMXGROUP </small>
+                <small>2019 &copy; APP'S </small>
                 <br />
-                <small>Todos los derechos reservados.</small>
+                <small>Application.</small>
             </footer>
         </div>
         
@@ -48,31 +48,31 @@
             <!--Encabezado-->
             <header data-role="header" data-theme="b">
                 <a href="#principal" data-icon="back" data-iconpos="notext"> </a>
-                <h1>APP00</h1>
+                <h1>APP ID-00</h1>
             </header>
 
             <!--Contenido-->
             <section data-role="content">
                 <form data-ajax="false">
-                    <label>Nombre de la materia:</label>
-                    <input type="text" id="iptMateria" required="required"/>
-                    <label>Número máximo ocupación</label>
-                    <input type="number" id="iptNumMaxCupo" required="required"/>
+                    <label>Nombre de la Materia:</label>
+                    <input type="text" id="iptMateria" required="required" pattern="^[A-Za-z0-9\sÁÉÍÓÚÑáéíóúñ]{1,99}$"/>
+                    <label>N&uacutemero de Cupos M&aacuteximo</label>
+                    <input type="number" id="iptNumMaxCupo" required="required" max="99" min="1" pattern="^[0-9]{1,2}$"/>
                     <input data-icon="edit" data-theme="b" type="button" id="btnGuardarMateria" value="Guardar">
                 </form>
             </section>    
         </div>
 
         <!--Página alumno-materia -->
-        <div data-role="page" id="registrar_alumno_materia">
+        <div data-role="page" id="registrar_alumno_materia" data-dom-cache="false">
             <!--Encabezado-->
             <header data-role="header" data-theme="b">
                 <a href="#principal" data-icon="back" data-iconpos="notext"> </a>
-                <h1>APP00</h1>
+                <h1>APP ID-00</h1>
             </header>
 
             <section data-role="content">
-                    <label> Seleccione el alumno:</label>
+                    <label> Seleccione el Alumno:</label>
                     <select id="comboAlumnos">                                        
                     </select>
 
@@ -87,7 +87,7 @@
             <!--Encabezado-->
             <header data-role="header" data-theme="b">
                 <a href="#principal" data-icon="back" data-iconpos="notext"> </a>
-                <h1>APP00</h1>
+                <h1>APP ID-00</h1>
             </header>
 
             <!--Contenido-->
@@ -95,28 +95,29 @@
                 <div class="ui-grid-a">
                     <form class="ui-block-a" data-ajax="false" autocomplete="on">                    
                         <label> Nombre: </label>
-                        <input id="iptNombre" type="text" placeholder="Nombre del alumno" required="required"/>
+                        <input id="iptNombre" type="text" placeholder="Nombre del alumno" required="required" pattern="^[A-Za-z0-9\sÁÉÍÓÚÑáéíóúñ]{1,99}$"/>
                     
                         <label> Apellido Paterno:</label>
-                        <input id="iptApellido1" type="text" placeholder="Primer apellido" required="required"/>
+                        <input id="iptApellido1" type="text" placeholder="Primer apellido" required="required" pattern="^[A-Za-z0-9\sÁÉÍÓÚÑáéíóúñ]{1,99}$"/>
                     
                         <label> Apellido Materno:</label>
-                        <input id="iptApellido2" type="text" placeholder="Segundo apellido" required="required"/>
+                        <input id="iptApellido2" type="text" placeholder="Segundo apellido" required="required" pattern="^[A-Za-z0-9\sÁÉÍÓÚÑáéíóúñ]{1,99}$"/>
                     
                         <label> Fecha de Nacimiento:</label>
-                        <input id="iptFechaNacimiento" type="date" required="required"/>
+                        <input id="iptFechaNacimiento" type="date" required="required" min="1900-01-01"/>
                     
-                        <label> Correo Electrónico:</label>
-                        <input id="iptCorreo" type="email" required="required"/>
+                        <label> Correo Electr&oacutenico:</label>
+                        <input id="iptCorreo" type="email" required="required" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"/>
                     
                         <label> Edad: </label>
                         <input id="iptEdad" type="text" readonly/>
-
+						
+						<label> Subir foto del alumno:</label>
                         <input id="iptFoto" type="file" accept="image/jpeg" required="required" />
                         <input id="btnGuardar" type="button" data-theme="b" data-icon="check" value="Guardar"/>
                     </form>
                     <aside id="divLienzo" class="ui-block-b"> 
-                        <img width="100%" src=".."/>    
+                        <img width="100%" />    
                     </aside>        
                     </div>                
             </section>
@@ -130,17 +131,21 @@
         entradaFoto.addEventListener('change', desplegarFoto);
         
         //
-        let accionGuardar = document.querySelector("#btnGuardar");  
-        accionGuardar.addEventListener('click', () => {
-            capturarDatos();
-        });
+        let accionGuardar = document.querySelector("#btnGuardar");   	 	
+        accionGuardar.addEventListener('click', capturarDatosAlumno);
         
-        //
+        //evento el cual se dispara cuando el input de la fecha de nacimiento pierde el focus.
         let accionEdad = document.querySelector("#iptFechaNacimiento");    
         accionEdad.addEventListener("blur", () => {
-            let fechaNacimiento = document.getElementById("iptFechaNacimiento").value;
-            let edad = new Date().getFullYear() - new Date(fechaNacimiento).getFullYear();
-                document.getElementById("iptEdad").value = edad;
+            let _fechaNacimiento = document.getElementById("iptFechaNacimiento").value;
+            let fechaNacimiento = new Date(_fechaNacimiento)
+            let edad = calcularEdad(fechaNacimiento);
+            if (edad <= 0 || isNaN(fechaNacimiento.getFullYear())) {
+                alert("La fecha de nacimiento no puede ser mayor o igual al año actual.")
+                document.getElementById("iptEdad").value = 0;
+            } else {
+                document.getElementById("iptEdad").value = edad  + " Años.";
+            }
         });
 
         //
@@ -148,21 +153,153 @@
         accionGuardarMateria.addEventListener('click',capturarDatosMateria);
 
         //
-        let paginaAlumnoMateria = document.querySelector("#alumno_materia");
+        let paginaAlumnoMateria = document.querySelector("#registrar_alumno_materia");
         paginaAlumnoMateria.addEventListener('click', ()=>{
             recibirDatosMaterias("listarMateria");
-            recibirDatosAlumnos("listarAlumno");
+            recibirDatosAlumnos("listarAlumno");        
+            let id_alumno = alumnoSeleccionado.value;
+            
         });
 
         //
         let alumnoSeleccionado = document.querySelector("#comboAlumnos");
         alumnoSeleccionado.addEventListener('change', () => {
-            let id_alumno = alumnoSeleccionado.value;
-            buscarAlumnoMateria("consultarAlumno/"+id_alumno);
+            
+            let m = localStorage.getItem("Materias")
+            recibirDatosMaterias("listarMateria");
+        	let materias = JSON.parse(m);
+        	
+        	//limpiar el fieldset :P
+        	desplegarMaterias(materias);	
+            //buscarMateriasOcupadas("listarCupoMaximos")
+        	buscarAlumnoMateria("consultarAlumno/"+id_alumno);
         });
-
     });
+    
 
+    let buscarMateriasOcupadas = (ruta) => {
+        fetch(ruta, {
+            method: "GET",
+            //body : JSON.stringify(datosAlumnoMaterias),
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        }).
+        then(respuesta => {
+            return respuesta.json();                        
+        }). 
+        then( data => {
+            
+            data.forEach(materia => {
+                let idMateria = materia.id_materia;
+                let input = document.getElementById(idMateria);
+                input.removeAttribute("checked");
+                input.setAttribute("disabled","disabled");
+            });
+            
+            $("#fieldMaterias").trigger("create");
+        })
+        .catch( error => alert(error));
+    }
+
+
+    //Calcular Edad
+    let calcularEdad = (fechaNacimiento) => {
+        let anios = fechaNacimiento.getFullYear();
+        let mes = fechaNacimiento.getMonth();
+        let dia = fechaNacimiento.getDate() + 1;
+
+        let fechaActual = new Date();
+        let anios_actual = fechaActual.getFullYear();
+        let mes_actual = fechaActual.getMonth();
+        let dia_actual = fechaActual.getDate();
+            
+        let edad = anios_actual - anios;
+        
+        //Hasta este momento aun no cumples año a pesar de que ya es tu mes.
+        if (mes_actual <= mes) {
+            edad = edad - 1;
+        }
+
+        if (dia_actual >= dia) {
+            edad = edad + 1
+        }    
+
+        return edad;
+    }
+
+    //capturarDatosAlumnoMateria
+    let capturarDatosAlumnoMateria = () => {
+        let alumnoSeleccionado = document.querySelector("#comboAlumnos")
+      	let id_alumno = alumnoSeleccionado.value
+      	
+        let _materias = localStorage.getItem("Materias");
+        let materias = JSON.parse(_materias);
+        
+        //let comboMaterias = document.querySelector("#fieldMaterias");
+        let AlumnoMaterias = [];
+        
+        materias.forEach(materia => {
+        	let id_materia = materia.id_materia;
+        	let selectMateria = document.getElementById(id_materia);
+        	
+        	if (selectMateria.hasAttribute("checked") || selectMateria.hasAttribute("data-cacheval") ) {
+        		let alumnoMateria = {
+        				'id_alumno' : id_alumno,
+            			'id_materia' : id_materia
+            	}
+            	AlumnoMaterias.push(alumnoMateria);	        		
+        	}
+        	
+        	if (selectMateria.getAttribute('data-cacheval') == "true") {
+        		for (let i=0; i < AlumnoMaterias.length; i ++ ) {
+        			let _idAlumnoMateria = AlumnoMaterias[i].id_materia;					
+        			if (_idAlumnoMateria == id_materia) {	
+        				AlumnoMaterias.splice(i,1);
+        			}
+        		}
+        	}
+        	
+        });
+        
+       if (AlumnoMaterias.length <= 0) {
+    	   let alumnoMateria = {
+   				'id_alumno' : id_alumno,
+       			'id_materia' : "0"
+       		}
+       		AlumnoMaterias.push(alumnoMateria);	
+       }
+       
+       console.log("CLIENTE ENVIA-> " + AlumnoMaterias)
+       enviarDatosAlumnoMateria("agregarAlumnoMateria", AlumnoMaterias);
+    }
+
+    //enviarDatosAlumnoMateria
+    let enviarDatosAlumnoMateria = (ruta, datosAlumnoMaterias) => {
+        fetch(ruta, {
+            method: "POST",
+            body : JSON.stringify(datosAlumnoMaterias),
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        }).
+        then(respuesta => {
+        	//
+            return respuesta.json();                    	
+        }). 
+        then( data => {
+        	console.log(data);
+            if (data.length <= 0) alert("Se han actualizado las materias del alumno.")
+            data.forEach(materia => {
+                alert("La " + materia.nombre + " ha exedido el número de cupos.");
+            });
+            
+            $("#fieldMaterias").trigger("create");
+        })
+        .catch( error => alert(error));
+    }
+         
+        
     //recibirDatosAlumnos
     let recibirDatosAlumnos = (ruta) => {
         fetch(ruta, {
@@ -182,16 +319,19 @@
         });
     }
 
-    //despl}egarAlumnos
+    //desplegarAlumnos
     let desplegarAlumnos = (lstAlumnos) => {
         /**
         * Desplegará los alumnos que esten registrados en un componente combox.
         */
         let otnAlumno = ``;
         
+        let i = 0 ;
         lstAlumnos.forEach(alumno => {
+            if (i == 0)  otnAlumno += `<option value="0">SELECCIONE UN ALUMNO.</option>`
             let nombreCompleto = alumno.nombre + " " + alumno.apellidoPaterno + " " + alumno.apellidoMaterno;
             otnAlumno += `<option value="${alumno.id_alumno}">${nombreCompleto}</option>`
+            i ++;
         });
 
         let sltAlumnos = `<select>${otnAlumno}</select>`;
@@ -227,9 +367,9 @@
         /**
         * Desplegará las materias que esten registrados en un componenye
         */
-        
         let iptMaterias = ``;
         let fieldMaterias = document.querySelector("#fieldMaterias");
+        
         lstMaterias.forEach((materia) => {
             iptMaterias += `
             <input type="checkbox" name=${materia.nombre} id=${materia.id_materia} />
@@ -240,10 +380,15 @@
             <fieldset data-role="controlgroup" >
             <legend>Seleccione la materia:</legend>
             ${iptMaterias}
+            <button type="button" id="btnGrabarAlumnoMaterias" data-theme="b" data-icon="refresh"> Grabar Asociación </button>
         `
-        
         fieldMaterias.innerHTML = fdtMaterias;
         $("#fieldMaterias").trigger("create");
+        
+        //EvENTOS
+        let accionGrabarAlumnoMateria = document.querySelector("#btnGrabarAlumnoMaterias");
+        accionGrabarAlumnoMateria.addEventListener('click', capturarDatosAlumnoMateria);
+       
     }
 
     //recibirDatosMateria
@@ -261,6 +406,8 @@
         then(respuesta => {
             return respuesta.json();
         }).then ((data) => {
+        		
+        	localStorage.setItem("Materias", JSON.stringify(data)); //////////////////////////////////////////////////////////////////////////////////////
             desplegarMaterias(data);
         }).
         catch(error => {
@@ -268,31 +415,20 @@
         });
     }
 
-    //desplegarDatosMaterias
+    //desplegarDatosMaterias    
     let desplegarAlumnoMaterias = (lstAlumnoMaterias) => {
         /**
         * 
         */
-        let fieldMaterias = document.querySelector("#fieldMaterias");
-        let w = fieldMaterias.getElementsByTagName('input');
-
-        for (let i=0; i < w.length; i ++) {
-            console.log(w[i])
-            delete w[i].checked
-            delete w[i].disabled
-            console.log(w[i])
-        }
-        $("#fieldMaterias").trigger("create");
-
-        if (lstAlumnoMaterias.length > 0 ) {
+              
+    	if (lstAlumnoMaterias.length > 0 ) {	
             lstAlumnoMaterias.forEach(alumnoMateria => {
                 let idMateria = alumnoMateria.id_materia;
                 let input = document.getElementById(idMateria);
-                input.setAttribute("checked", "checked")
-                input.setAttribute("disabled", "disabled");
-                
-                $("#fieldMaterias").trigger("create");
+            	input.setAttribute("checked", "checked")
+                input.removeAttribute("data-cacheval");	
             });
+            $("#fieldMaterias").trigger("create");
         } else {
             alert("EL alumno aun no tiene materias asociadas.")
         }
@@ -320,8 +456,8 @@
 
     }
 
-    //capturarDatos
-    let capturarDatos = () => {
+    //capturarDatosAlumno
+    let capturarDatosAlumno = () => {
         /**
         * Captura los datos de los alumno, y valida que al menos hayan sido capturados los datos.
         */
@@ -350,10 +486,10 @@
                 "contenido" : jpge64
             }
 
-            let valido = validarDatos(alumno);
+            let valido = validarDatosAlumno(alumno);
             
             if (valido === 1 ) {
-                enviarDatos("agregarAlumno", alumno);
+                enviarDatosAlumno("agregarAlumno", alumno);
             } else {
                 alert("Capture todos los campos.")
             }
@@ -366,30 +502,84 @@
         */
         let valido = 4;
 
-        if (materia["nombre"].length > 0) valido >>= 1;
-        if (materia["numMaxCupo"].length > 0) valido >>= 1;
-
+        if (materia["nombre"].length > 0) {
+            let validaMateria = new RegExp("^[A-Za-z0-9\sÁÉÍÓÚÑáéíóúñ]{1,99}$");
+            let esValido = validaMateria.exec(materia["nombre"]);
+        	if (esValido == null) {
+        		alert("El nombre de la materia no ha sido validado.");
+            } else {
+        		valido >>= 1;		
+        	}
+        }
+        if (materia["numMaxCupo"].length > 0) {
+            let validaNumMaxCupo = new RegExp("^[0-9]{1,2}$");
+            let esValido = validaNumMaxCupo.exec(materia["numMaxCupo"]);
+            if (esValido == null || materia["numMaxCupo"] <= 0) {
+        		alert("El número de cupos no ha sido validado.");
+            } else {
+        		valido >>= 1;		
+            }
+        } 
+        
         console.log(valido);
         return valido;
     }
 
-    let validarDatos = (alumno) => {
+    let validarDatosAlumno = (alumno) => {
         /**
         * Valida que los datos del alumno no esten vacios.
         */
-        let valido = 32;
+        let valido = 64;
 
-        if (alumno["nombre"].length > 0 ) valido >>= 1; 
-        if (alumno["apellidoPaterno"].length > 0) valido >>= 1;
-        if (alumno["apellidoMaterno"].length > 0) valido >>= 1;
-        if (alumno["fechaNacimiento"].length > 0 ) {    
-            alert(alumno["fechaNacimiento"]);
-            valido >>= 1 ;
+        if (alumno["nombre"].length > 0 ) {
+        	let validaNombre = new RegExp("^[A-Za-z0-9\sÁÉÍÓÚÑáéíóúñ]{1,99}$");
+        	let esValido = validaNombre.exec(alumno["nombre"]);
+        	if (esValido == null) {
+        		alert("El nombre del alumno no ha sido validado.");
+            } else {
+        		valido >>= 1;		
+        	}
+        } 
+        if (alumno["apellidoPaterno"].length > 0)  {
+        	let validaApellidoPaterno = new RegExp("^[A-Za-z0-9\sÁÉÍÓÚÑáéíóúñ]{1,99}$");
+        	let esValido = validaApellidoPaterno.exec(alumno["apellidoPaterno"]);
+        	if (esValido == null) {
+        		alert("El apellido paterno del alumno no ha sido validado.");
+            } else {
+        		valido >>= 1;		
+        	}
         }
-        if (alumno["correoElectronico"].length > 0) valido >>= 1;
+        if (alumno["apellidoMaterno"].length > 0)  {
+        	let validaApellidoMaterno = new RegExp("^[A-Za-z0-9\sÁÉÍÓÚÑáéíóúñ]{1,99}$");
+        	let esValido = validaApellidoMaterno.exec(alumno["apellidoMaterno"]);
+        	if (esValido == null) {
+        		alert("El apellido materno del alumno no ha sido validado.");
+            } else {
+        		valido >>= 1;		
+            }
+        }
+        //if (alumno["fechaNacimiento"].length > 0 ) { 
+            let fechaNacimiento = new Date(alumno["fechaNacimiento"])
+            let edad = calcularEdad(fechaNacimiento);
+            
+            if (edad <= 0 || isNaN(fechaNacimiento.getFullYear())) {
+                alert("La fecha de nacimiento no ha sido validada.");
+            } else {
+                valido >>= 1;
+            }
+        //}
+        if (alumno["correoElectronico"].length > 0) {
+        	let validaCorreo = new RegExp("^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$");
+        	let esValido = validaCorreo.exec(alumno["correoElectronico"]);
+        	if (esValido == null) {
+        		alert("El correo electrónico no ha sido validado.");
+        	} else {
+        		valido >>= 1;	
+        	}
+        	
+        };
         if (alumno["contenido"].length > 0) valido >>= 1;
         console.log(valido);
-
         return valido;
     }
 
@@ -404,11 +594,14 @@
                 'Content-Type' : 'application/json'
             }
         }).
-        then(respuesta => alert(respuesta.status)).
+        then(respuesta => {
+        	if (respuesta.status == 200) alert("La materia ha sido registrada.");
+        	location.reload("/");
+        }).
         catch(error => alert(error));
     } 
 
-    let enviarDatos = (ruta, datosAlumno) => {
+    let enviarDatosAlumno = (ruta, datosAlumno) => {
         /**
         * Envia un objecto json al servidor con los datos del alumno.
         */
@@ -420,7 +613,16 @@
                 'Content-Type' : 'application/json'
             }
         }).
-        then(respuesta => alert(respuesta.status)).
+        then(respuesta => {
+        	console.log(respuesta);
+        	if (respuesta.ok == true) {
+        		if (respuesta.status == 200) alert("Los datos del alumno ha sido registrados.")
+            	location.reload("/");
+        	} else {
+        		alert("El correo electrónico ya ha sido registrado.");
+        	}
+        	
+        }).
         catch(error => alert(error));
     }
 

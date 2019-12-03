@@ -12,4 +12,5 @@ public interface MateriaBo {
 	//lista que regresa todos los registros de la tabla de la BD.
 	public List<Materia> getAllMateria();
 
+	public List<Materia> ObtieneMateriasOcupadas();
 }

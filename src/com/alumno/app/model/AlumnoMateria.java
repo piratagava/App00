@@ -8,20 +8,21 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="AlumnoMateria")
+@Table(name = "AlumnoMateria")
 public class AlumnoMateria {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id_alumnoMateria;
 
-	@Column(name="id_alumno")
+	@Column(name = "id_alumno")
 	private int id_alumno;
-	
-	@Column(name="id_materia",unique=true)
+
+	@Column(name = "id_materia", unique = true)
 	private int id_materia;
-	
-	public AlumnoMateria() {}
+
+	public AlumnoMateria() {
+	}
 
 	public AlumnoMateria(int id_alumnoMateria, int id_alumno, int id_materia) {
 		super();
@@ -54,6 +55,8 @@ public class AlumnoMateria {
 		this.id_materia = id_materia;
 	}
 
-	
-	
+	@Override
+	public String toString() {
+		return  ""+getId_materia();
+	}
 }

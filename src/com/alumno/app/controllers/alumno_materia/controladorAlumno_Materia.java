@@ -1,7 +1,6 @@
 package com.alumno.app.controllers.alumno_materia;
-
+import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alumno.app.bo.Alumno_MateriaBo;
 import com.alumno.app.model.AlumnoMateria;
 import com.alumno.app.model.Materia;
+
 
 @Controller
 public class controladorAlumno_Materia {
@@ -40,16 +40,17 @@ public class controladorAlumno_Materia {
 	
 	//crea el registro de asociacion alumno y materia
 	@RequestMapping(value = "/agregarAlumnoMateria", method = RequestMethod.POST)
-	public @ResponseBody Boolean guardarAlumnoMateria(@RequestBody AlumnoMateria alumnoMateria) {	
-		try {
-			alumno_materiaBo.crearAlumno_Materia(alumnoMateria);
-			return true;
-		} catch (Exception e) {
-			System.out.println("ERROR AL CREAR LA MATERIA"+e.getMessage());
-			//Si manda falso es porque el alumno no puede registrar la misma materia
-			return false;		
-		}
+	public @ResponseBody List<Materia> guardarAlumnoMateria(@RequestBody List<AlumnoMateria>  obtner){	
+	//try{			
+		List<Materia> materias= alumno_materiaBo.crearAlumno_Materia(obtner);
+		return materias;
+		//}catch (Error e) {
+		//	System.out.println("ERROR /n"+e.getMessage());
+		//	return e.getMessage();	
 	}
+
+	//}
+
 	
 	//retornamos una lista de materias asociadas a los alumnos
 	//pathvariable indica que el id la obtiene mediante url desde el front que esta mandando

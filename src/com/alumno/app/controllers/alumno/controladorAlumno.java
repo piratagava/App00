@@ -42,15 +42,12 @@ public class controladorAlumno {
 	
 	//agrega Alumno mediante peticion post y lo serializa en json
 	@RequestMapping(value = "/agregarAlumno", method = RequestMethod.POST)
-	public @ResponseBody Boolean guardarAlumno(@RequestBody Alumno alumno) {
-		try {
-			System.out.print("Alumno +++++++++ " + alumno);
+	public @ResponseBody String guardarAlumno(@RequestBody Alumno alumno) {
+		try {			
 			alumnoBo.crearAlumno(alumno);
-			//si se efectua correctamente la respuesta de la peticion regresa un true
-			return true;
-		} catch (Exception e) {
-			//si la respuesta de la peticion es erronea regresa false
-			return false;			
+			return "201";
+		} catch (Error e) {
+			return e.getMessage();			
 		}
 	}
 }

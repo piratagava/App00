@@ -11,5 +11,8 @@ public interface MateriaDao {
 	public void crearMateria(Materia materia);
 
 	public List<Materia> getAllMateria();
-
+	
+	//consulta por todos 0
+	public List<Materia> ObtieneMateriasOcupadas();
+ 
 }
