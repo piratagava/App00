@@ -28,7 +28,7 @@ public class Alumno_MateriaBoImpl implements Alumno_MateriaBo {
 		if (ListCrear.get(0).getId_materia() == 0) {
 			for (AlumnoMateria itemValue : listTablaDB) {
 				if (existeElementoenLista(ListCrear, itemValue)) {
-					System.out.print("Hay almenos una coincidencio");
+					System.out.print("Hay almenos una Coincidencia");
 				} else {
 					dao.eliminarAlumnoMateria(itemValue);
 					List<Materia> consulta = ObtieneNumMaxMateria(itemValue.getId_materia());
@@ -36,15 +36,14 @@ public class Alumno_MateriaBoImpl implements Alumno_MateriaBo {
 						int max = registra.getNumMaxCupo();
 						System.out.print("SOYYYYYY NUMERO MAXIMO " + max + "\n");
 						int resultado = max + 1;
-						registra.setNumMaxCupo(resultado);						
-						System.out.print("SEGUN TERMINE DE OPERAR SETEEEEEEEOOOOOO " + resultado + "\n");
+						registra.setNumMaxCupo(resultado);
+						System.out.print("TERMINE DE OPERAR SETEEEEEEEOOOOOO " + resultado + "\n");
 					}
 				}
 			}
 		} else {
 			// si la tabla de AlumnoMateria existen datos entra la condicion
 			if (listTablaDB.size() > 0) {
-
 				for (AlumnoMateria itemBD : listTablaDB) {
 					if (existeElementoenLista(ListCrear, itemBD)) {
 						System.out.print("Elemento Existe en Tabla de BD");
@@ -56,7 +55,7 @@ public class Alumno_MateriaBoImpl implements Alumno_MateriaBo {
 							System.out.print("SOYYYYYY NUMERO MAXIMO " + max + "\n");
 							int resultado = max + 1;
 							registra.setNumMaxCupo(resultado);
-							System.out.print("SEGUN TERMINE DE OPERAR SETEEEEEEEOOOOOO " + resultado + "\n");
+							System.out.print("TERMINE DE OPERAR SETEEEEEEEOOOOOO " + resultado + "\n");
 						}
 					}
 				}
@@ -64,48 +63,48 @@ public class Alumno_MateriaBoImpl implements Alumno_MateriaBo {
 				for (AlumnoMateria fronList : ListCrear) {
 					if (existeElementoenLista(listTablaDB, fronList)) {
 						System.out.print("Elemento existe ya");
-					} else {						
+					} else {
 						System.out.print(
 								" CREANDO NUEVO REGISFTRO EN LA TABLA ALUMNO MATERIA" + fronList.getId_materia());
 						List<Materia> consulta = ObtieneNumMaxMateria(fronList.getId_materia());
 						for (Materia registra : consulta) {
 							int max = registra.getNumMaxCupo();
 							System.out.print("SOYYYYYY NUMERO MAXIMO " + max + "\n");
-							
-							if(max<=0) {
+
+							if (max <= 0) {
 								materiasOcupadas.add(registra);
-								//throw new Error("" + registra.getId_materia());
+								// throw new Error("" + registra.getId_materia());
 								break;
-							}else {
+							} else {
 								int resultado = max - 1;
 								registra.setNumMaxCupo(resultado);
-								dao.crearAlumno_Materia(fronList);								
-					System.out.print("SEGUN TERMINE DE OPERAR SETEEEEEEEOOOOOO " + resultado + "\n");
-							}																				
+								dao.crearAlumno_Materia(fronList);
+								System.out.print("SEGUN TERMINE DE OPERAR SETEEEEEEEOOOOOO " + resultado + "\n");
+							}
 						}
 					}
 				}
 				// si la tabla de AlumnoMateria no existen registro inicialmente los crea
 			} else {
-				for (AlumnoMateria registraComoVieneDelFront : ListCrear) { 					
+				for (AlumnoMateria registraComoVieneDelFront : ListCrear) {
 					// creo la lista materia para obtener NumMaxCupo y setearlo mediante id_materia
 					// que guardo
 					List<Materia> consulta = ObtieneNumMaxMateria(registraComoVieneDelFront.getId_materia());
 					for (Materia registra : consulta) {
 						int max = registra.getNumMaxCupo();
 						System.out.print("SOYYYYYY NUMERO MAXIMO " + max + "\n");
-						
-						if(max<=0) {
+
+						if (max <= 0) {
 							materiasOcupadas.add(registra);
-							//throw new Error("" + registra.getId_materia());
+							// throw new Error("" + registra.getId_materia());
 							break;
-						}else {
+						} else {
 							int resultado = max - 1;
-							registra.setNumMaxCupo(resultado);	
+							registra.setNumMaxCupo(resultado);
 							dao.crearAlumno_Materia(registraComoVieneDelFront);
-			System.out.print("SEGUN TERMINE DE OPERAR SETEEEEEEEOOOOOO " + resultado + "\n");						
-						}												
-					
+							System.out.print("SEGUN TERMINE DE OPERAR SETEEEEEEEOOOOOO " + resultado + "\n");
+						}
+
 					}
 
 				}
@@ -136,7 +135,6 @@ public class Alumno_MateriaBoImpl implements Alumno_MateriaBo {
 		return dao.getIDAllAlumnosMAterias(id_alumno);
 	}
 
-	
 	@Override
 	public void eliminarAlumnoMateria(AlumnoMateria alumnoMateria) {
 		dao.eliminarAlumnoMateria(alumnoMateria);

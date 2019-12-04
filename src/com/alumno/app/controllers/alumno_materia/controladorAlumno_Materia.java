@@ -1,4 +1,5 @@
 package com.alumno.app.controllers.alumno_materia;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,51 +13,50 @@ import com.alumno.app.bo.Alumno_MateriaBo;
 import com.alumno.app.model.AlumnoMateria;
 import com.alumno.app.model.Materia;
 
-
 @Controller
 public class controladorAlumno_Materia {
 
-	@Autowired 
+	@Autowired
 	private Alumno_MateriaBo alumno_materiaBo;
-	
-	//se crea una "vista" a partir de un modelo
+
+	// se crea una "vista" a partir de un modelo
 	private ModelAndView mav = new ModelAndView();
-	
-	//regresa una lista en objetos json
+
+	// regresa una lista en objetos json
 	@RequestMapping(value = "/listarAlumnoMateria", method = RequestMethod.GET)
-	public  @ResponseBody List<AlumnoMateria> muestraAlumnoMateria(){
-		List<AlumnoMateria> lista=alumno_materiaBo.getAllAlumnos_Materias();
+	public @ResponseBody List<AlumnoMateria> muestraAlumnoMateria() {
+		List<AlumnoMateria> lista = alumno_materiaBo.getAllAlumnos_Materias();
 		return lista;
 	}
-	
-	//prepara la vista para poder crear nuevo objeto de tipo Materia
-	@RequestMapping(value = "/agregarAlumnoMateria", method = RequestMethod.GET)
+
+	// prepara la vista para poder crear nuevo objeto de tipo Materia
+	@RequestMapping(value = "/asignar_materias", method = RequestMethod.GET)
 	public ModelAndView AgregarAlumnoMateria() {
 		mav.addObject(new AlumnoMateria());
-		mav.setViewName("index");
+		mav.setViewName("asignar_materias");
 		return mav;
 	}
-	
-	//crea el registro de asociacion alumno y materia
-	@RequestMapping(value = "/agregarAlumnoMateria", method = RequestMethod.POST)
-	public @ResponseBody List<Materia> guardarAlumnoMateria(@RequestBody List<AlumnoMateria>  obtner){	
-	//try{			
-		List<Materia> materias= alumno_materiaBo.crearAlumno_Materia(obtner);
+
+	// crea el registro de asociacion alumno y materia
+	@RequestMapping(value = "/asignar_materias", method = RequestMethod.POST)
+	public @ResponseBody List<Materia> guardarAlumnoMateria(@RequestBody List<AlumnoMateria> obtner) {
+		// try{
+		List<Materia> materias = alumno_materiaBo.crearAlumno_Materia(obtner);
 		return materias;
-		//}catch (Error e) {
-		//	System.out.println("ERROR /n"+e.getMessage());
-		//	return e.getMessage();	
+		// }catch (Error e) {
+		// System.out.println("ERROR /n"+e.getMessage());
+		// return e.getMessage();
 	}
 
-	//}
+	// }
 
-	
-	//retornamos una lista de materias asociadas a los alumnos
-	//pathvariable indica que el id la obtiene mediante url desde el front que esta mandando
-		@RequestMapping(value = "/consultarAlumno/{id_alumno}", method = RequestMethod.GET)
-		public @ResponseBody List<AlumnoMateria> muestraAsociacion(@PathVariable int id_alumno){
-			List<AlumnoMateria> lista=alumno_materiaBo.getIDAllAlumnosMAterias(id_alumno);
-			return lista;
-		}
-				
+	// retornamos una lista de materias asociadas a los alumnos
+	// pathvariable indica que el id la obtiene mediante url desde el front que esta
+	// mandando
+	@RequestMapping(value = "/consultarAlumno/{id_alumno}", method = RequestMethod.GET)
+	public @ResponseBody List<AlumnoMateria> muestraAsociacion(@PathVariable int id_alumno) {
+		List<AlumnoMateria> lista = alumno_materiaBo.getIDAllAlumnosMAterias(id_alumno);
+		return lista;
+	}
+
 }

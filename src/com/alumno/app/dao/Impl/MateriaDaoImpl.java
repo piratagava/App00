@@ -43,7 +43,7 @@ public class MateriaDaoImpl implements MateriaDao {
 	@Override
 	public Materia consultarMateria(int id_materia) {
 		Session session= entity.unwrap(Session.class);
-		//Crear uniqueResult = solo devuelbe u valor
+		//Crear uniqueResult = solo devuelbe un valor
 		return	(Materia) session.createQuery("from Materia where id_materia="+id_materia).uniqueResult();
 	
 	}

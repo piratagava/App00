@@ -23,15 +23,15 @@ public class controladorMateria {
 	private ModelAndView mav = new ModelAndView();
 
 	// prepara la vista index para agregar nuevo objeto de tipo materia
-	@RequestMapping(value = "/agregarMateria", method = RequestMethod.GET)
+	@RequestMapping(value = "/registrar_materia", method = RequestMethod.GET)
 	public ModelAndView AgregarMateria() {
 		mav.addObject(new Materia());
-		mav.setViewName("index");
+		mav.setViewName("registrar_materia");
 		return mav;
 	}
 
 	// agrega registro de nueva materia
-	@RequestMapping(value = "/agregarMateria", method = RequestMethod.POST)
+	@RequestMapping(value = "/registrar_materia", method = RequestMethod.POST)
 	public @ResponseBody String guardarMateria(@RequestBody Materia materia) {
 		try {
 			materiaBo.crearMateria(materia);
@@ -42,8 +42,14 @@ public class controladorMateria {
 		}
 	}
 
+	// permite obtener la vista de editar_materia
+	@RequestMapping(value = "/editar_materia", method = RequestMethod.GET)
+	public String editarMateria() {
+		return "editar_materia";
+	}
+
 	// metodo que actualiza el registro materia por objeto que llega del json
-	@RequestMapping(value = "/actualizarMateria", method = RequestMethod.PUT)
+	@RequestMapping(value = "/editar_materia", method = RequestMethod.PUT)
 	public @ResponseBody Boolean actualizarMateria(@RequestBody Materia materia) {
 		try {
 			materiaBo.actualizar(materia);
