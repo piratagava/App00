@@ -4,8 +4,8 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
-        <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+        <script src="http://code.jquery.com/jquery-1.11.1.min.js" rel="external"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js" rel="external"></script>
     </head>
 
     <body>
@@ -13,7 +13,7 @@
         <div data-role="page" id="editar_materia">
             <!--Encabezado-->
             <header data-role="header" data-theme="b">
-                <a href="index.html" data-icon="back" data-iconpos="notext"> </a>
+                <a href="/App00/" data-icon="back" data-iconpos="notext"> </a>
                 <h1>Editar Materia</h1>
             </header>
                 
@@ -36,6 +36,146 @@
     </body>
 
     <script>
+        window.addEventListener('load', () => {
+            //
+            let paginaEditarMateria = document.querySelector("#editar_materia");
+            paginaEditarMateria.addEventListener('click', () => {
+                obtenerDatosMaterias("listarMateria");
+            });
+
+            let alumnoSeleccionado = document.querySelector("#comboAlumnos");
+            alumnoSeleccionado.addEventListener('change', () => {
+            
+                let m = localStorage.getItem("Materias")
+                recibirDatosMaterias("listarMateria");
+                let materias = JSON.parse(m);
+                
+                let id_alumno = alumnoSeleccionado.value
+                //limpiar el fieldset :P
+                desplegarMaterias(materias);	
+                buscarMateriasOcupadas("listarCupoMaximoPorAlumno", id_alumno)
+          //recibirDatosMateria
+    let recibirDatosMaterias = (ruta) => {
+        /**
+        * 
+        */
+        fetch(ruta, {
+            method : 'GET',
+        // mode : "no-cors",
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        }).
+        then(respuesta => {
+            return respuesta.json();
+        }).then ((data) => {
+        		
+        	localStorage.setItem("Materias", JSON.stringify(data)); //////////////////////////////////////////////////////////////////////////////////////
+            desplegarMaterias(data);
+        }).
+        catch(error => {
+            alert(error);
+        });
+    }      if (id_alumno > 0)	buscarAlumnoMateria("consultarAlumno/"+id_alumno);
+            });
+
+        });
+
+        //obtenerDatosMateria
+        let obtenerDatosMaterias = (ruta) => {
+            fetch(ruta, {
+            method : 'GET',
+            headers : {
+                'Content-Type' : 'application/json'
+                }
+            }).
+            then(respuesta => {
+                return respuesta.json();
+            }).then ((data) => {
+                desplegarComboMaterias(data);
+            }).
+            catch(error => {
+                alert(error);
+            });
+	    }  
+
+        //actualizarDatosMateria
+        let actualizarDatosMateria = (ruta, datosMateria) => {
+            /**
+            * Envia un objecto json al servidor con los datos de la materia.
+            */
+            fetch(ruta, {
+                method : "PUT",
+                body : JSON.stringify(datosMateria),
+                headers : {
+                    'Content-Type' : 'application/json'
+                }
+            }).
+            then(respuesta => {
+                console.log(respuesta);
+                if (respuesta.ok == true) {
+                    alert("La materia ha sido actualizada.");
+                    location.reload("/");
+                } else {
+                    alert("La materia no ha sido actualizada");
+                }
+                
+            }).
+            catch(error => alert(error));
+   	    }
+
+        //recibirDatosMateria
+        let recibirDatosMaterias = (ruta) => {
+            /**
+            * 
+            */
+            fetch(ruta, {
+                method : 'GET',
+            // mode : "no-cors",
+                headers : {
+                    'Content-Type' : 'application/json'
+                }
+            }).
+            then(respuesta => {
+                return respuesta.json();
+            }).then ((data) => {
+                    
+                localStorage.setItem("Materias", JSON.stringify(data)); //////////////////////////////////////////////////////////////////////////////////////
+                desplegarMaterias(data);
+            }).
+            catch(error => {
+                alert(error);
+            });
+        }  
+
+        //desplegarMaterias
+        let desplegarMaterias = (lstMaterias) => {
+            /**
+            * Desplegará las materias que esten registrados en un componenye
+            */
+            let iptMaterias = ``;
+            let fieldMaterias = document.querySelector("#fieldMaterias");
+            
+            lstMaterias.forEach((materia) => {
+                iptMaterias += `
+                <input type="checkbox" name=${materia.nombre} id=${materia.id_materia} />
+                <label for=${materia.id_materia}>${materia.nombre}</label> `
+            });
+            
+            let fdtMaterias = `
+                <fieldset data-role="controlgroup" >
+                <legend>Seleccione la materia:</legend>
+                ${iptMaterias}
+                <button type="button" id="btnGrabarAlumnoMaterias" data-theme="b" data-icon="refresh"> Grabar Asociación </button>
+            `
+            fieldMaterias.innerHTML = fdtMaterias;
+            $("#fieldMaterias").trigger("create");
+            
+            //EvENTOS
+            let accionGrabarAlumnoMateria = document.querySelector("#btnGrabarAlumnoMaterias");
+            accionGrabarAlumnoMateria.addEventListener('click', capturarDatosAlumnoMateria);
+        
+        }         
     </script>
 
 </html>              
