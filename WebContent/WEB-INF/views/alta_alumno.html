@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+        <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    </head>
+    
+    <body>
+        <!--Página registar materia-->
+        <div data-role="page" id="alta_alumno">
+            <!--Encabezado-->
+            <header data-role="header" data-theme="b">
+                <a href="index.html" data-icon="back" data-iconpos="notext"> </a>
+                <h1>Alta de Alumno</h1>
+            </header>
+
+            <!--Contenido-->
+            <section data-role="content">
+                <div class="ui-grid-a">
+                    <form class="ui-block-a" data-ajax="false" autocomplete="on">                    
+                        <label> Nombre: </label>
+                        <input id="iptNombre" type="text" placeholder="Nombre del alumno" required="required" pattern="^[A-Za-z0-9\sÁÉÍÓÚÑáéíóúñ]{1,99}$"/>
+                    
+                        <label> Apellido Paterno:</label>
+                        <input id="iptApellido1" type="text" placeholder="Primer apellido" required="required" pattern="^[A-Za-z0-9\sÁÉÍÓÚÑáéíóúñ]{1,99}$"/>
+                    
+                        <label> Apellido Materno:</label>
+                        <input id="iptApellido2" type="text" placeholder="Segundo apellido" required="required" pattern="^[A-Za-z0-9\sÁÉÍÓÚÑáéíóúñ]{1,99}$"/>
+                    
+                        <label> Fecha de Nacimiento:</label>
+                        <input id="iptFechaNacimiento" type="date" required="required" min="1900-01-01"/>
+                    
+                        <label> Correo Electr&oacutenico:</label>
+                        <input id="iptCorreo" type="email" required="required" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"/>
+                    
+                        <label> Edad: </label>
+                        <input id="iptEdad" type="text" readonly/>
+                        
+                        <label> Subir foto del alumno:</label>
+                        <input id="iptFoto" type="file" accept="image/jpeg" required="required" />
+                        <input id="btnGuardar" type="button" data-theme="b" data-icon="check" value="Guardar"/>
+                    </form>
+
+                    <aside id="divLienzo" class="ui-block-b"> 
+                        <img width="100%" />    
+                    </aside>        
+                </div>                
+            </section>
+        </div>
+    </body>
+    <script>
+    
+    </script>
+</html>

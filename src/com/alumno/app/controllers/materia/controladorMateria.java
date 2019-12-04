@@ -43,7 +43,7 @@ public class controladorMateria {
 	}
 
 	// metodo que actualiza el registro materia por objeto que llega del json
-	@RequestMapping(value = "/actualizarMateria", method = RequestMethod.POST)
+	@RequestMapping(value = "/actualizarMateria", method = RequestMethod.PUT)
 	public @ResponseBody Boolean actualizarMateria(@RequestBody Materia materia) {
 		try {
 			materiaBo.actualizar(materia);

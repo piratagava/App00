@@ -10,18 +10,21 @@
 
     <body>
         <!--Página Principal-->
-        <div data-role="page" id="principal">
+        <div data-role="page" id="index">
             
             <!--Menú Lateral Principal-->
             <nav data-role="panel" id="menu" data-display="overlay">
                 <h2>Men&uacute Principal</h2>
                 <ul data-role="listview">
+                    
                     <li data-role="list-divider">Alumnos</li>
-                    <li><a href="#registrar_alumno">Dar de alta Alumno</a></li>
-                    <li><a href="#registrar_alumno_materia" id="registrar_alumno_materia">Asignar Materias</a></li>
+                    <li><a href="registrar_alumno">Dar de alta Alumno</a></li>
+                    <li><a href="asignar_materias" id="registrar_alumno_materia">Asignar Materias</a></li>
+                    <li><a href="#">Editar Alumno</a></li>
+
                     <li data-role="list-divider">Materias</li>
-                    <li><a href="#registrar_materia">Registrar Materia</a></li>
-                    <li><a href="#registrar_materia">Buscar Materia</a></li>
+                    <li><a href="registrar_materia">Registrar Materia</a></li>
+                    <li><a href="editar_materia" id="editar_materia">Editar Materia</a></li>
                 </ul>
             </nav>
             
@@ -33,6 +36,7 @@
             
             <!--Contenido-->
             <main data-role="content">
+            	
             </main>
 
 
@@ -43,86 +47,7 @@
                 <small>Application.</small>
             </footer>
         </div>
-        
-        <!--Página registar materia-->
-        <div data-role="page" id="registrar_materia">
-            <!--Encabezado-->
-            <header data-role="header" data-theme="b">
-                <a href="#principal" data-icon="back" data-iconpos="notext"> </a>
-                <h1>APP ID-00</h1>
-            </header>
-
-            <!--Contenido-->
-            <section data-role="content">
-                <form data-ajax="false">
-                    <label>Nombre de la Materia:</label>
-                    <input type="text" id="iptMateria" required="required" pattern="^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$"/>
-                    <label>N&uacutemero de Cupos M&aacuteximo</label>
-                    <input type="number" id="iptNumMaxCupo" required="required" max="99" min="1" pattern="^[0-9]{1,2}$"/>
-                    <input data-icon="edit" data-theme="b" type="button" id="btnGuardarMateria" value="Guardar">
-                </form>
-            </section>    
-        </div>
-
-        <!--Página alumno-materia -->
-        <div data-role="page" id="registrar_alumno_materia" data-dom-cache="false">
-            <!--Encabezado-->
-            <header data-role="header" data-theme="b">
-                <a href="#principal" data-icon="back" data-iconpos="notext"> </a>
-                <h1>APP ID-00</h1>
-            </header>
-
-            <section data-role="content">
-                    <label> Seleccione el Alumno:</label>
-                    <select id="comboAlumnos">                                        
-                    </select>
-
-                    <form id="fieldMaterias">
-                    </form>
-            </section>
-        </div>
-
-
-        <!--Página registrar alumno-->
-        <div data-role="page" id="registrar_alumno">
-            <!--Encabezado-->
-            <header data-role="header" data-theme="b">
-                <a href="#principal" data-icon="back" data-iconpos="notext"> </a>
-                <h1>APP ID-00</h1>
-            </header>
-
-            <!--Contenido-->
-            <section data-role="content">
-                <div class="ui-grid-a">
-                    <form class="ui-block-a" data-ajax="false" autocomplete="on">                    
-                        <label> Nombre: </label>
-                        <input id="iptNombre" type="text" placeholder="Nombre del alumno" required="required" pattern="^[A-Za-z0-9\sÁÉÍÓÚÑáéíóúñ]{1,99}$"/>
-                    
-                        <label> Apellido Paterno:</label>
-                        <input id="iptApellido1" type="text" placeholder="Primer apellido" required="required" pattern="^[A-Za-z0-9\sÁÉÍÓÚÑáéíóúñ]{1,99}$"/>
-                    
-                        <label> Apellido Materno:</label>
-                        <input id="iptApellido2" type="text" placeholder="Segundo apellido" required="required" pattern="^[A-Za-z0-9\sÁÉÍÓÚÑáéíóúñ]{1,99}$"/>
-                    
-                        <label> Fecha de Nacimiento:</label>
-                        <input id="iptFechaNacimiento" type="date" required="required" min="1900-01-01"/>
-                    
-                        <label> Correo Electr&oacutenico:</label>
-                        <input id="iptCorreo" type="email" required="required" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"/>
-                    
-                        <label> Edad: </label>
-                        <input id="iptEdad" type="text" readonly/>
-						
-						<label> Subir foto del alumno:</label>
-                        <input id="iptFoto" type="file" accept="image/jpeg" required="required" />
-                        <input id="btnGuardar" type="button" data-theme="b" data-icon="check" value="Guardar"/>
-                    </form>
-                    <aside id="divLienzo" class="ui-block-b"> 
-                        <img width="100%" />    
-                    </aside>        
-                    </div>                
-            </section>
-        </div>
+    </body>
     <script>
     'use strict'
 
@@ -155,7 +80,11 @@
 
         //
         let accionGuardarMateria = document.querySelector("#btnGuardarMateria");
-        accionGuardarMateria.addEventListener('click',capturarDatosMateria);
+        accionGuardarMateria.addEventListener('click', () => {
+        	capturarDatosMateria("POST")
+        });
+        	
+        
 
         //
         let paginaAlumnoMateria = document.querySelector("#registrar_alumno_materia");
@@ -165,7 +94,13 @@
             recibirDatosAlumnos("listarAlumno");        
             
         });
-
+		
+        //
+        let paginaEditarMateria = document.querySelector("#editar_materia");
+        paginaEditarMateria.addEventListener('click', () => {
+        	obtenerDatosMaterias("listarMateria");
+        });
+        
         //
         let alumnoSeleccionado = document.querySelector("#comboAlumnos");
         alumnoSeleccionado.addEventListener('change', () => {
@@ -180,9 +115,97 @@
             buscarMateriasOcupadas("listarCupoMaximoPorAlumno", id_alumno)
             if (id_alumno > 0)	buscarAlumnoMateria("consultarAlumno/"+id_alumno);
         });
+        
+        
+        
+        //Evento cambio de materia
+        let materiaSeleccionada = document.querySelector("#comboMaterias");
+        materiaSeleccionada.addEventListener('change', () => {
+            let id_materia = materiaSeleccionada.value
+        	alert(id_materia);
+           
+          
+            
+            //POR DEFINIR RUTA DEL CONTROLADOR,
+            if (id_materia > 0)	consultarMateria("listarConsultaMateria/"+id_materia);
+        });
+        
+        
     });
     
+    //consultarMateria
+    let consultarMateria = (ruta) => {
+    	fetch(ruta, {
+    	    method : 'GET',
+    	    headers : {
+    	    	'Content-Type' : 'application/json'
+    	    	}
+    	    }).
+    	    then(respuesta => {
+    	    	return respuesta.json();
+    	    }).then ((data) => {
+    	    	desplegarMateria(data);
+    	    }).
+    	    catch(error => {
+    	    	alert(error);
+    	    });
+    }
+    
+    let desplegarMateria = (materia) => {
+    	/**
+    	* Desplegará los datos de la materia, en el cual se mostrará el nombre de la materia y el número máximo de cupos
+    	**/
+    	document.getElementById("iptMateria").value = materia.nombre;
+    	document.getElementById("iptNumMaxCupo").value = materia.numMaxCupo;
+    	
+    	//Envento actualizar materia
+        
+        let btnEditarMateria = document.querySelector("#btnEditarMateria");
+    	btnEditarMateria.addEventListener('click', () => {
+    		capturarDatosMateria("PUT")
+    	});
+        
+    }
+    
+	let obtenerDatosMaterias = (ruta) => {
+		fetch(ruta, {
+	    method : 'GET',
+	    headers : {
+	    	'Content-Type' : 'application/json'
+	    	}
+	    }).
+	    then(respuesta => {
+	    	return respuesta.json();
+	    }).then ((data) => {
+	    	desplegarComboMaterias(data);
+	    }).
+	    catch(error => {
+	    	alert(error);
+	    });
+	}
+    
+    
+    let desplegarComboMaterias = (lstMaterias) => {
+    	/**
+    	* Desplegará las materias que esten registradas, las cuales se mostrarán en un compotente combox.
+    	*/
 
+    	let otnMateria = ``;
+    	let i = 0;
+    	
+    	lstMaterias.forEach(materia => {
+    		
+    		if (i == 0) otnMateria += `<option value="0">SELECCIONE LA MATERIA.</option>`
+			otnMateria += `<option value=${materia.id_materia}>${materia.nombre}</option>` 
+    		i ++;
+    	
+    	});
+    	
+    	let comboMaterias = document.querySelector("#comboMaterias");
+    	let sltMaterias = `<select>${otnMateria}</select>`;
+    	comboMaterias.innerHTML = sltMaterias; 
+    }
+    
     let buscarMateriasOcupadas = (ruta, id_alumno) => {
         fetch(ruta, {
             method: "GET",
@@ -242,7 +265,6 @@
         let _materias = localStorage.getItem("Materias");
         let materias = JSON.parse(_materias);
         
-        //let comboMaterias = document.querySelector("#fieldMaterias");
         let AlumnoMaterias = [];
         
         materias.forEach(materia => {
@@ -290,19 +312,10 @@
             }
         }).
         then(respuesta => {
-        	//
             return respuesta.json();                    	
         }). 
         then( data => {
-        	//console.log(data);
-            //if (data.length <= 0) 
-            	alert("Se han actualizado las materias del alumno.")
-            
-            //data.forEach(materia => {
-            //    alert("La " + materia.nombre + " ha exedido el número de cupos.");
-            //});
-            //location.reload("/");
-            //$("#fieldMaterias").trigger("create");
+        	alert("Se han actualizado las materias del alumno.");
         })
         .catch( error => alert(error));
     }
@@ -443,21 +456,26 @@
     } 
 
     //caputurarDatosMateria
-    let capturarDatosMateria = () => {
+    let capturarDatosMateria = (accion) => {
         /**
         * Captura los datos de las materia y confirma que al menos hayan sido capturados los datos.
         */
         let nombre = document.getElementById("iptMateria").value;
         let numMaxCupo = document.getElementById("iptNumMaxCupo").value;
+        
         let materia = {
             "nombre" : nombre,
             "numMaxCupo" : numMaxCupo
         }
-
+		console.log(materia)
         let valido = validarDatosMateria(materia);
             
         if (valido === 1 ) {
-            enviarDatosMateria("agregarMateria", materia);
+        	if (accion === "POST") {
+        		enviarDatosMateria("agregarMateria", materia);	
+        	} else if (accion === "PUT") {
+        		actualizarDatosMateria("actualizarMateria", materia)
+        	}
         } else {
             alert("Capture todos los campos.")
         }
@@ -515,15 +533,17 @@
         if (materia["nombre"].length > 0) {
             let validaMateria = /^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$/
             let esValido = validaMateria.exec(materia["nombre"]);
-        	if (esValido == null) {
+        	alert(esValido)
+            if (esValido == null) {
         		alert("El nombre de la materia no ha sido validado.");
             } else {
         		valido >>= 1;		
         	}
         }
         if (materia["numMaxCupo"].length > 0) {
-            let validaNumMaxCupo = new RegExp("^[0-9]{1,2}$");
+            let validaNumMaxCupo = /^[0-9]{1,2}$/
             let esValido = validaNumMaxCupo.exec(materia["numMaxCupo"]);
+            alert(esValido)
             if (esValido == null || materia["numMaxCupo"] <= 0) {
         		alert("El número de cupos no ha sido validado.");
             } else {
@@ -592,8 +612,35 @@
         console.log(valido);
         return valido;
     }
-
-    let enviarDatosMateria = (ruta,datosMateria) => {
+	
+    /********************************************************************/
+    
+   	let actualizarDatosMateria = (ruta, datosMateria) => {
+   		/**
+         * Envia un objecto json al servidor con los datos de la materia.
+         */
+         fetch(ruta, {
+             method : "PUT",
+             body : JSON.stringify(datosMateria),
+             headers : {
+                 'Content-Type' : 'application/json'
+             }
+         }).
+         then(respuesta => {
+        	 console.log(respuesta);
+        	 if (respuesta.ok == true) {
+        		 alert("La materia ha sido actualizada.");
+        		 location.reload("/");
+        	 } else {
+        		 alert("La materia no ha sido actualizada");
+        	 }
+        	 
+         }).
+         catch(error => alert(error));
+   		
+   	}
+    
+   	let enviarDatosMateria = (ruta,datosMateria) => {
         /**
         * Envia un objecto json al servidor con los datos de la materia.
         */

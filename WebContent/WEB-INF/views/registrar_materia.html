@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+        <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    </head>
+
+    <body>
+        <!--Página registar materia-->
+        <div data-role="page" id="registrar_materia">
+            <!--Encabezado-->
+            <header data-role="header" data-theme="b">
+                <a href="index.html" data-icon="back" data-iconpos="notext"> </a>
+                <h1>Registrar Materia</h1>
+            </header>
+
+            <!--Contenido-->
+            <section data-role="content">
+                <form data-ajax="false">
+                    <label>Nombre de la Materia:</label>
+                    <input type="text" id="iptMateria" required="required" pattern="^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$"/>
+                    <label>N&uacutemero de Cupos M&aacuteximo</label>
+                    <input type="number" id="iptNumMaxCupo" required="required" max="99" min="1" pattern="^[0-9]{1,2}$"/>
+                    <input data-icon="edit" data-theme="b" type="button" id="btnGuardarMateria" value="Guardar" />
+                </form>
+            </section>
+
+        </div>
+
+        <script>
+        </script>
+    </body>
+</html>
