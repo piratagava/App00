@@ -32,16 +32,13 @@ public class controladorMateria {
 
 	// agrega registro de nueva materia
 	@RequestMapping(value = "/agregarMateria", method = RequestMethod.POST)
-	public @ResponseBody Boolean guardarMateria(@RequestBody Materia materia) {
+	public @ResponseBody String guardarMateria(@RequestBody Materia materia) {
 		try {
 			materiaBo.crearMateria(materia);
-			// Si te regresa true es porque no existe nombre repetidos en la tabla de la BD.
-			return true;
-		} catch (Exception e) {
+			return "201";
+		} catch (Error e) {
 			System.out.println("ERROR AL CREAR LA MATERIA" + e.getMessage());
-			// Si te regresa False la respuesta Post es por Duplicate entry 'nombre' for key
-			// 'nombre' se repiten
-			return false;
+			return e.getMessage();
 		}
 	}
 

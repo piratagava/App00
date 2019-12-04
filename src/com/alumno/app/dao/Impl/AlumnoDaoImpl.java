@@ -14,20 +14,31 @@ public class AlumnoDaoImpl implements AlumnoDao {
 
 	@PersistenceContext
 	private EntityManager entity;
-	
+
 	@Override
 	public void crearAlumno(Alumno alumno) {
 		entity.persist(alumno);
 		System.out.print("AGREGANDO PERSONA CORRECTA \n");
-		boolean exist=entity.contains(alumno);
+		boolean exist = entity.contains(alumno);
 		System.out.print("VERIFICANDO SI ESTRA DENTRO DE LA PERSISTENCIA " + exist + "\n");
-		
-		
+
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Alumno> getAllAlumnos() {
 		Session session = entity.unwrap(Session.class);
-		return session.createQuery("from Alumno").list();	
+		return session.createQuery("from Alumno").list();
+	}
+
+	@Override
+	public Alumno consultaAlumno(int id_alumno) {
+		Session session = entity.unwrap(Session.class);
+		return (Alumno) session.createQuery("from Alumno where id_alumno=" + id_alumno).uniqueResult();
+	}
+
+	@Override
+	public void actualizarAlumno(Alumno alumno) {
+		Session session = entity.unwrap(Session.class);
+		session.update(alumno);
 	}
 }

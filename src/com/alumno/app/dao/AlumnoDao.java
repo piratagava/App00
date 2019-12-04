@@ -10,4 +10,8 @@ public interface AlumnoDao {
 	
 	public List<Alumno> getAllAlumnos();
 	
+	public Alumno consultaAlumno(int id_alumno);
+	
+	public void actualizarAlumno(Alumno alumno);
+	
 }
