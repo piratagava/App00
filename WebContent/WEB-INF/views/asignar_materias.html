@@ -31,15 +31,15 @@
 
     <script>
         window.addEventListener('load', () => {
-            let paginaAlumnoMateria = document.querySelector("#registrar_alumno_materia");
-            paginaAlumnoMateria.addEventListener('click', ()=> {
+            //let paginaAlumnoMateria = document.querySelector("#asociar_materia");
+            //paginaAlumnoMateria.addEventListener('click', ()=> {
 
                 recibirDatosMaterias("listarMateria");
                 recibirDatosAlumnos("listarAlumno");        
-            });    
+            //});    
 
             //Evento cambio de materia
-            let materiaSeleccionada = document.querySelector("#comboMaterias");
+            let materiaSeleccionada = document.querySelector("#comboNombre");
             materiaSeleccionada.addEventListener('change', () => {
                 let id_materia = materiaSeleccionada.value
         	    alert(id_materia);
@@ -47,7 +47,51 @@
                 if (id_materia > 0)	consultarMateria("listarConsultaMateria/"+id_materia);
             });    
         });
+		
+      //recibirDatosMateria
+    	let recibirDatosMaterias = (ruta) => {
+		        /**
+		        * 
+		        */
+	        fetch(ruta, {
+	            method : 'GET',
+	        	headers : {
+	                'Content-Type' : 'application/json'
+	            }
+	        }).
+	        then(respuesta => {
+	            return respuesta.json();
+	        }).then ((data) => {
+	        	localStorage.setItem("Materias", JSON.stringify(data)); //////////////////////////////////////////////////////////////////////////////////////
+	          	  desplegarMaterias(data);
+	        }).
+	        catch(error => {
+	            alert(error);
+	        })
+    	}
+        
+      	//recibirDatosAlumnos
+        let recibirDatosAlumnos = (ruta) => {
+            fetch(ruta, {
+                method : 'GET',
+                headers : {
+                    'Content-Type' : 'application/json'
+                }
+            }).
+            then(respuesta => {
+                return respuesta.json();
+            }).
+                then(data => {
+                desplegarAlumnos(data);
+            }).
+            catch(error => {
+                alert(error);
+            });
+        }
 
+        
+        
+        
         //capturarDatosAlumnoMateria
         let capturarDatosAlumnoMateria = () => {
             let alumnoSeleccionado = document.querySelector("#comboAlumnos")

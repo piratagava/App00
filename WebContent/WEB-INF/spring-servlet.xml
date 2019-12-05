@@ -28,14 +28,6 @@
 	
 	<!-- Propiedade de mi base de datos -->
 	<context:property-placeholder location="/META-INF/jdbc.properties" />
-
-	<!--Prefijo de ruta de archivo y sufijo tipo de archivo que va leer para las vistas-->
-	<bean
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix" value="WEB-INF/views/" />
-		<property name="suffix" value=".html" />
-	</bean>
-	
 		
 	<!-- Configuracion para trabajar con JPA -->
 <bean id="entityManagerFactoryBean" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
@@ -78,6 +70,13 @@
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
       <property name="entityManagerFactory" ref="entityManagerFactoryBean" />
    </bean>
+   
+   <bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="WEB-INF/views/" />
+		<property name="suffix" value=".html" />
+	</bean>
+	
 	
 <!--responsable de registrar los componentes Spring necesarios que impulsan la gestión de transacciones
  	impulsada por anotaciones; como cuando se invocan los métodos @Transactional-->

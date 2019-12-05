@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    	
         <title>Registrar Alumno</title>
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
         <script src="http://code.jquery.com/jquery-1.11.1.min.js" rel="external"></script>
@@ -10,7 +11,7 @@
     </head>
     
     <body>
-        <!--PÃ¡gina registar materia-->
+        <!--Página registar materia-->
         <div data-role="page" id="alta_alumno">
             <!--Encabezado-->
             <header data-role="header" data-theme="b">
@@ -43,6 +44,8 @@
                         
                         <label> Subir foto del alumno:</label>
                         <input id="iptFoto" type="file" accept="image/jpeg" required="required" />
+                                           
+                        
                         <input id="btnGuardarAlumno" type="button" data-theme="b" data-icon="check" value="Guardar"/>
                     </form>
 
@@ -52,12 +55,12 @@
                 </div>                
             </section>
         </div>
-    </body>
+   
     
     
     <script>
     	'use strict'
-    	//window.addEventListener('load', () => {
+    	window.addEventListener('load', () => {
             //evento el cual se dispara cuando el evento de la foto es cambiada.
             let inputFoto = document.querySelector('#iptFoto');
             inputFoto.addEventListener('change', () => {
@@ -78,14 +81,14 @@
                 let fechaNacimiento = new Date(_fechaNacimiento)
                 let edad = calcularEdad(fechaNacimiento);
                 if (edad <= 0 || isNaN(fechaNacimiento.getFullYear())) {
-                    alert("La fecha de nacimiento no puede ser mayor o igual al aÃ±o actual.")
+                    alert("La fecha de nacimiento no puede ser mayor o igual al año actual.")
                     document.getElementById("iptEdad").value = 0;
                 } else {
-                    document.getElementById("iptEdad").value = edad  + " AÃ±os.";
+                    document.getElementById("iptEdad").value = edad  + " Años.";
                 }
             });
 
-        //});
+        });
 
         //capturarDatosAlumno
         let capturarDatosAlumno = () => {
@@ -122,7 +125,7 @@
                 let valido = validarDatosAlumno(alumno);
                 
                 if (valido === 1 ) {
-                    enviarDatosAlumno("agregarAlumno", alumno);
+                    enviarDatosAlumno("alta_alumno", alumno);
                 } else {
                     alert("Capture todos los campos.")
                 }
@@ -141,7 +144,7 @@
             }
 
             /**
-            * Contiene la informaciÃ³n de todos los archivos seleccionado
+            * Contiene la información de todos los archivos seleccionado
             */
             let archivo = entradaFoto.files;    
             let foto = document.createElement('img');
@@ -162,7 +165,7 @@
                 return
             }
             if (archivo.size > 555000) {
-                alert("El tamaÃ±o de la imagan sobrepasa los 555 kb.")
+                alert("El tamaño de la imagan sobrepasa los 555 kb.")
                 return
             } 
             else  valido >>= 1;
@@ -188,7 +191,7 @@
                     if (respuesta.status == 200) alert("Los datos del alumno ha sido registrados.")
                     location.reload("/");
                 } else {
-                    alert("El correo electrÃ³nico ya ha sido registrado.");
+                    alert("El correo electrónico ya ha sido registrado.");
                 }
                 
             }).
@@ -242,7 +245,7 @@
                 let validaCorreo = new RegExp("^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$");
                 let esValido = validaCorreo.exec(alumno["correoElectronico"]);
                 if (esValido == null) {
-                    alert("El correo electrÃ³nico no ha sido validado.");
+                    alert("El correo electrónico no ha sido validado.");
                 } else {
                     valido >>= 1;	
                 }
@@ -266,7 +269,7 @@
 	            
 	        let edad = anios_actual - anios;
 	        
-	        //Hasta este momento aun no cumples aÃ±o a pesar de que ya es tu mes.
+	        //Hasta este momento aun no cumples año a pesar de que ya es tu mes.
 	        if (mes_actual <= mes) {
 	            edad = edad - 1;
 	        }
@@ -274,8 +277,10 @@
 	        if (dia_actual >= dia) {
 	            edad = edad + 1
 	        }    
+	        	     	        
 	
 	        return edad;
     	}
-    </script>
+    	</script>
+     </body>
 </html>

@@ -21,7 +21,7 @@ public class Alumno_MateriaBoImpl implements Alumno_MateriaBo {
 
 	@Override
 	@HttpConstraint
-	public List<Materia> crearAlumno_Materia(List<AlumnoMateria> ListCrear) {
+	public List<Materia> crearAlumno_Materia(List<AlumnoMateria> ListCrear){
 		List<Materia> materiasOcupadas = new ArrayList();
 		List<AlumnoMateria> listTablaDB = getIDAllAlumnosMAterias(ListCrear.get(0).getId_alumno());
 		// condicion si lista materia viene en 0 para eliminar todas las asociaciones

@@ -1,6 +1,10 @@
 package com.alumno.app.controllers.alumno;
 
 import java.util.List;
+import java.util.logging.Logger;
+
+import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,14 +16,16 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alumno.app.bo.AlumnoBo;
 import com.alumno.app.model.Alumno;
 
-@Controller
+@Controller("/principal")
 public class controladorAlumno {
 
+	//public static final Logger log = (Logger) LoggerFactory.getLogger(controladorAlumno.class);
+	
 	@Autowired
 	private AlumnoBo alumnoBo;
 
 	// Variables de clases, global, local, pendiente
-	private ModelAndView mav = new ModelAndView();
+	ModelAndView mav = new ModelAndView();
 
 	// permite iniciar index.html
 	@RequestMapping(value = "/", method = RequestMethod.GET)
