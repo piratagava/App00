@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+    	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    	
+        <title>Registrar Alumno</title>
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+        <script src="http://code.jquery.com/jquery-1.11.1.min.js" rel="external"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js" rel="external"></script>
+    </head>
+    
+    <body>
+        <!--Página registar materia-->
+        <div data-role="page" id="alta_alumno">
+            <!--Encabezado-->
+            <header data-role="header" data-theme="b">
+                <a href="/App00/" data-icon="back" data-iconpos="notext"> </a>
+                <h1>Alta de Alumno</h1>
+            </header>
+
+            <!--Contenido-->
+            <section data-role="content">
+                <h2>Registrar Alumno</h2>
+                <div class="ui-grid-a">
+                    <form class="ui-block-a" data-ajax="false" autocomplete="on">                    
+                        <label> Nombre: </label>
+                        <input id="iptNombre" type="text" placeholder="Nombre del alumno" required="required" pattern="^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$"/>
+                    
+                        <label> Apellido Paterno:</label>
+                        <input id="iptApellido1" type="text" placeholder="Primer apellido" required="required" pattern="^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$"/>
+                    
+                        <label> Apellido Materno:</label>
+                        <input id="iptApellido2" type="text" placeholder="Segundo apellido" required="required" pattern="^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$"/>
+                    
+                        <label> Fecha de Nacimiento:</label>
+                        <input id="iptFechaNacimiento" type="date" required="required" min="1900-01-01"/>
+                    
+                        <label> Correo Electr&oacutenico:</label>
+                        <input id="iptCorreo" type="email" required="required" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"/>
+                    
+                        <label> Edad: </label>
+                        <input id="iptEdad" type="text" readonly/>
+                        
+                        <label> Subir foto del alumno:</label>
+                        <input id="iptFoto" type="file" accept="image/jpeg" required="required" />
+                                           
+                        
+                        <input id="btnGuardarAlumno" type="button" data-theme="b" data-icon="check" value="Guardar"/>
+                    </form>
+
+                    <aside id="divLienzo" class="ui-block-b"> 
+                        <img width="100%" src="#"/>    
+                    </aside>        
+                </div>                
+            </section>
+        </div>
+   
+    
+    
+    <script>
+    	'use strict'
+    	window.addEventListener('load', () => {
+            //evento el cual se dispara cuando el evento de la foto es cambiada.
+            let inputFoto = document.querySelector('#iptFoto');
+            inputFoto.addEventListener('change', () => {
+                if (desplegarFoto() == false) {
+                    inpuFoto.value = "";
+                }
+            });
+            
+            //evento el cual se dispara cuando el boton guardar clikeado
+            let accionGuardar = document.querySelector("#btnGuardarAlumno");   	 	
+            accionGuardar.addEventListener('click', capturarDatosAlumno);
+            
+            //evento el cual se dispara cuando el input de la fecha de nacimiento pierde el focus.
+            let accionEdad = document.querySelector("#iptFechaNacimiento");    
+            accionEdad.addEventListener("blur", () => {
+            
+                let _fechaNacimiento = document.getElementById("iptFechaNacimiento").value;
+                let fechaNacimiento = new Date(_fechaNacimiento)
+                let edad = calcularEdad(fechaNacimiento);
+                if (edad <= 0 || isNaN(fechaNacimiento.getFullYear())) {
+                    alert("La fecha de nacimiento no puede ser mayor o igual al año actual.")
+                    document.getElementById("iptEdad").value = 0;
+                } else {
+                    document.getElementById("iptEdad").value = edad  + " Años.";
+                }
+            });
+
+        });
+
+        //capturarDatosAlumno
+        let capturarDatosAlumno = () => {
+            /**
+            * Captura los datos de los alumno, y valida que al menos hayan sido capturados los datos.
+            */
+            let nombre = document.getElementById("iptNombre").value;
+            let apellidoPaterno = document.getElementById("iptApellido1").value;
+            let apellidoMaterno = document.getElementById("iptApellido2").value;
+            let fechaNacimiento = document.getElementById("iptFechaNacimiento").value;
+            let correoElectronico = document.getElementById("iptCorreo").value;
+            
+
+            let lector = new FileReader();
+            let entradaFoto = document.querySelector('#iptFoto');
+            let archivo = entradaFoto.files;
+            let blob = new Blob(archivo, {type : 'image/jpeg'})
+            console.log(archivo)
+            
+
+            lector.readAsBinaryString(blob);
+            lector.onload = () => {
+                let jpge64 = window.btoa(lector.result);
+                
+                let alumno = {
+                    "nombre" : nombre,
+                    "apellidoPaterno" : apellidoPaterno,
+                    "apellidoMaterno" : apellidoMaterno,
+                    "fechaNacimiento" : new Date(fechaNacimiento),
+                    "correoElectronico" : correoElectronico,
+                    "contenido" : jpge64
+                }
+
+                let valido = validarDatosAlumno(alumno);
+                
+                if (valido === 1 ) {
+                    enviarDatosAlumno("alta_alumno", alumno);
+                } else {
+                    alert("Capture todos los campos.")
+                }
+            }
+        }
+
+        //desplegarFoto
+        let desplegarFoto = () => {
+            /**
+            * Despliega la foto de alumno una vez haya sido seleccionada.
+            */
+            let entradaFoto = document.querySelector('#iptFoto');
+            let lienzo = document.querySelector("#divLienzo");
+            while (lienzo.firstChild) {
+                lienzo.removeChild(lienzo.firstChild);
+            }
+
+            /**
+            * Contiene la información de todos los archivos seleccionado
+            */
+            let archivo = entradaFoto.files;    
+            let foto = document.createElement('img');
+            foto.setAttribute("width", "100%");
+            let valido = validarFotoAlumno(archivo[0])
+            
+            if (valido == 1) {
+                foto.src = URL.createObjectURL(archivo[0]);
+                lienzo.appendChild(foto);
+            } else return false;    
+        }
+
+        //validarFotoAlumno
+        let validarFotoAlumno = (archivo) => {
+            let valido = 2;
+            if (archivo.type != 'image/jpeg') {
+                alert("El archivo que ha seleccionado no es un formato jpeg.")
+                return
+            }
+            if (archivo.size > 555000) {
+                alert("El tamaño de la imagan sobrepasa los 555 kb.")
+                return
+            } 
+            else  valido >>= 1;
+            return valido;
+        }
+
+        //enviarDatosAlumno
+        let enviarDatosAlumno = (ruta, datosAlumno) => {
+            /**
+            * Envia un objecto json al servidor con los datos del alumno.
+            */
+            console.log(datosAlumno)
+            fetch(ruta, {
+                method : 'POST',
+                body : JSON.stringify(datosAlumno),
+                headers : {
+                    'Content-Type' : 'application/json'
+                }
+            }).
+            then(respuesta => {
+                console.log(respuesta);
+                if (respuesta.ok == true) {
+                    if (respuesta.status == 200) alert("Los datos del alumno ha sido registrados.")
+                    location.reload("/");
+                } else {
+                    alert("El correo electrónico ya ha sido registrado.");
+                }
+                
+            }).
+            catch(error => alert(error));
+        }
+
+        //validarDatosAlumno
+        let validarDatosAlumno = (alumno) => {
+            /**
+            * Valida que los datos del alumno no esten vacios.
+            */
+            let valido = 64;
+
+            if (alumno["nombre"].length > 0 ) {
+                let validaNombre = /^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$/
+                let esValido = validaNombre.exec(alumno["nombre"]);
+                if (esValido == null) {
+                    alert("El nombre del alumno no ha sido validado.");
+                } else {
+                    valido >>= 1;		
+                }
+            } 
+            if (alumno["apellidoPaterno"].length > 0)  {
+                let validaApellidoPaterno = /^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$/
+                let esValido = validaApellidoPaterno.exec(alumno["apellidoPaterno"]);
+                if (esValido == null) {
+                    alert("El apellido paterno del alumno no ha sido validado.");
+                } else {
+                    valido >>= 1;		
+                }
+            }
+            if (alumno["apellidoMaterno"].length > 0)  {
+                let validaApellidoMaterno = /^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$/
+                let esValido = validaApellidoMaterno.exec(alumno["apellidoMaterno"]);
+                if (esValido == null) {
+                    alert("El apellido materno del alumno no ha sido validado.");
+                } else {
+                    valido >>= 1;		
+                }
+            }
+            let fechaNacimiento = new Date(alumno["fechaNacimiento"])
+            let edad = calcularEdad(fechaNacimiento);
+                
+            if (edad <= 0 || isNaN(fechaNacimiento.getFullYear())) {
+                alert("La fecha de nacimiento no ha sido validada.");
+            } else {
+                valido >>= 1;
+            }
+            
+            if (alumno["correoElectronico"].length > 0) {
+                let validaCorreo = new RegExp("^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$");
+                let esValido = validaCorreo.exec(alumno["correoElectronico"]);
+                if (esValido == null) {
+                    alert("El correo electrónico no ha sido validado.");
+                } else {
+                    valido >>= 1;	
+                }
+                
+            };
+            if (alumno["contenido"].length > 0) valido >>= 1;
+            console.log(valido);
+            return valido;
+        }
+
+        //Calcular Edad
+        let calcularEdad = (fechaNacimiento) => {
+	        let anios = fechaNacimiento.getFullYear();
+	        let mes = fechaNacimiento.getMonth();
+	        let dia = fechaNacimiento.getDate() + 1;
+	
+	        let fechaActual = new Date();
+	        let anios_actual = fechaActual.getFullYear();
+	        let mes_actual = fechaActual.getMonth();
+	        let dia_actual = fechaActual.getDate();
+	            
+	        let edad = anios_actual - anios;
+	        
+	        //Hasta este momento aun no cumples año a pesar de que ya es tu mes.
+	        if (mes_actual <= mes) {
+	            edad = edad - 1;
+	        }
+	
+	        if (dia_actual >= dia) {
+	            edad = edad + 1
+	        }    
+	        	     	        
+	
+	        return edad;
+    	}
+    	</script>
+     </body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Registrar Materia</title>
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+        <script src="http://code.jquery.com/jquery-1.11.1.min.js" rel="external"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js" rel="external"></script>
+    </head>
+
+    <body>
+        <!--Página registar materia-->
+        <div data-role="page" id="registrar_materia">
+            <!--Encabezado-->
+            <header data-role="header" data-theme="b">
+                <a href="/App00/" data-icon="back" data-iconpos="notext"> </a>
+                <h1>Registrar Materia</h1>
+            </header>
+
+            <!--Contenido-->
+            <section data-role="content">
+                <h2>Registrar Materia</h2>
+                <form data-ajax="false">
+                    <label>Nombre de la Materia:</label>
+                    <input type="text" id="iptMateria" required="required" pattern="^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$"/>
+                    <label>N&uacutemero de Cupos M&aacuteximo</label>
+                    <input type="number" id="iptNumMaxCupo" required="required" max="99" min="1" pattern="^[0-9]{1,2}$"/>
+                    <input data-icon="edit" data-theme="b" type="button" id="btnGuardarMateria" value="Guardar" />
+                </form>
+            </section>
+
+        </div>
+
+        <script>
+            'use strict'
+            window.addEventListener('load', () => {
+                let accionGuardarMateria = document.querySelector("#btnGuardarMateria");
+                accionGuardarMateria.addEventListener('click', () => {
+        	        capturarDatosMateria("POST")
+                });
+            })
+
+
+            //caputurarDatosMateria
+            let capturarDatosMateria = (accion) => {
+            /**
+            * Captura los datos de las materia y confirma que al menos hayan sido capturados los datos.
+            */
+            let nombre = document.getElementById("iptMateria").value;
+            let numMaxCupo = document.getElementById("iptNumMaxCupo").value;
+            
+            let materia = {
+                "nombre" : nombre,
+                "numMaxCupo" : numMaxCupo
+            }
+            console.log(materia)
+            let valido = validarDatosMateria(materia);
+                
+            if (valido === 1 ) {
+                if (accion === "POST") {
+                    enviarDatosMateria("registrar_materia", materia);	
+                } else if (accion === "PUT") {
+                    actualizarDatosMateria("editar_materia", materia)
+                }
+            } else {
+                alert("Capture todos los campos.")
+            }
+
+        }
+
+            let validarDatosMateria = (materia) => {
+            /**
+            * Valida que los datos de la materia no esten vacios.
+            */
+            let valido = 4;
+
+            if (materia["nombre"].length > 0) {
+                let validaMateria = /^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$/
+                let esValido = validaMateria.exec(materia["nombre"]);
+                
+                if (esValido == null) {
+                    alert("El nombre de la materia no ha sido validado.");
+                } else {
+                    valido >>= 1;		
+                }
+            }
+            if (materia["numMaxCupo"].length > 0) {
+                let validaNumMaxCupo = /^[0-9]{1,2}$/
+                let esValido = validaNumMaxCupo.exec(materia["numMaxCupo"]);
+                
+                if (esValido == null || materia["numMaxCupo"] <= 0) {
+                    alert("El número de cupos no ha sido validado.");
+                } else {
+                    valido >>= 1;		
+                }
+            } 
+            
+            console.log(valido);
+            return valido;
+        }
+
+        let enviarDatosMateria = (ruta,datosMateria) => {
+            /**
+            * Envia un objecto json al servidor con los datos de la materia.
+            */
+            fetch(ruta, {
+                method : "POST",
+                body : JSON.stringify(datosMateria),
+                headers : {
+                    'Content-Type' : 'application/json'
+                }
+            }).
+            then(respuesta => {
+                if (respuesta.ok == "201") {
+                	alert("La materia ha sido registrada.");
+                	location.reload("/");
+                } else {
+                	alert("No se ha podido registrar la materia.")
+                }
+                
+                
+            }).
+            catch(error => alert(error));
+        } 
+
+        </script>
+    </body>
+</html>
