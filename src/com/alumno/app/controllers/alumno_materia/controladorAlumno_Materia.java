@@ -44,13 +44,14 @@ public class controladorAlumno_Materia {
 
 	// crea el registro de asociacion alumno y materia
 	@RequestMapping(value = "/asignar_materias", method = RequestMethod.POST)
-	public @ResponseBody List<Materia> guardarAlumnoMateria(@RequestBody List<AlumnoMateria> obtner) {
-		// try{
-		List<Materia> materias = alumno_materiaBo.crearAlumno_Materia(obtner);
-		return materias;
-		// }catch (Error e) {
-		// System.out.println("ERROR /n"+e.getMessage());
-		// return e.getMessage();
+	public @ResponseBody String guardarAlumnoMateria(@RequestBody List<AlumnoMateria> obtner) {
+		try {
+			alumno_materiaBo.crearAlumno_Materia(obtner);
+			return "201";
+		} catch (Error e) {
+			System.out.println("ERROR AL CREAR LA MATERIA" + e.getMessage());
+			return e.getMessage();
+		}
 	}
 
 	// }
