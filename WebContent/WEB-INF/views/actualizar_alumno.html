@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Editar Alumno</title>
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+        <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    </head>
+    
+    <body>
+        <!--Página editar alumno-->
+        <div data-role="page" id="editar_alumno">
+            <!--Encabezado-->
+            <header data-role="header" data-theme="b">
+                <a href="/App00/" data-icon="back" data-iconpos="notext"> </a>
+                <h1>Editar Alumno</h1>
+            </header>
+
+            <!--Contenido-->
+            <section data-role="content">
+                <h2>Editar Alumno</h2>
+                <label> Seleccione al alumno:</label>
+                <select id="comboAlumnos">
+
+                </select>
+                <div class="ui-grid-a">
+                    <form class="ui-block-a" data-ajax="false" autocomplete="on">                    
+                        <label> Nombre: </label>
+                        <input id="iptNombre" type="text" placeholder="Nombre del alumno" required="required" pattern="^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$"/>
+                        
+                        <label> Apellido Paterno:</label>
+                        <input id="iptApellido1" type="text" placeholder="Primer apellido" required="required" pattern="^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$"/>
+                        
+                        <label> Apellido Materno:</label>
+                        <input id="iptApellido2" type="text" placeholder="Segundo apellido" required="required" pattern="^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$"/>
+                        
+                        <label> Fecha de Nacimiento:</label>
+                        <input id="iptFechaNacimiento" type="date" required="required" min="1900-01-01"/>
+                        
+                        <label> Correo Electr&oacutenico:</label>
+                        <input id="iptCorreo" type="email" required="required" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"/>
+                        
+                        <label> Edad: </label>
+                        <input id="iptEdad" type="text" readonly/>
+                            
+                        <label> Subir foto del alumno:</label>
+                        <input id="iptFoto" type="file" accept="image/jpeg" required="required" />
+                                                   
+                        <input id="btnEditarAlumno" type="button" data-theme="b" data-icon="check" value="Guardar"/>
+                    </form>
+    
+                    <aside id="divLienzo" class="ui-block-b"> 
+                        <img width="100%" src="#"/>    
+                    </aside>        
+                </div>                
+            </section>
+        </div>
+    </body>
+
+    <script>
+        'use strict'
+    	window.addEventListener('load', () => {
+            obtenerDatosAlumnos("POR DE DEFIR RUTAS");
+            let alumnoSeleccionado = document.querySelector("#comboAlumnos")
+            alumnoSeleccionado.addEventListener('change', () =>{
+                let id_alumno = alumnoSeleccionado.value
+                if (id_alumno > 0) consultarAlumno("POR DEFINIR");
+            });
+        });
+        //consultarAlumno
+        let consultarAlumno = (ruta) => {
+            fetch(ruta, {
+                method : 'GET',
+                headers : {
+                    'Content-Type' : 'application/json'
+                }
+            }).
+            then(respuesta => {
+                return respuesta.json();
+            }).
+            then(data => {
+                desplegarAlumno(data);
+            }).
+            catch(error => {
+                alert(error);
+            });
+        }
+        //desplegarAlumno 
+        let desplegarAlumno = (alumno) => {
+            document.getElementById("iptNombte").value = alumno.nombre;
+            document.getElementById("iptApellidos1").value = alumno.apellidoPaterno;
+            document.getElementById("iptApellidos2").value = alumno.apellidoMaterno;
+            document.getElementById("iptFechaNacimiento").value = alumno.fechaNacimiento;
+        }
+    </script>
+</html>

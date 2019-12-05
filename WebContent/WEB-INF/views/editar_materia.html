@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Editar Alumno</title>
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
         <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
         <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
@@ -19,6 +20,7 @@
                 
             <!--Contenido-->
             <section data-role="content">
+                <h2>Editar Alumno</h2>
                 <label> Seleccione la materia:</label>
                 <select id="comboMaterias">                                        
                         
@@ -29,7 +31,7 @@
                     <input type="text" id="iptIdMateria" disabled="disabled"/>
                                         
                     <label>Nombre de la Materia:</label>
-                    <input type="text" id="iptMateria" required="required" pattern="^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$"/>
+                    <input type="text" id="iptNombreMateria" required="required" pattern="^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$"/>
                     <label>N&uacutemero de Cupos M&aacuteximo</label>
                     <input type="number" id="iptNumMaxCupo" required="required" max="99" min="1" pattern="^[0-9]{1,2}$"/>
                     <input data-icon="edit" data-theme="b" type="button" id="btnEditarMateria" value="Editar">
@@ -43,9 +45,8 @@
             //
             //let paginaEditarMateria = document.querySelector("#editar_materia");
             //paginaEditarMateria.addEventListener('click', () => {
-                obtenerDatosMaterias("listarMateria");
+            obtenerDatosMaterias("listarMateria");
             //});
-
             let materiaSeleccionada = document.querySelector("#comboMaterias");
             
             materiaSeleccionada.addEventListener('change', () => {
@@ -70,23 +71,23 @@
         	    method : 'GET',
         	    headers : {
         	    	'Content-Type' : 'application/json'
-        	    	}
-        	    }).
-        	    then(respuesta => {
-        	    	return respuesta.json();
-        	    }).then ((data) => {
-        	    	desplegarMateria(data);
-        	    }).
-        	    catch(error => {
-        	    	alert(error);
-        	    });
+        	    }
+        	}).
+        	then(respuesta => {
+        	    return respuesta.json();
+        	}).then ((data) => {
+        	    desplegarMateria(data);
+        	}).
+        	catch(error => {
+        	    alert(error);
+        	});
         }
-        //
+        //desplegarMateria
         let desplegarMateria = (materia) => {
 	    	/**
 	    	* Desplegará los datos de la materia, en el cual se mostrará el nombre de la materia y el número máximo de cupos
 	    	**/
-	    	document.getElementById("iptMateria").value = materia.nombre;
+	    	document.getElementById("iptNombteMateria").value = materia.nombre;
 	    	document.getElementById("iptNumMaxCupo").value = materia.numMaxCupo;
 	    	document.getElementById("iptIdMateria").value = materia.id_materia;
 	    	
@@ -103,7 +104,7 @@
         /**
         * Captura los datos de las materia y confirma que al menos hayan sido capturados los datos.
         */
-            let nombre = document.getElementById("iptMateria").value;
+            let nombre = document.getElementById("iptNombreMateria").value;
             let numMaxCupo = document.getElementById("iptNumMaxCupo").value;
             let idMateria = document.getElementById("iptIdMateria").value;
             
@@ -121,15 +122,12 @@
             } else {
                 alert("Capture todos los campos.")
             }
-
     	}
-
         let validarDatosMateria = (materia) => {
             /**
             * Valida que los datos de la materia no esten vacios.
             */
             let valido = 4;
-
             if (materia["nombre"].length > 0) {
                 let validaMateria = /^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$/
                 let esValido = validaMateria.exec(materia["nombre"]);
@@ -154,7 +152,6 @@
             console.log(valido);
             return valido;
         }
-
 		//enviarDatosMateria        
         let enviarDatosMateria = (ruta,datosMateria) => {
             /**
@@ -179,7 +176,6 @@
             }).
             catch(error => alert(error));
         } 
-
         
         
         /////////////////////////////////////////////////////////////////////////
@@ -207,7 +203,6 @@
         	/**
         	* Desplegará las materias que esten registradas, las cuales se mostrarán en un compotente combox.
         	*/
-
         	let otnMateria = ``;
         	let i = 0;
         	
@@ -249,7 +244,6 @@
             }).
             catch(error => alert(error));
    	    }
-
         //desplegarMaterias
         let desplegarMaterias = (lstMaterias) => {
             /**
@@ -278,4 +272,4 @@
             accionGrabarAlumnoMateria.addEventListener('click', capturarDatosAlumnoMateria);
         }         
     </script>
-</html>              
+</html>  

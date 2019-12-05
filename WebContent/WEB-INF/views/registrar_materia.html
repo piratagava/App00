@@ -11,7 +11,7 @@
     </head>
 
     <body>
-        <!--Página registar materia-->
+        <!--PÃ¡gina registar materia-->
         <div data-role="page" id="registrar_materia">
             <!--Encabezado-->
             <header data-role="header" data-theme="b">
@@ -41,8 +41,6 @@
         	        capturarDatosMateria()
                 });
             })
-
-
             //caputurarDatosMateria
             let capturarDatosMateria = () => {
             /**
@@ -63,15 +61,12 @@
 	            } else {
 	                alert("Capture todos los campos.")
 	            }
-
         	}
-
             let validarDatosMateria = (materia) => {
             /**
             * Valida que los datos de la materia no esten vacios.
             */
             let valido = 4;
-
             if (materia["nombre"].length > 0) {
                 let validaMateria = /^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$/
                 let esValido = validaMateria.exec(materia["nombre"]);
@@ -87,7 +82,7 @@
                 let esValido = validaNumMaxCupo.exec(materia["numMaxCupo"]);
                 
                 if (esValido == null || materia["numMaxCupo"] <= 0) {
-                    alert("El número de cupos no ha sido validado.");
+                    alert("El nÃºmero de cupos no ha sido validado.");
                 } else {
                     valido >>= 1;		
                 }
@@ -96,7 +91,6 @@
             console.log(valido);
             return valido;
         }
-
         let enviarDatosMateria = (ruta,datosMateria) => {
             /**
             * Envia un objecto json al servidor con los datos de la materia.
@@ -120,7 +114,6 @@
             }).
             catch(error => alert(error));
         } 
-
         </script>
     </body>
 </html>

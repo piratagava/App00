@@ -33,11 +33,9 @@
         window.addEventListener('load', () => {
             //let paginaAlumnoMateria = document.querySelector("#asociar_materia");
             //paginaAlumnoMateria.addEventListener('click', ()=> {
-
                 recibirDatosMaterias("listarMateria");
                 recibirDatosAlumnos("listarAlumno");        
             //});    
-
             //Evento cambio de materia
             let materiaSeleccionada = document.querySelector("#comboNombre");
             materiaSeleccionada.addEventListener('change', () => {
@@ -88,7 +86,6 @@
                 alert(error);
             });
         }
-
         
         
         
@@ -136,7 +133,6 @@
             if (id_alumno == 0) alert("Aun no se ha seleccionado el alumno.");
             else enviarDatosAlumnoMateria("agregarAlumnoMateria", AlumnoMaterias);
         };
-
         //buscarAlumnoMateria
         let buscarAlumnoMateria = (ruta) => {
             /**
@@ -159,7 +155,6 @@
                 alert(error);
             });
         }
-
         //desplegarDatosMaterias    
         let desplegarAlumnoMaterias = (lstAlumnoMaterias) => {
             /**
@@ -196,7 +191,6 @@
             })
             .catch( error => alert(error));
         }
-
         //buscarMariasOcupadas
         let buscarMateriasOcupadas = (ruta, id_alumno) => {
             fetch(ruta, {

@@ -11,7 +11,7 @@
     </head>
     
     <body>
-        <!--Página registar materia-->
+        <!--PÃ¡gina registar materia-->
         <div data-role="page" id="alta_alumno">
             <!--Encabezado-->
             <header data-role="header" data-theme="b">
@@ -81,15 +81,13 @@
                 let fechaNacimiento = new Date(_fechaNacimiento)
                 let edad = calcularEdad(fechaNacimiento);
                 if (edad <= 0 || isNaN(fechaNacimiento.getFullYear())) {
-                    alert("La fecha de nacimiento no puede ser mayor o igual al año actual.")
+                    alert("La fecha de nacimiento no puede ser mayor o igual al aÃ±o actual.")
                     document.getElementById("iptEdad").value = 0;
                 } else {
-                    document.getElementById("iptEdad").value = edad  + " Años.";
+                    document.getElementById("iptEdad").value = edad  + " AÃ±os.";
                 }
             });
-
         });
-
         //capturarDatosAlumno
         let capturarDatosAlumno = () => {
             /**
@@ -101,14 +99,12 @@
             let fechaNacimiento = document.getElementById("iptFechaNacimiento").value;
             let correoElectronico = document.getElementById("iptCorreo").value;
             
-
             let lector = new FileReader();
             let entradaFoto = document.querySelector('#iptFoto');
             let archivo = entradaFoto.files;
             let blob = new Blob(archivo, {type : 'image/jpeg'})
             console.log(archivo)
             
-
             lector.readAsBinaryString(blob);
             lector.onload = () => {
                 let jpge64 = window.btoa(lector.result);
@@ -121,7 +117,6 @@
                     "correoElectronico" : correoElectronico,
                     "contenido" : jpge64
                 }
-
                 let valido = validarDatosAlumno(alumno);
                 
                 if (valido === 1 ) {
@@ -131,7 +126,6 @@
                 }
             }
         }
-
         //desplegarFoto
         let desplegarFoto = () => {
             /**
@@ -142,9 +136,8 @@
             while (lienzo.firstChild) {
                 lienzo.removeChild(lienzo.firstChild);
             }
-
             /**
-            * Contiene la información de todos los archivos seleccionado
+            * Contiene la informaciÃ³n de todos los archivos seleccionado
             */
             let archivo = entradaFoto.files;    
             let foto = document.createElement('img');
@@ -156,7 +149,6 @@
                 lienzo.appendChild(foto);
             } else return false;    
         }
-
         //validarFotoAlumno
         let validarFotoAlumno = (archivo) => {
             let valido = 2;
@@ -165,13 +157,12 @@
                 return
             }
             if (archivo.size > 555000) {
-                alert("El tamaño de la imagan sobrepasa los 555 kb.")
+                alert("El tamaÃ±o de la imagan sobrepasa los 555 kb.")
                 return
             } 
             else  valido >>= 1;
             return valido;
         }
-
         //enviarDatosAlumno
         let enviarDatosAlumno = (ruta, datosAlumno) => {
             /**
@@ -191,20 +182,18 @@
                     if (respuesta.status == 200) alert("Los datos del alumno ha sido registrados.")
                     location.reload("/");
                 } else {
-                    alert("El correo electrónico ya ha sido registrado.");
+                    alert("El correo electrÃ³nico ya ha sido registrado.");
                 }
                 
             }).
             catch(error => alert(error));
         }
-
         //validarDatosAlumno
         let validarDatosAlumno = (alumno) => {
             /**
             * Valida que los datos del alumno no esten vacios.
             */
             let valido = 64;
-
             if (alumno["nombre"].length > 0 ) {
                 let validaNombre = /^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$/
                 let esValido = validaNombre.exec(alumno["nombre"]);
@@ -245,7 +234,7 @@
                 let validaCorreo = new RegExp("^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$");
                 let esValido = validaCorreo.exec(alumno["correoElectronico"]);
                 if (esValido == null) {
-                    alert("El correo electrónico no ha sido validado.");
+                    alert("El correo electrÃ³nico no ha sido validado.");
                 } else {
                     valido >>= 1;	
                 }
@@ -255,7 +244,6 @@
             console.log(valido);
             return valido;
         }
-
         //Calcular Edad
         let calcularEdad = (fechaNacimiento) => {
 	        let anios = fechaNacimiento.getFullYear();
@@ -269,7 +257,7 @@
 	            
 	        let edad = anios_actual - anios;
 	        
-	        //Hasta este momento aun no cumples año a pesar de que ya es tu mes.
+	        //Hasta este momento aun no cumples aÃ±o a pesar de que ya es tu mes.
 	        if (mes_actual <= mes) {
 	            edad = edad - 1;
 	        }

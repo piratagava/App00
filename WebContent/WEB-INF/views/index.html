@@ -50,7 +50,6 @@
     </body>
     <script>
     'use strict'
-
     window.addEventListener('load', () => {
         
     });
@@ -77,12 +76,10 @@
             otnAlumno += `<option value="${alumno.id_alumno}">${nombreCompleto}</option>`
             i ++;
         });
-
         let sltAlumnos = `<select>${otnAlumno}</select>`;
         let comboAlumnos = document.querySelector("#comboAlumnos");
         comboAlumnos.innerHTML = sltAlumnos;
     }
-
     	</script>  
     </body>
 </html>
