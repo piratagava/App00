@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+        <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    </head>
+
+    <body>
+        <!--Página alumno-materia -->
+        <div data-role="page" id="asignar_materias" data-dom-cache="false">
+            <!--Encabezado-->
+            <header data-role="header" data-theme="b">
+                <a href="/App00/" data-icon="back" data-iconpos="notext"> </a>
+                <h1>Asignar Materias</h1>
+            </header>
+
+            <!--Contenido-->
+            <section data-role="content">
+            	<h2>Asigna Materias</h2>
+            	<label> Seleccione el Alumno:</label>
+                <select id="comboAlumnos">                                        
+                </select>
+
+                <form id="fieldMaterias">
+                </form>
+            </section>
+        </div>
+    </body>
+
+    <script>
+        window.addEventListener('load', () => {
+            //let paginaAlumnoMateria = document.querySelector("#asociar_materia");
+            //paginaAlumnoMateria.addEventListener('click', ()=> {
+                recibirDatosMaterias("listarMateria");
+                recibirDatosAlumnos("listarAlumno");        
+            //});    
+            //Evento cambio de materia
+            
+            let alumnoSeleccionado = document.querySelector("#comboAlumnos");
+            
+            alumnoSeleccionado.addEventListener('change', () => {
+            	let m = localStorage.getItem("Materias")
+                let id_alumno = alumnoSeleccionado.value
+                let materias = JSON.parse(m);
+                //limpia los input :P
+            	desplegarMaterias(materias);	
+	            
+            	buscarMateriasOcupadas("listarCupoMaximoPorAlumno", id_alumno)
+                if (id_alumno > 0)	buscarAlumnoMateria("consultarAlumno/"+id_alumno);
+            });    
+        });
+        
+        //buscarMateriasOcupadas
+        let buscarMateriasOcupadas = (ruta, id_alumno) => {
+	        fetch(ruta, {
+	            method: "GET",
+	            headers : {
+	                'Content-Type' : 'application/json'
+	            }
+	        }).
+	        then(respuesta => {
+	            return respuesta.json();                        
+	        }). 
+	        then( data => {
+	            
+	        	let bandera = false;
+	            data.forEach(alumnoMateria => {
+	            	
+	            	console.log(alumnoMateria);
+	            	let input = document.getElementById(alumnoMateria[0]);	            	
+	            	if (bandera == false) {	            		
+	            		if (id_alumno ==  alumnoMateria[1]) {			               		
+		               		bandera = true;
+		               		input.removeAttribute("disabled");	
+		               		//input.removeAttribute("checked");
+		               	} else {
+		               		input.setAttribute("disabled","disabled");
+		               	}
+	            	}	            		               
+	            });
+	            
+	            /*
+	            let m = localStorage.getItem("Materias");
+	            let materias = JSON.parse(m);
+	            
+	            materias.forEach(materia => {
+	            	let input = document.getElementById(materia.id_materia);
+	            	if (input.hasAttribute('disabled') )
+	            }) 
+	            */
+	            //$("#fieldMaterias").trigger("create");
+	        })
+	        .catch( error => alert(error));
+	    }
+		
+      //recibirDatosMateria
+    	let recibirDatosMaterias = (ruta) => {
+		        /**
+		        * 
+		        */
+	        fetch(ruta, {
+	            method : 'GET',
+	        	headers : {
+	                'Content-Type' : 'application/json'
+	            }
+	        }).
+	        then(respuesta => {
+	            return respuesta.json();
+	        }).then ((data) => {
+	        	localStorage.setItem("Materias", JSON.stringify(data)); //////////////////////////////////////////////////////////////////////////////////////
+	          	  desplegarMaterias(data);
+	        }).
+	        catch(error => {
+	            alert(error);
+	        })
+    	}
+        
+      	//recibirDatosAlumnos
+        let recibirDatosAlumnos = (ruta) => {
+            fetch(ruta, {
+                method : 'GET',
+                headers : {
+                    'Content-Type' : 'application/json'
+                }
+            }).
+            then(respuesta => {
+                return respuesta.json();
+            }).
+                then(data => {
+                desplegarAlumnos(data);
+            }).
+            catch(error => {
+                alert(error);
+            });
+        }
+        
+        
+        
+        //capturarDatosAlumnoMateria
+        let capturarDatosAlumnoMateria = () => {
+            let alumnoSeleccionado = document.querySelector("#comboAlumnos")
+            let id_alumno = alumnoSeleccionado.value
+            
+            let _materias = localStorage.getItem("Materias");
+            let materias = JSON.parse(_materias);
+            
+            let AlumnoMaterias = [];
+            
+            materias.forEach(materia => {
+                let id_materia = materia.id_materia;
+                let selectMateria = document.getElementById(id_materia);
+                
+                if (selectMateria.hasAttribute("checked") || selectMateria.hasAttribute("data-cacheval") ) {
+                    let alumnoMateria = {
+                            'id_alumno' : id_alumno,
+                            'id_materia' : id_materia
+                    }
+                    AlumnoMaterias.push(alumnoMateria);	        		
+                }
+                
+                if (selectMateria.getAttribute('data-cacheval') == "true") {
+                    for (let i=0; i < AlumnoMaterias.length; i ++ ) {
+                        let _idAlumnoMateria = AlumnoMaterias[i].id_materia;					
+                        if (_idAlumnoMateria == id_materia) {	
+                            AlumnoMaterias.splice(i,1);
+                        }
+                    }
+                }
+                
+            });
+            
+            if (AlumnoMaterias.length <= 0) {
+            let alumnoMateria = {
+                    'id_alumno' : id_alumno,
+                    'id_materia' : "0"
+                }
+                AlumnoMaterias.push(alumnoMateria);	
+            }
+        
+            if (id_alumno == 0) alert("Aun no se ha seleccionado el alumno.");
+            else enviarDatosAlumnoMateria("asignar_materias", AlumnoMaterias);
+        };
+        //buscarAlumnoMateria
+        let buscarAlumnoMateria = (ruta) => {
+            /**
+            * Busca las materias las cuales esten asociadas al alumno.
+            * Si no tiene asociada materias, el sistema deberá regresar una lista vacia.
+            */
+            fetch(ruta, {
+                method : 'GET',
+                headers : {
+                    'Content-Type' : 'application/json'
+                }
+            }).
+            then(respuesta => {
+                return respuesta.json();
+            }).
+            then((data) => {
+                desplegarAlumnoMaterias(data);
+            }).
+            catch(error => {
+                alert(error);
+            });
+        }
+        //desplegarDatosMaterias    
+        let desplegarAlumnoMaterias = (lstAlumnoMaterias) => {
+            /**
+            * 
+            */
+                
+            if (lstAlumnoMaterias.length > 0 ) {	
+                lstAlumnoMaterias.forEach(alumnoMateria => {
+                    let idMateria = alumnoMateria.id_materia;
+                    let input = document.getElementById(idMateria);
+                    input.setAttribute("checked", "checked")
+                    input.removeAttribute("data-cacheval");	
+                });
+                $("#fieldMaterias").trigger("create");
+            } else {
+                alert("EL alumno aun no tiene materias asociadas.")
+            }
+        }
+        
+        //enviarDatosAlumnoMateria
+        let enviarDatosAlumnoMateria = (ruta, datosAlumnoMaterias) => {
+            fetch(ruta, {
+                method: "POST",
+                body : JSON.stringify(datosAlumnoMaterias),
+                headers : {
+                    'Content-Type' : 'application/json'
+                }
+            }).
+            then(respuesta => {
+                return respuesta.json();                    	
+            }). 
+            then( data => {
+                alert("Se han actualizado las materias del alumno.");
+                location.reload("/");
+            })
+            .catch( error => alert(error));
+        }
+        
+        /**
+        //buscarMariasOcupadas
+        let buscarMateriasOcupadas = (ruta, id_alumno) => {
+            fetch(ruta, {
+                method: "GET",
+                headers : {
+                    'Content-Type' : 'application/json'
+                }
+            }).
+            then(respuesta => {
+                return respuesta.json();                        
+            }). 
+            then( data => {
+                
+                
+                data.forEach(alumnoMateria => {
+                    if (id_alumno !=  alumnoMateria[1]) {
+                        let input = document.getElementById(alumnoMateria[0]);
+                        input.setAttribute("disabled","disabled");
+                    }
+                });
+                
+            })
+            .catch( error => alert(error));
+        }
+        **/
+      //desplegarMaterias
+        let desplegarMaterias = (lstMaterias) => {
+            /**
+            * Desplegará las materias que esten registrados en un componenye
+            */
+            let iptMaterias = ``;
+            let fieldMaterias = document.querySelector("#fieldMaterias");
+            
+            lstMaterias.forEach((materia) => {
+                iptMaterias += `
+                <input type="checkbox" name=${materia.nombre} id=${materia.id_materia} />
+                <label for=${materia.id_materia}>${materia.nombre}</label> `
+            });
+            
+            let fdtMaterias = `
+                <fieldset data-role="controlgroup" >
+                <legend>Seleccione la materia:</legend>
+                ${iptMaterias}
+                <button type="button" id="btnGrabarAlumnoMaterias" data-theme="b" data-icon="refresh"> Grabar Asociación </button>
+            `
+            fieldMaterias.innerHTML = fdtMaterias;
+            $("#fieldMaterias").trigger("create");
+            
+            //EvENTOS
+            let accionGrabarAlumnoMateria = document.querySelector("#btnGrabarAlumnoMaterias");
+            accionGrabarAlumnoMateria.addEventListener('click', capturarDatosAlumnoMateria);
+        }
+        
+        let desplegarAlumnos = (lstAlumnos) => {
+            /**
+            * Desplegará los alumnos que esten registrados en un componente combox.
+            */
+            let otnAlumno = ``;
+            
+            let i = 0 ;
+            lstAlumnos.forEach(alumno => {
+                if (i == 0)  otnAlumno += `<option value="0">SELECCIONE UN ALUMNO.</option>`
+                let nombreCompleto = alumno.nombre + " " + alumno.apellidoPaterno + " " + alumno.apellidoMaterno;
+                otnAlumno += `<option value="${alumno.id_alumno}">${nombreCompleto}</option>`
+                i ++;
+            });
+            let sltAlumnos = `<select>${otnAlumno}</select>`;
+            let comboAlumnos = document.querySelector("#comboAlumnos");
+            comboAlumnos.innerHTML = sltAlumnos;
+        }
+    </script>
+</html>
