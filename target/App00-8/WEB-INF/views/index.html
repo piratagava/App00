@@ -4,10 +4,9 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
-        <script src="http://code.jquery.com/jquery-1.11.1.min.js" rel="external"></script>
-        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js" rel="external"></script>
-    	<script src="/resources/js/main.js"> </script>
-    </head>
+        <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js" ></script>
+     </head>
 
     <body>
         <!--Página Principal-->
@@ -20,12 +19,12 @@
                     
                     <li data-role="list-divider">Alumnos</li>
                     <li><a href="alta_alumno" rel="external">Dar de alta Alumno</a></li>
-                    <li><a href="asignar_materias" id="registrar_alumno_materia">Asignar Materias</a></li>
+                    <li><a href="asignar_materias" id="registrar_alumno_materia" rel="external">Asignar Materias</a></li>
                     <li><a href="#">Editar Alumno</a></li>
 
                     <li data-role="list-divider">Materias</li>
-                    <li><a href="registrar_materia">Registrar Materia</a></li>
-                    <li><a href="editar_materia" id="editar_materia">Editar Materia</a></li>
+                    <li><a href="registrar_materia" rel="external">Registrar Materia</a></li>
+                    <li><a href="editar_materia" id="editar_materia" rel="external">Editar Materia</a></li>
                 </ul>
             </nav>
             
@@ -51,87 +50,18 @@
     </body>
     <script>
     'use strict'
-
     window.addEventListener('load', () => {
         
     });
     
-    //consultarMateria
-    let consultarMateria = (ruta) => {
-    	fetch(ruta, {
-    	    method : 'GET',
-    	    headers : {
-    	    	'Content-Type' : 'application/json'
-    	    	}
-    	    }).
-    	    then(respuesta => {
-    	    	return respuesta.json();
-    	    }).then ((data) => {
-    	    	desplegarMateria(data);
-    	    }).
-    	    catch(error => {
-    	    	alert(error);
-    	    });
-    }
     
-    let desplegarMateria = (materia) => {
-    	/**
-    	* Desplegará los datos de la materia, en el cual se mostrará el nombre de la materia y el número máximo de cupos
-    	**/
-    	document.getElementById("iptMateria").value = materia.nombre;
-    	document.getElementById("iptNumMaxCupo").value = materia.numMaxCupo;
-    	
-    	//Envento actualizar materia
-        
-        let btnEditarMateria = document.querySelector("#btnEditarMateria");
-    	btnEditarMateria.addEventListener('click', () => {
-    		capturarDatosMateria("PUT")
-    	});
-        
-    }
     
-    let desplegarComboMaterias = (lstMaterias) => {
-    	/**
-    	* Desplegará las materias que esten registradas, las cuales se mostrarán en un compotente combox.
-    	*/
-
-    	let otnMateria = ``;
-    	let i = 0;
-    	
-    	lstMaterias.forEach(materia => {
-    		
-    		if (i == 0) otnMateria += `<option value="0">SELECCIONE LA MATERIA.</option>`
-			otnMateria += `<option value=${materia.id_materia}>${materia.nombre}</option>` 
-    		i ++;
-    	
-    	});
-    	
-    	let comboMaterias = document.querySelector("#comboMaterias");
-    	let sltMaterias = `<select>${otnMateria}</select>`;
-    	comboMaterias.innerHTML = sltMaterias; 
-    }
     
+    
+      
     
   
-    //recibirDatosAlumnos
-    let recibirDatosAlumnos = (ruta) => {
-        fetch(ruta, {
-            method : 'GET',
-            headers : {
-                'Content-Type' : 'application/json'
-            }
-        }).
-        then(respuesta => {
-            return respuesta.json();
-        }).
-            then(data => {
-            desplegarAlumnos(data);
-        }).
-        catch(error => {
-            alert(error);
-        });
-    }
-
+    
     //desplegarAlumnos
     let desplegarAlumnos = (lstAlumnos) => {
         /**
@@ -146,12 +76,10 @@
             otnAlumno += `<option value="${alumno.id_alumno}">${nombreCompleto}</option>`
             i ++;
         });
-
         let sltAlumnos = `<select>${otnAlumno}</select>`;
         let comboAlumnos = document.querySelector("#comboAlumnos");
         comboAlumnos.innerHTML = sltAlumnos;
     }
-
     	</script>  
     </body>
 </html>

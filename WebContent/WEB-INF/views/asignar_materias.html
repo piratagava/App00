@@ -4,8 +4,8 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
-        <script src="http://code.jquery.com/jquery-1.11.1.min.js" rel="extenal"></script>
-        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js" rel="extenal"></script>
+        <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
     </head>
 
     <body>
@@ -19,12 +19,13 @@
 
             <!--Contenido-->
             <section data-role="content">
-                    <label> Seleccione el Alumno:</label>
-                    <select id="comboAlumnos">                                        
-                    </select>
+            	<h2>Asigna Materias</h2>
+            	<label> Seleccione el Alumno:</label>
+                <select id="comboAlumnos">                                        
+                </select>
 
-                    <form id="fieldMaterias">
-                    </form>
+                <form id="fieldMaterias">
+                </form>
             </section>
         </div>
     </body>
@@ -37,14 +38,66 @@
                 recibirDatosAlumnos("listarAlumno");        
             //});    
             //Evento cambio de materia
-            let materiaSeleccionada = document.querySelector("#comboNombre");
-            materiaSeleccionada.addEventListener('change', () => {
-                let id_materia = materiaSeleccionada.value
-        	    alert(id_materia);
-                //POR DEFINIR RUTA DEL CONTROLADOR,
-                if (id_materia > 0)	consultarMateria("listarConsultaMateria/"+id_materia);
+            
+            let alumnoSeleccionado = document.querySelector("#comboAlumnos");
+            
+            alumnoSeleccionado.addEventListener('change', () => {
+            	let m = localStorage.getItem("Materias")
+                let id_alumno = alumnoSeleccionado.value
+                let materias = JSON.parse(m);
+                //limpia los input :P
+            	desplegarMaterias(materias);	
+	            
+            	buscarMateriasOcupadas("listarCupoMaximoPorAlumno", id_alumno)
+                if (id_alumno > 0)	buscarAlumnoMateria("consultarAlumno/"+id_alumno);
             });    
         });
+        
+        //buscarMateriasOcupadas
+        let buscarMateriasOcupadas = (ruta, id_alumno) => {
+	        fetch(ruta, {
+	            method: "GET",
+	            headers : {
+	                'Content-Type' : 'application/json'
+	            }
+	        }).
+	        then(respuesta => {
+	            return respuesta.json();                        
+	        }). 
+	        then( data => {
+	            
+	        	let bandera = false; 
+	            data.forEach(alumnoMateria => {
+	            	console.log(alumnoMateria);
+	            	let input = document.getElementById(alumnoMateria[0]);
+	            	console.log(input);
+	               	
+	            	if (bandera == false) {
+	            		if (id_alumno ==  alumnoMateria[1]) {	
+		               		input.removeAttribute("disabled");
+		               		bandera = true
+		               	} else {
+		               		input.setAttribute("disabled","disabled");
+		               	}	
+	            	}
+	            	
+	               	
+	               	console.log(data)
+	            });
+	            
+	            /*
+	            let m = localStorage.getItem("Materias");
+	            let materias = JSON.parse(m);
+	            
+	            materias.forEach(materia => {
+	            	let input = document.getElementById(materia.id_materia);
+	            	if (input.hasAttribute('disabled') )
+	            }) 
+	            */
+	            //$("#fieldMaterias").trigger("create");
+	        })
+	        .catch( error => alert(error));
+	    }
 		
       //recibirDatosMateria
     	let recibirDatosMaterias = (ruta) => {
@@ -131,7 +184,7 @@
             }
         
             if (id_alumno == 0) alert("Aun no se ha seleccionado el alumno.");
-            else enviarDatosAlumnoMateria("agregarAlumnoMateria", AlumnoMaterias);
+            else enviarDatosAlumnoMateria("asignar_materias", AlumnoMaterias);
         };
         //buscarAlumnoMateria
         let buscarAlumnoMateria = (ruta) => {
@@ -191,6 +244,8 @@
             })
             .catch( error => alert(error));
         }
+        
+        /**
         //buscarMariasOcupadas
         let buscarMateriasOcupadas = (ruta, id_alumno) => {
             fetch(ruta, {
@@ -214,6 +269,52 @@
                 
             })
             .catch( error => alert(error));
+        }
+        **/
+      //desplegarMaterias
+        let desplegarMaterias = (lstMaterias) => {
+            /**
+            * Desplegará las materias que esten registrados en un componenye
+            */
+            let iptMaterias = ``;
+            let fieldMaterias = document.querySelector("#fieldMaterias");
+            
+            lstMaterias.forEach((materia) => {
+                iptMaterias += `
+                <input type="checkbox" name=${materia.nombre} id=${materia.id_materia} />
+                <label for=${materia.id_materia}>${materia.nombre}</label> `
+            });
+            
+            let fdtMaterias = `
+                <fieldset data-role="controlgroup" >
+                <legend>Seleccione la materia:</legend>
+                ${iptMaterias}
+                <button type="button" id="btnGrabarAlumnoMaterias" data-theme="b" data-icon="refresh"> Grabar Asociación </button>
+            `
+            fieldMaterias.innerHTML = fdtMaterias;
+            $("#fieldMaterias").trigger("create");
+            
+            //EvENTOS
+            let accionGrabarAlumnoMateria = document.querySelector("#btnGrabarAlumnoMaterias");
+            accionGrabarAlumnoMateria.addEventListener('click', capturarDatosAlumnoMateria);
+        }
+        
+        let desplegarAlumnos = (lstAlumnos) => {
+            /**
+            * Desplegará los alumnos que esten registrados en un componente combox.
+            */
+            let otnAlumno = ``;
+            
+            let i = 0 ;
+            lstAlumnos.forEach(alumno => {
+                if (i == 0)  otnAlumno += `<option value="0">SELECCIONE UN ALUMNO.</option>`
+                let nombreCompleto = alumno.nombre + " " + alumno.apellidoPaterno + " " + alumno.apellidoMaterno;
+                otnAlumno += `<option value="${alumno.id_alumno}">${nombreCompleto}</option>`
+                i ++;
+            });
+            let sltAlumnos = `<select>${otnAlumno}</select>`;
+            let comboAlumnos = document.querySelector("#comboAlumnos");
+            comboAlumnos.innerHTML = sltAlumnos;
         }
     </script>
 </html>
