@@ -65,17 +65,33 @@
 	    
 		obtenerDatosAlumno("listarAlumno");
 		
-		let inputFoto = document.querySelector('#iptFoto');
-        inputFoto.addEventListener('change', () => {
-            if (desplegarFoto() == false) {
-                inpuFoto.value = "";
-            }
-        });
 	
+        
 		let alumnoSeleccionado = document.querySelector("#comboAlumnos");
 		alumnoSeleccionado.addEventListener('change', () => {
             let id_alumno = alumnoSeleccionado.value
             if (id_alumno > 0) consultarAlumno("consultaAlumno/"+id_alumno);
+        });
+		
+		//evento el cual se dispara cuando el boton guardar clikeado
+        let accionEditar = document.querySelector("#btnEditarAlumno");   	 	
+        accionEditar.addEventListener('click', capturarDatosAlumno);
+        
+		
+		
+		//evento el cual se dispara cuando el input de la fecha de nacimiento pierde el focus.
+        let accionEdad = document.querySelector("#iptFechaNacimiento");    
+        accionEdad.addEventListener("blur", () => {
+        
+            let _fechaNacimiento = document.getElementById("iptFechaNacimiento").value;
+            let fechaNacimiento = new Date(_fechaNacimiento)
+            let edad = calcularEdad(fechaNacimiento);
+            if (edad <= 0 || isNaN(fechaNacimiento.getFullYear())) {
+                alert("La fecha de nacimiento no puede ser mayor o igual al año actual.")
+                document.getElementById("iptEdad").value = 0;
+            } else {
+                document.getElementById("iptEdad").value = edad  + " Años.";
+            }
         });
     });
     
@@ -139,13 +155,40 @@
     	document.getElementById("iptApellido1").value = alumno.apellidoPaterno;
     	document.getElementById("iptApellido2").value = alumno.apellidoMaterno;
     	document.getElementById("iptFechaNacimiento").value = alumno.fechaNacimiento;
-    	document.getElementById("iptCorreo").value = alumno.correoElectronico;	    	
-    	
+    	document.getElementById("iptCorreo").value = alumno.correoElectronico;	 
+    	document.getElementById("iptEdad").value = calcularEdad(new Date(alumno.fechaNacimiento));
+    	let urlImagen = cargarBufferJPGE(alumno.contenido);
+    	desplegarFoto2(urlImagen);
     	//aqui hacer conversion de imganen para obtenerlo y mostrarlo
         
     		//pendiente foto t
 	}
     
+    
+    //desplegarFoto
+    let desplegarFoto2 = (url) => {
+        /**
+        * Despliega la foto de alumno una vez haya sido seleccionada.
+        */
+        
+        let lienzo = document.querySelector("#divLienzo");
+        
+        while (lienzo.firstChild) {
+            lienzo.removeChild(lienzo.firstChild);
+        }
+
+        /**
+        * Contiene la informaci�n de todos los archivos seleccionado
+        */
+          
+        let foto = document.createElement('img');
+        foto.setAttribute("width", "100%");
+        
+        //foto.src = URL.createObjectURL(url);
+        foto.src = url
+        lienzo.appendChild(foto);
+        
+    }
     
   //capturarDatosAlumno
     let capturarDatosAlumno = () => {
@@ -338,5 +381,21 @@
 
         return edad;
 	}
+    
+    
+
+    let cargarBufferJPGE = (jpg64) => {
+    	 let decodedData = window.atob(jpg64);
+         let buffer = new ArrayBuffer(jpg64.length);
+         let view = new Uint8Array(buffer);
+         for (let i = 0; i < jpg64.length; i ++) {
+         	view[i] = decodedData.charCodeAt(i);
+         }
+         
+         let file = new Blob([view], {type:'image/jpeg'});
+         let url = URL.createObjectURL(file);
+         
+         return url;
+    }
     </script>
 </html>
