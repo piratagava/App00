@@ -34,7 +34,7 @@ public class Alumno {
 	private String correoElectronico;
 	
 	@Lob
-	@Column(name="contenido", length = 65535) //representa Text TEXT | 65,535 (216−1) bytes = 64 KiB
+	@Column(name="contenido", length = 555000) //representa Text TEXT | 65,535 (216−1) bytes = 64 KiB
 	private String contenido;
 	
 	
