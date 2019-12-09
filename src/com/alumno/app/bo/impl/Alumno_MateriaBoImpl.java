@@ -21,7 +21,7 @@ public class Alumno_MateriaBoImpl implements Alumno_MateriaBo {
 
 	@Override
 	@HttpConstraint
-	public List<Materia> crearAlumno_Materia(List<AlumnoMateria> ListCrear){
+	public List<Materia> crearAlumno_Materia(List<AlumnoMateria> ListCrear) {
 		List<Materia> materiasOcupadas = new ArrayList();
 		List<AlumnoMateria> listTablaDB = getIDAllAlumnosMAterias(ListCrear.get(0).getId_alumno());
 		// condicion si lista materia viene en 0 para eliminar todas las asociaciones
@@ -70,10 +70,10 @@ public class Alumno_MateriaBoImpl implements Alumno_MateriaBo {
 						for (Materia registra : consulta) {
 							int max = registra.getNumMaxCupo();
 							System.out.print("SOYYYYYY NUMERO MAXIMO " + max + "\n");
+							// Modifique con try catch
 
 							if (max <= 0) {
 								materiasOcupadas.add(registra);
-								// throw new Error("" + registra.getId_materia());
 								break;
 							} else {
 								int resultado = max - 1;
@@ -81,6 +81,7 @@ public class Alumno_MateriaBoImpl implements Alumno_MateriaBo {
 								dao.crearAlumno_Materia(fronList);
 								System.out.print("SEGUN TERMINE DE OPERAR SETEEEEEEEOOOOOO " + resultado + "\n");
 							}
+
 						}
 					}
 				}
@@ -93,16 +94,15 @@ public class Alumno_MateriaBoImpl implements Alumno_MateriaBo {
 					for (Materia registra : consulta) {
 						int max = registra.getNumMaxCupo();
 						System.out.print("SOYYYYYY NUMERO MAXIMO " + max + "\n");
-
+						// sufrio modificaciones
 						if (max <= 0) {
 							materiasOcupadas.add(registra);
-							// throw new Error("" + registra.getId_materia());
 							break;
 						} else {
 							int resultado = max - 1;
 							registra.setNumMaxCupo(resultado);
 							dao.crearAlumno_Materia(registraComoVieneDelFront);
-							System.out.print("SEGUN TERMINE DE OPERAR SETEEEEEEEOOOOOO " + resultado + "\n");
+							System.out.print("SEGUN TERMINE DE OPERAR SETEEEEEEEOOOOOO " + resultado + "\n");						
 						}
 
 					}

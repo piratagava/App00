@@ -1,35 +1,36 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
-        <script src="http://code.jquery.com/jquery-1.11.1.min.js" rel="extenal"></script>
-        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js" rel="extenal"></script>
-    </head>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link rel="stylesheet"
+	href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script
+	src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+</head>
 
-    <body>
-        <!--Página alumno-materia -->
-        <div data-role="page" id="asignar_materias" data-dom-cache="false">
-            <!--Encabezado-->
-            <header data-role="header" data-theme="b">
-                <a href="/App00/" data-icon="back" data-iconpos="notext"> </a>
-                <h1>Asignar Materias</h1>
-            </header>
+<body>
+	<!--Página alumno-materia -->
+	<div data-role="page" id="asignar_materias" data-dom-cache="false">
+		<!--Encabezado-->
+		<header data-role="header" data-theme="b">
+			<a href="/App00/" data-icon="back" data-iconpos="notext"> </a>
+			<h1>Asignar Materias</h1>
+		</header>
 
-            <!--Contenido-->
-            <section data-role="content">
-                    <label> Seleccione el Alumno:</label>
-                    <select id="comboAlumnos">                                        
-                    </select>
+		<!--Contenido-->
+		<section data-role="content">
+			<h2>Asigna Materias</h2>
+			<label> Seleccione el Alumno:</label> <select id="comboAlumnos">
+			</select>
 
-                    <form id="fieldMaterias">
-                    </form>
-            </section>
-        </div>
-    </body>
+			<form id="fieldMaterias"></form>
+		</section>
+	</div>
+</body>
 
-    <script>
+<script>
         window.addEventListener('load', () => {
             //let paginaAlumnoMateria = document.querySelector("#asociar_materia");
             //paginaAlumnoMateria.addEventListener('click', ()=> {
@@ -37,14 +38,92 @@
                 recibirDatosAlumnos("listarAlumno");        
             //});    
             //Evento cambio de materia
-            let materiaSeleccionada = document.querySelector("#comboNombre");
-            materiaSeleccionada.addEventListener('change', () => {
-                let id_materia = materiaSeleccionada.value
-        	    alert(id_materia);
-                //POR DEFINIR RUTA DEL CONTROLADOR,
-                if (id_materia > 0)	consultarMateria("listarConsultaMateria/"+id_materia);
+            
+            let alumnoSeleccionado = document.querySelector("#comboAlumnos");
+            
+            alumnoSeleccionado.addEventListener('change', () => {
+            	let m = localStorage.getItem("Materias")
+                let id_alumno = alumnoSeleccionado.value
+                let materias = JSON.parse(m);
+                //limpia los input :P
+            	desplegarMaterias(materias);	
+	                         	
+                if (id_alumno > 0)	buscarAlumnoMateria("consultarAlumno/"+id_alumno);                             
             });    
         });
+    
+        
+        //buscarMateriasOcupadas
+        let buscarMateriasOcupadas = (ruta, id_alumno) => {
+	        fetch(ruta, {
+	            method: "GET",
+	            headers : {
+	                'Content-Type' : 'application/json'
+	            }
+	        }).
+	        then(respuesta => {
+	            return respuesta.json();                        
+	        }). 
+	        then( data => {
+	        	
+	        	let bandera = true;	
+	        	
+	            data.forEach(alumnoMateria => {
+	            
+	            	//obtengo id materia para verificar su status de checked o disabled
+	            let input = document.getElementById(alumnoMateria.id_materia);	            		
+	           	console.log(input)
+	            	
+	 		  	if(input!=null){
+	       			console.log(input.getAttribute("checked"))	
+	       			
+       			if(input.getAttribute("checked")=="checked"){
+       				
+	      			console.log("activado")
+	      			
+	     		}else{         				            			
+       			
+	     			input.setAttribute("disabled","disabled");
+           	 }
+	      }
+	            	/*
+	            	if(bandera==true){
+	            		if(id_alumno==alumnoMateria[1]){
+		            		//alert("entro el if id_alumno son iguales")
+		            		
+		            		bandera=true;		            		
+		            	}else if(id_alumno!==alumnoMateria[1]){
+		            		//alert("entro el else if diferente de id_alumno")
+		            		           		
+		            		bandera=false;	
+		            		input.setAttribute("disabled","disabled");
+		            	}else{
+		            		//alert("ningun caso")
+		            		
+		            		bandera=false;
+		            	}
+
+	            		
+	            	}else if(bandera==false){
+	            		if(id_alumno!==alumnoMateria[1]){
+	            			input.setAttribute("disabled","disabled");	
+	            		}else if(id_alumno==alumnoMateria[1]){
+		            		alert("entro el if id_alumno son iguales")
+		            		contador++;
+		            		bandera=true;		            		
+		            	}
+	            	}	
+	            	*/
+	            
+	            });
+	            
+	       	 
+	          
+	        })
+	        .catch( error => alert(error));
+	    }
+        
+       
 		
       //recibirDatosMateria
     	let recibirDatosMaterias = (ruta) => {
@@ -131,7 +210,8 @@
             }
         
             if (id_alumno == 0) alert("Aun no se ha seleccionado el alumno.");
-            else enviarDatosAlumnoMateria("agregarAlumnoMateria", AlumnoMaterias);
+            //guarda datos por post
+            else enviarDatosAlumnoMateria("asignar_materias", AlumnoMaterias);
         };
         //buscarAlumnoMateria
         let buscarAlumnoMateria = (ruta) => {
@@ -155,26 +235,37 @@
                 alert(error);
             });
         }
+        
         //desplegarDatosMaterias    
         let desplegarAlumnoMaterias = (lstAlumnoMaterias) => {
-            /**
-            * 
-            */
-                
+        	//
             if (lstAlumnoMaterias.length > 0 ) {	
-                lstAlumnoMaterias.forEach(alumnoMateria => {
+                lstAlumnoMaterias.forEach(alumnoMateria => {                	
                     let idMateria = alumnoMateria.id_materia;
-                    let input = document.getElementById(idMateria);
-                    input.setAttribute("checked", "checked")
+                    let input = document.getElementById(idMateria);                    
+                    input.setAttribute("checked", "checked")                    
                     input.removeAttribute("data-cacheval");	
+                    
                 });
+                console.log("mensaje")
+                  
                 $("#fieldMaterias").trigger("create");
+                //obtiene id_alumno para mostrar las materias en cupoMax=0
+                let alumnoSeleccionado = document.querySelector("#comboAlumnos");
+                let id_alumno = alumnoSeleccionado.value               
+                buscarMateriasOcupadas("listarCupoMaximoPorAlumno", id_alumno);
+                
             } else {
-                alert("EL alumno aun no tiene materias asociadas.")
+              
+            	alert("EL alumno aun no tiene materias asociadas.")
+            	/*Practicar Javascript*/
+                let alumnoSeleccionado = document.querySelector("#comboAlumnos");
+                let id_alumno = alumnoSeleccionado.value                                
+                buscarMateriasOcupadas("listarCupoMaximoPorAlumno", id_alumno);
             }
         }
         
-        //enviarDatosAlumnoMateria
+        //enviarDatosAlumnoMateria recibe datos aqui para mandarlos por post a mi controler asignar_materia
         let enviarDatosAlumnoMateria = (ruta, datosAlumnoMaterias) => {
             fetch(ruta, {
                 method: "POST",
@@ -191,29 +282,51 @@
             })
             .catch( error => alert(error));
         }
-        //buscarMariasOcupadas
-        let buscarMateriasOcupadas = (ruta, id_alumno) => {
-            fetch(ruta, {
-                method: "GET",
-                headers : {
-                    'Content-Type' : 'application/json'
-                }
-            }).
-            then(respuesta => {
-                return respuesta.json();                        
-            }). 
-            then( data => {
-                
-                
-                data.forEach(alumnoMateria => {
-                    if (id_alumno !=  alumnoMateria[1]) {
-                        let input = document.getElementById(alumnoMateria[0]);
-                        input.setAttribute("disabled","disabled");
-                    }
-                });
-                
-            })
-            .catch( error => alert(error));
+              
+      //desplegarMaterias
+        let desplegarMaterias = (lstMaterias) => {
+            /**
+            * Desplegará las materias que esten registrados en un componenye
+            */
+            let iptMaterias = ``;
+            let fieldMaterias = document.querySelector("#fieldMaterias");
+            
+            lstMaterias.forEach((materia) => {
+                iptMaterias += `
+                <input type="checkbox" name=${materia.nombre} id=${materia.id_materia} />
+                <label for=${materia.id_materia}>${materia.nombre}</label> `
+            });
+            
+            let fdtMaterias = `
+                <fieldset data-role="controlgroup" >
+                <legend>Seleccione la materia:</legend>
+                ${iptMaterias}
+                <button type="button" id="btnGrabarAlumnoMaterias" data-theme="b" data-icon="refresh"> Grabar Asociación </button>
+            `
+            fieldMaterias.innerHTML = fdtMaterias;
+            $("#fieldMaterias").trigger("create");
+            
+            //EvENTOS
+            let accionGrabarAlumnoMateria = document.querySelector("#btnGrabarAlumnoMaterias");
+            accionGrabarAlumnoMateria.addEventListener('click', capturarDatosAlumnoMateria);
+        }
+        
+        let desplegarAlumnos = (lstAlumnos) => {
+            /**
+            * Desplegará los alumnos que esten registrados en un componente combox.
+            */
+            let otnAlumno = ``;
+            
+            let i = 0 ;
+            lstAlumnos.forEach(alumno => {
+                if (i == 0)  otnAlumno += `<option value="0">SELECCIONE UN ALUMNO.</option>`
+                let nombreCompleto = alumno.nombre + " " + alumno.apellidoPaterno + " " + alumno.apellidoMaterno;
+                otnAlumno += `<option value="${alumno.id_alumno}">${nombreCompleto}</option>`
+                i ++;
+            });
+            let sltAlumnos = `<select>${otnAlumno}</select>`;
+            let comboAlumnos = document.querySelector("#comboAlumnos");
+            comboAlumnos.innerHTML = sltAlumnos;
         }
     </script>
 </html>

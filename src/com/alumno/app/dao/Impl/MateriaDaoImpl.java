@@ -16,8 +16,7 @@ public class MateriaDaoImpl implements MateriaDao {
 	private EntityManager entity;
 	
 	@Override
-	public void crearMateria(Materia materia) {
-		
+	public void crearMateria(Materia materia) {		
 		entity.persist(materia);
 	}
 
@@ -37,7 +36,7 @@ public class MateriaDaoImpl implements MateriaDao {
 	@SuppressWarnings("unchecked")
 	public List<Materia> ObtieneMateriasOcupadasPorAlumno() {
 		Session session = entity.unwrap(Session.class);
-		return session.createSQLQuery("select Materia.id_materia, id_alumno from Materia inner join AlumnoMateria on Materia.id_materia = AlumnoMateria.id_materia where numMaxCupo = 0").list();
+		return session.createQuery("from Materia where numMaxCupo = 0").list();
 	}
 
 	@Override

@@ -62,13 +62,57 @@
     <script>
         'use strict'
     	window.addEventListener('load', () => {
-            obtenerDatosAlumnos("POR DE DEFIR RUTAS");
-            let alumnoSeleccionado = document.querySelector("#comboAlumnos")
-            alumnoSeleccionado.addEventListener('change', () =>{
+    		
+            obtenerDatosAlumnos("listarAlumno");
+            
+    		let alumnoSeleccionado = document.querySelector("#comboAlumnos");
+    		alumnoSeleccionado.addEventListener('change', () => {
                 let id_alumno = alumnoSeleccionado.value
-                if (id_alumno > 0) consultarAlumno("POR DEFINIR");
+                if (id_alumno > 0) consultarAlumno("consultaAlumno/"+id_alumno);
             });
+            
         });
+        
+    	//obtenerDatosAlumno
+        let obtenerDatosAlumnos = (ruta) => {
+            fetch(ruta, {
+            method : 'GET',
+            headers : {
+                'Content-Type' : 'application/json'
+                }
+            }).
+            then(respuesta => {
+                return respuesta.json();
+            }).then ((data) => {
+                desplegarComboAlumnos(data);
+            }).
+            catch(error => {
+                alert(error);
+            });
+	    }
+        
+        
+        let desplegarComboAlumnos = (lstAlumnos) => {
+        	/**
+        	* Desplegará las materias que esten registradas, las cuales se mostrarán en un compotente combox.
+        	*/
+
+        	let otnMateria = ``;
+        	let i = 0;
+        	
+        	lstAlumnos.forEach(alumno => {
+        		
+        		if (i == 0) otnMateria += `<option value="0">SELECCIONE LA MATERIA.</option>`
+    			otnMateria += `<option value=${alumno.id_alumno}>${alumno.nombre}</option>` 
+        		i ++;
+        	
+        	});
+        	
+        	let comboMaterias = document.querySelector("#comboAlumnos");
+        	let sltMaterias = `<select>${otnMateria}</select>`;
+        	comboMaterias.innerHTML = sltMaterias; 
+        }
+        
         //consultarAlumno
         let consultarAlumno = (ruta) => {
             fetch(ruta, {

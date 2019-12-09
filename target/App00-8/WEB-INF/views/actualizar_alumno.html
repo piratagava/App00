@@ -62,7 +62,11 @@
     <script>
         'use strict'
     	window.addEventListener('load', () => {
-            obtenerDatosAlumnos("POR DE DEFIR RUTAS");
+    		
+            obtenerDatosAlumnos("listarAlumno");
+            
+            
+            
             let alumnoSeleccionado = document.querySelector("#comboAlumnos")
             alumnoSeleccionado.addEventListener('change', () =>{
                 let id_alumno = alumnoSeleccionado.value

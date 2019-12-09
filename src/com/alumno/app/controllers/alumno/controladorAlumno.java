@@ -67,6 +67,11 @@ public class controladorAlumno {
 		}
 	}
 
+   @RequestMapping(value="/actualizar_alumno",method = RequestMethod.GET)
+   public String actualizar_alumno() {
+		return "actualizar_alumno";
+	}
+
 	// agrega Alumno mediante peticion post y lo serializa en json
 	@RequestMapping(value = "/actualizarAlumno", method = RequestMethod.POST)
 	public @ResponseBody String actualizaAlumno(@RequestBody Alumno alumno) {
