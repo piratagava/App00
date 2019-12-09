@@ -171,6 +171,7 @@
     	let urlImagen = cargarBufferJPGE(alumno.contenido);
     	desplegarFoto2(urlImagen);
     	
+    	localStorage.clear();
     	localStorage.setItem("Foto", alumno.contenido);    	    	
 	}
    
@@ -212,9 +213,8 @@
         let fechaNacimiento = document.getElementById("iptFechaNacimiento").value;
         let correoElectronico = document.getElementById("iptCorreo").value;
         let foto = document.getElementById("iptFoto").value;
-        console.log(foto)
         
-        if (foto == null) {
+        if (foto == "") {
         	let alumno = {
                 	"id_alumno" : id_alumno,
                     "nombre" : nombre,
