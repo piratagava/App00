@@ -27,6 +27,9 @@
                 </select>
                 <div class="ui-grid-a">
                     <form class="ui-block-a" data-ajax="false" autocomplete="on">                    
+                      <!-- campo oculto para enviar id de la persona actualizar -->
+                      <input id="iptIdalumno" type="hidden" placeholder="Id_Alumno">
+                      
                         <label> Nombre: </label>
                         <input id="iptNombre" type="text" placeholder="Nombre del alumno" required="required" pattern="^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$"/>
                         
@@ -66,6 +69,12 @@
 		obtenerDatosAlumno("listarAlumno");
 		
 	
+	    let inputFoto = document.querySelector('#iptFoto');
+        inputFoto.addEventListener('change', () => {
+            if (desplegarFoto() == false) {
+                inputFoto.value = "";
+            }
+        });
         
 		let alumnoSeleccionado = document.querySelector("#comboAlumnos");
 		alumnoSeleccionado.addEventListener('change', () => {
@@ -77,8 +86,7 @@
         let accionEditar = document.querySelector("#btnEditarAlumno");   	 	
         accionEditar.addEventListener('click', capturarDatosAlumno);
         
-		
-		
+	
 		//evento el cual se dispara cuando el input de la fecha de nacimiento pierde el focus.
         let accionEdad = document.querySelector("#iptFechaNacimiento");    
         accionEdad.addEventListener("blur", () => {
@@ -87,10 +95,10 @@
             let fechaNacimiento = new Date(_fechaNacimiento)
             let edad = calcularEdad(fechaNacimiento);
             if (edad <= 0 || isNaN(fechaNacimiento.getFullYear())) {
-                alert("La fecha de nacimiento no puede ser mayor o igual al aÃ±o actual.")
+                alert("La fecha de nacimiento no puede ser mayor o igual al años actual.")
                 document.getElementById("iptEdad").value = 0;
             } else {
-                document.getElementById("iptEdad").value = edad  + " AÃ±os.";
+                document.getElementById("iptEdad").value = edad  + " Años.";
             }
         });
     });
@@ -118,8 +126,8 @@
     	let otnMateria = ``;
     	let i = 0;   	
     	lstAlumnos.forEach(alumno => {
-    		if (i == 0) otnMateria += `<option value="0">SELECCIONE LA MATERIA.</option>`
-			otnMateria += `<option value=${alumno.id_alumno}>${alumno.nombre}</option>` 
+    		if (i == 0) otnMateria += `<option value="0">SELECCIONE AL ALUMNO.</option>`
+			otnMateria += `<option value=${alumno.id_alumno}>${alumno.nombre} ${alumno.apellidoPaterno} ${alumno.apellidoMaterno}</option>` 
     		i ++;
     	
     	});
@@ -149,8 +157,9 @@
     //
     let desplegarAlumno = (alumno) => {
     	/**
-    	* Desplegará los datos de la materia, en el cual se mostrará el nombre de la materia y el número máximo de cupos
+    	* Desplegará los datos deL Alumno
     	**/
+    	document.getElementById("iptIdalumno").value = alumno.id_alumno;
     	document.getElementById("iptNombre").value = alumno.nombre;
     	document.getElementById("iptApellido1").value = alumno.apellidoPaterno;
     	document.getElementById("iptApellido2").value = alumno.apellidoMaterno;
@@ -159,9 +168,7 @@
     	document.getElementById("iptEdad").value = calcularEdad(new Date(alumno.fechaNacimiento));
     	let urlImagen = cargarBufferJPGE(alumno.contenido);
     	desplegarFoto2(urlImagen);
-    	//aqui hacer conversion de imganen para obtenerlo y mostrarlo
-        
-    		//pendiente foto t
+    	
 	}
     
     
@@ -195,11 +202,13 @@
         /**
         * Captura los datos de los alumno, y valida que al menos hayan sido capturados los datos.
         */
+        let id_alumno = document.getElementById("iptIdalumno").value;
         let nombre = document.getElementById("iptNombre").value;
         let apellidoPaterno = document.getElementById("iptApellido1").value;
         let apellidoMaterno = document.getElementById("iptApellido2").value;
         let fechaNacimiento = document.getElementById("iptFechaNacimiento").value;
         let correoElectronico = document.getElementById("iptCorreo").value;
+        
         
 
         let lector = new FileReader();
@@ -214,6 +223,7 @@
             let jpge64 = window.btoa(lector.result);
             
             let alumno = {
+            	"id_alumno" : id_alumno,
                 "nombre" : nombre,
                 "apellidoPaterno" : apellidoPaterno,
                 "apellidoMaterno" : apellidoMaterno,
@@ -225,7 +235,7 @@
             let valido = validarDatosAlumno(alumno);
             
             if (valido === 1 ) {
-                enviarDatosAlumno("alta_alumno", alumno);
+                enviarDatosAlumno("actualizar_alumno", alumno);
             } else {
                 alert("Capture todos los campos.")
             }
@@ -279,7 +289,7 @@
         */
         console.log(datosAlumno)
         fetch(ruta, {
-            method : 'POST',
+            method : 'PUT',
             body : JSON.stringify(datosAlumno),
             headers : {
                 'Content-Type' : 'application/json'
@@ -381,8 +391,6 @@
 
         return edad;
 	}
-    
-    
 
     let cargarBufferJPGE = (jpg64) => {
     	 let decodedData = window.atob(jpg64);
