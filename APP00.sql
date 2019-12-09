@@ -10,7 +10,7 @@ CREATE TABLE Alumno (
   apellidoMaterno VARCHAR(100) NOT NULL,
   fechaNacimiento DATE NOT NULL,
   correoElectronico VARCHAR(100) NOT NULL,
-  contenido TEXT NOT NULL,
+  contenido MEDIUMTEXT NOT NULL,
   PRIMARY KEY (id_alumno));
 
 -- -----------------------------------------------------
@@ -38,14 +38,4 @@ CREATE TABLE AlumnoMateria (
   ---unicos y cuando realice la transaccion si no es valido genere error
 ALTER TABLE Materia ADD UNIQUE (nombre);
 ALTER TABLE Alumno ADD UNIQUE (correoElectronico);
-ALTER TABLE AlumnoMateria ADD UNIQUE (id_alumno,id_materia);
 
-
-CREATE TRIGGER RestarMaterias AFTER INSERT ON AlumnoMateria
-FOR EACH
-ROW
-BEGIN
-    UPDATE Materia 
-    SET numMaxCupo = numMaxCupo - AlumnoMateria.id_materia
-    WHERE id_alumnoMateria = id_alumnoMateria;
-END
