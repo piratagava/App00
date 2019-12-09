@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>Editar Alumno</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        
+        <title> Editar Alumno </title>
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
         <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
         <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
@@ -313,7 +315,7 @@
         /**
         * Valida que los datos del alumno no esten vacios.
         */
-        let valido = 64;
+        let valido = 32;
 
         if (alumno["nombre"].length > 0 ) {
             let validaNombre = /^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$/
@@ -361,7 +363,6 @@
             }
             
         };
-        if (alumno["contenido"].length > 0) valido >>= 1;
         console.log(valido);
         return valido;
     }

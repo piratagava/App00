@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
-    	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
     	
         <title>Registrar Alumno</title>
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
@@ -21,7 +22,7 @@
 
             <!--Contenido-->
             <section data-role="content">
-                <h2>Registrar Alumno</h2>
+                <h2>Registra Alumno</h2>
                 <div class="ui-grid-a">
                     <form class="ui-block-a" data-ajax="false" autocomplete="on">                    
                         <label> Nombre: </label>
@@ -81,10 +82,10 @@
                 let fechaNacimiento = new Date(_fechaNacimiento)
                 let edad = calcularEdad(fechaNacimiento);
                 if (edad <= 0 || isNaN(fechaNacimiento.getFullYear())) {
-                    alert("La fecha de nacimiento no puede ser mayor o igual al aÃ±o actual.")
+                    alert("La fecha de nacimiento no puede ser mayor o igual al año actual.")
                     document.getElementById("iptEdad").value = 0;
                 } else {
-                    document.getElementById("iptEdad").value = edad  + " AÃ±os.";
+                    document.getElementById("iptEdad").value = edad  + " Años.";
                 }
             });
         });
@@ -182,7 +183,7 @@
                     if (respuesta.status == 200) alert("Los datos del alumno ha sido registrados.")
                     location.reload("/");
                 } else {
-                    alert("El correo electrÃ³nico ya ha sido registrado.");
+                    alert("El correo electrónico ya ha sido registrado.");
                 }
                 
             }).

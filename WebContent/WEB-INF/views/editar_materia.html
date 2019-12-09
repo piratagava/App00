@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>Editar Alumno</title>
+    	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    	<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Editar Materia</title>
+        
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
         <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
         <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
     </head>
 
     <body>
-        <!--P√°gina editar materia-->
+        <!--P·gina editar materia-->
         <div data-role="page" id="editar_materia">
             <!--Encabezado-->
             <header data-role="header" data-theme="b">
@@ -20,7 +22,7 @@
                 
             <!--Contenido-->
             <section data-role="content">
-                <h2>Editar Alumno</h2>
+                <h2>Edita Materia</h2>
                 <label> Seleccione la materia:</label>
                 <select id="comboMaterias">                                        
                         
@@ -85,7 +87,7 @@
         //desplegarMateria
         let desplegarMateria = (materia) => {
 	    	/**
-	    	* Desplegar√° los datos de la materia, en el cual se mostrar√° el nombre de la materia y el n√∫mero m√°ximo de cupos
+	    	* Desplegar· los datos de la materia, en el cual se mostrar· el nombre de la materia y el n˙mero m·ximo de cupos
 	    	**/
 	    	document.getElementById("iptNombreMateria").value = materia.nombre;
 	    	document.getElementById("iptNumMaxCupo").value = materia.numMaxCupo;
@@ -143,7 +145,7 @@
                 let esValido = validaNumMaxCupo.exec(materia["numMaxCupo"]);
                 
                 if (esValido == null || materia["numMaxCupo"] <= 0) {
-                    alert("El n√∫mero de cupos no ha sido validado.");
+                    alert("El n˙mero de cupos no ha sido validado.");
                 } else {
                     valido >>= 1;		
                 }
@@ -201,7 +203,7 @@
 		
         let desplegarComboMaterias = (lstMaterias) => {
         	/**
-        	* Desplegar√° las materias que esten registradas, las cuales se mostrar√°n en un compotente combox.
+        	* Desplegar· las materias que esten registradas, las cuales se mostrar·n en un compotente combox.
         	*/
         	let otnMateria = ``;
         	let i = 0;
@@ -247,7 +249,7 @@
         //desplegarMaterias
         let desplegarMaterias = (lstMaterias) => {
             /**
-            * Desplegar√° las materias que esten registrados en un componenye
+            * Desplegar· las materias que esten registrados en un componenye
             */
             let iptMaterias = ``;
             let fieldMaterias = document.querySelector("#fieldMaterias");
@@ -262,7 +264,7 @@
                 <fieldset data-role="controlgroup" >
                 <legend>Seleccione la materia:</legend>
                 ${iptMaterias}
-                <button type="button" id="btnGrabarAlumnoMaterias" data-theme="b" data-icon="refresh"> Grabar Asociaci√≥n </button>
+                <button type="button" id="btnGrabarAlumnoMaterias" data-theme="b" data-icon="refresh"> Grabar AsociaciÛn </button>
             `
             fieldMaterias.innerHTML = fdtMaterias;
             $("#fieldMaterias").trigger("create");
