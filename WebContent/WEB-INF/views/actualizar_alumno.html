@@ -60,83 +60,283 @@
     </body>
 
     <script>
-        'use strict'
-    	window.addEventListener('load', () => {
-    		
-            obtenerDatosAlumnos("listarAlumno");
-            
-    		let alumnoSeleccionado = document.querySelector("#comboAlumnos");
-    		alumnoSeleccionado.addEventListener('change', () => {
-                let id_alumno = alumnoSeleccionado.value
-                if (id_alumno > 0) consultarAlumno("consultaAlumno/"+id_alumno);
-            });
-            
+    'use strict'
+	window.addEventListener('load', () => {   	
+	    
+		obtenerDatosAlumno("listarAlumno");
+		
+		let inputFoto = document.querySelector('#iptFoto');
+        inputFoto.addEventListener('change', () => {
+            if (desplegarFoto() == false) {
+                inpuFoto.value = "";
+            }
         });
+	
+		let alumnoSeleccionado = document.querySelector("#comboAlumnos");
+		alumnoSeleccionado.addEventListener('change', () => {
+            let id_alumno = alumnoSeleccionado.value
+            if (id_alumno > 0) consultarAlumno("consultaAlumno/"+id_alumno);
+        });
+    });
+    
+	 //obtenerDatosMateria
+    let obtenerDatosAlumno = (ruta) => {
+        fetch(ruta, {
+        method : 'GET',
+        headers : {
+            'Content-Type' : 'application/json'
+            }
+        }).
+        then(respuesta => {
+            return respuesta.json();
+        }).then ((data) => {
+            desplegarComboAlumnos(data);
+        }).
+        catch(error => {
+            alert(error);
+        });
+    }
+	
+    let desplegarComboAlumnos = (lstAlumnos) => {
+ 
+    	let otnMateria = ``;
+    	let i = 0;   	
+    	lstAlumnos.forEach(alumno => {
+    		if (i == 0) otnMateria += `<option value="0">SELECCIONE LA MATERIA.</option>`
+			otnMateria += `<option value=${alumno.id_alumno}>${alumno.nombre}</option>` 
+    		i ++;
+    	
+    	});
+    	
+    	let comboMaterias = document.querySelector("#comboAlumnos");
+    	let sltMaterias = `<select>${otnMateria}</select>`;
+    	comboMaterias.innerHTML = sltMaterias; 
+    }
+    
+  	//aqui trae la consulta especifica del alumno de acuerdo si id 
+    let consultarAlumno = (ruta) => {
+    	fetch(ruta, {
+    	    method : 'GET',
+    	    headers : {
+    	    	'Content-Type' : 'application/json'
+    	    	}
+    	    }).
+    	    then(respuesta => {
+    	    	return respuesta.json();
+    	    }).then ((data) => {
+    	    	desplegarAlumno(data);
+    	    }).
+    	    catch(error => {
+    	    	alert(error);
+    	    });
+    }
+    //
+    let desplegarAlumno = (alumno) => {
+    	/**
+    	* Desplegará los datos de la materia, en el cual se mostrará el nombre de la materia y el número máximo de cupos
+    	**/
+    	document.getElementById("iptNombre").value = alumno.nombre;
+    	document.getElementById("iptApellido1").value = alumno.apellidoPaterno;
+    	document.getElementById("iptApellido2").value = alumno.apellidoMaterno;
+    	document.getElementById("iptFechaNacimiento").value = alumno.fechaNacimiento;
+    	document.getElementById("iptCorreo").value = alumno.correoElectronico;	    	
+    	
+    	//aqui hacer conversion de imganen para obtenerlo y mostrarlo
         
-    	//obtenerDatosAlumno
-        let obtenerDatosAlumnos = (ruta) => {
-            fetch(ruta, {
-            method : 'GET',
+    		//pendiente foto t
+	}
+    
+    
+  //capturarDatosAlumno
+    let capturarDatosAlumno = () => {
+        /**
+        * Captura los datos de los alumno, y valida que al menos hayan sido capturados los datos.
+        */
+        let nombre = document.getElementById("iptNombre").value;
+        let apellidoPaterno = document.getElementById("iptApellido1").value;
+        let apellidoMaterno = document.getElementById("iptApellido2").value;
+        let fechaNacimiento = document.getElementById("iptFechaNacimiento").value;
+        let correoElectronico = document.getElementById("iptCorreo").value;
+        
+
+        let lector = new FileReader();
+        let entradaFoto = document.querySelector('#iptFoto');
+        let archivo = entradaFoto.files;
+        let blob = new Blob(archivo, {type : 'image/jpeg'})
+        console.log(archivo)
+        
+
+        lector.readAsBinaryString(blob);
+        lector.onload = () => {
+            let jpge64 = window.btoa(lector.result);
+            
+            let alumno = {
+                "nombre" : nombre,
+                "apellidoPaterno" : apellidoPaterno,
+                "apellidoMaterno" : apellidoMaterno,
+                "fechaNacimiento" : new Date(fechaNacimiento),
+                "correoElectronico" : correoElectronico,
+                "contenido" : jpge64
+            }
+
+            let valido = validarDatosAlumno(alumno);
+            
+            if (valido === 1 ) {
+                enviarDatosAlumno("alta_alumno", alumno);
+            } else {
+                alert("Capture todos los campos.")
+            }
+        }
+    }
+
+    //desplegarFoto
+    let desplegarFoto = () => {
+        /**
+        * Despliega la foto de alumno una vez haya sido seleccionada.
+        */
+        let entradaFoto = document.querySelector('#iptFoto');
+        let lienzo = document.querySelector("#divLienzo");
+        while (lienzo.firstChild) {
+            lienzo.removeChild(lienzo.firstChild);
+        }
+
+        /**
+        * Contiene la información de todos los archivos seleccionado
+        */
+        let archivo = entradaFoto.files;    
+        let foto = document.createElement('img');
+        foto.setAttribute("width", "100%");
+        let valido = validarFotoAlumno(archivo[0])
+        
+        if (valido == 1) {
+            foto.src = URL.createObjectURL(archivo[0]);
+            lienzo.appendChild(foto);
+        } else return false;    
+    }
+
+    //validarFotoAlumno
+    let validarFotoAlumno = (archivo) => {
+        let valido = 2;
+        if (archivo.type != 'image/jpeg') {
+            alert("El archivo que ha seleccionado no es un formato jpeg.")
+            return
+        }
+        if (archivo.size > 555000) {
+            alert("El tamaño de la imagan sobrepasa los 555 kb.")
+            return
+        } 
+        else  valido >>= 1;
+        return valido;
+    }
+
+    //enviarDatosAlumno
+    let enviarDatosAlumno = (ruta, datosAlumno) => {
+        /**
+        * Envia un objecto json al servidor con los datos del alumno.
+        */
+        console.log(datosAlumno)
+        fetch(ruta, {
+            method : 'POST',
+            body : JSON.stringify(datosAlumno),
             headers : {
                 'Content-Type' : 'application/json'
-                }
-            }).
-            then(respuesta => {
-                return respuesta.json();
-            }).then ((data) => {
-                desplegarComboAlumnos(data);
-            }).
-            catch(error => {
-                alert(error);
-            });
-	    }
-        
-        
-        let desplegarComboAlumnos = (lstAlumnos) => {
-        	/**
-        	* Desplegará las materias que esten registradas, las cuales se mostrarán en un compotente combox.
-        	*/
+            }
+        }).
+        then(respuesta => {
+            console.log(respuesta);
+            if (respuesta.ok == true) {
+                if (respuesta.status == 200) alert("Los datos del alumno ha sido registrados.")
+                location.reload("/");
+            } else {
+                alert("El correo electrónico ya ha sido registrado.");
+            }
+            
+        }).
+        catch(error => alert(error));
+    }
 
-        	let otnMateria = ``;
-        	let i = 0;
-        	
-        	lstAlumnos.forEach(alumno => {
-        		
-        		if (i == 0) otnMateria += `<option value="0">SELECCIONE LA MATERIA.</option>`
-    			otnMateria += `<option value=${alumno.id_alumno}>${alumno.nombre}</option>` 
-        		i ++;
-        	
-        	});
-        	
-        	let comboMaterias = document.querySelector("#comboAlumnos");
-        	let sltMaterias = `<select>${otnMateria}</select>`;
-        	comboMaterias.innerHTML = sltMaterias; 
+    //validarDatosAlumno
+    let validarDatosAlumno = (alumno) => {
+        /**
+        * Valida que los datos del alumno no esten vacios.
+        */
+        let valido = 64;
+
+        if (alumno["nombre"].length > 0 ) {
+            let validaNombre = /^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$/
+            let esValido = validaNombre.exec(alumno["nombre"]);
+            if (esValido == null) {
+                alert("El nombre del alumno no ha sido validado.");
+            } else {
+                valido >>= 1;		
+            }
+        } 
+        if (alumno["apellidoPaterno"].length > 0)  {
+            let validaApellidoPaterno = /^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$/
+            let esValido = validaApellidoPaterno.exec(alumno["apellidoPaterno"]);
+            if (esValido == null) {
+                alert("El apellido paterno del alumno no ha sido validado.");
+            } else {
+                valido >>= 1;		
+            }
+        }
+        if (alumno["apellidoMaterno"].length > 0)  {
+            let validaApellidoMaterno = /^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$/
+            let esValido = validaApellidoMaterno.exec(alumno["apellidoMaterno"]);
+            if (esValido == null) {
+                alert("El apellido materno del alumno no ha sido validado.");
+            } else {
+                valido >>= 1;		
+            }
+        }
+        let fechaNacimiento = new Date(alumno["fechaNacimiento"])
+        let edad = calcularEdad(fechaNacimiento);
+            
+        if (edad <= 0 || isNaN(fechaNacimiento.getFullYear())) {
+            alert("La fecha de nacimiento no ha sido validada.");
+        } else {
+            valido >>= 1;
         }
         
-        //consultarAlumno
-        let consultarAlumno = (ruta) => {
-            fetch(ruta, {
-                method : 'GET',
-                headers : {
-                    'Content-Type' : 'application/json'
-                }
-            }).
-            then(respuesta => {
-                return respuesta.json();
-            }).
-            then(data => {
-                desplegarAlumno(data);
-            }).
-            catch(error => {
-                alert(error);
-            });
+        if (alumno["correoElectronico"].length > 0) {
+            let validaCorreo = new RegExp("^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$");
+            let esValido = validaCorreo.exec(alumno["correoElectronico"]);
+            if (esValido == null) {
+                alert("El correo electrónico no ha sido validado.");
+            } else {
+                valido >>= 1;	
+            }
+            
+        };
+        if (alumno["contenido"].length > 0) valido >>= 1;
+        console.log(valido);
+        return valido;
+    }
+
+    //Calcular Edad
+    let calcularEdad = (fechaNacimiento) => {
+        let anios = fechaNacimiento.getFullYear();
+        let mes = fechaNacimiento.getMonth();
+        let dia = fechaNacimiento.getDate() + 1;
+
+        let fechaActual = new Date();
+        let anios_actual = fechaActual.getFullYear();
+        let mes_actual = fechaActual.getMonth();
+        let dia_actual = fechaActual.getDate();
+            
+        let edad = anios_actual - anios;
+        
+        //Hasta este momento aun no cumples año a pesar de que ya es tu mes.
+        if (mes_actual <= mes) {
+            edad = edad - 1;
         }
-        //desplegarAlumno 
-        let desplegarAlumno = (alumno) => {
-            document.getElementById("iptNombte").value = alumno.nombre;
-            document.getElementById("iptApellidos1").value = alumno.apellidoPaterno;
-            document.getElementById("iptApellidos2").value = alumno.apellidoMaterno;
-            document.getElementById("iptFechaNacimiento").value = alumno.fechaNacimiento;
-        }
+
+        if (dia_actual >= dia) {
+            edad = edad + 1
+        }    
+        	     	        
+
+        return edad;
+	}
     </script>
 </html>
