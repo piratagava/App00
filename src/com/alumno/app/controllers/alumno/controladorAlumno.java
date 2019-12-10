@@ -88,5 +88,9 @@ public class controladorAlumno {
 	public String RegresarIndex() {
 		return "index";
 	}
-
+	
+	@RequestMapping(value = "/alumnosAsociados/{id_materia}", method = RequestMethod.GET)
+	public @ResponseBody List<Alumno> alumnosAsociados(@PathVariable int id_materia) {
+		return alumnoBo.alumnosAsociados(id_materia);
+	}
 }

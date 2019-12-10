@@ -15,4 +15,6 @@ public interface AlumnoBo {
 	public Alumno consultaAlumno(int id_alumno);
 
 	public void actualizarAlumno(Alumno alumno);
+	
+	public List<Alumno> alumnosAsociados(int id_materia);
 }

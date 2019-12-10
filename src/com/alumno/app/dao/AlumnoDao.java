@@ -14,4 +14,5 @@ public interface AlumnoDao  {
 	
 	public void actualizarAlumno(Alumno alumno);
 	
+	public int [] alumnosAsociados(int id_materia);
 }

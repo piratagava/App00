@@ -1,5 +1,6 @@
 package com.alumno.app.dao.Impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Session;
 import javax.persistence.EntityManager;
@@ -40,5 +41,25 @@ public class AlumnoDaoImpl implements AlumnoDao {
 	public void actualizarAlumno(Alumno alumno) {
 		Session session = entity.unwrap(Session.class);
 		session.update(alumno);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public int [] alumnosAsociados(int id_materia) {
+		Session session = entity.unwrap(Session.class);
+		
+		String sql = "select Alumno.id_alumno from Alumno inner join AlumnoMateria where Alumno.id_alumno = AlumnoMateria.id_alumno and AlumnoMateria.id_materia = " + id_materia + ";";
+		List alumnos = session.createSQLQuery(sql).list();
+		
+		int[] _alumnos;
+		_alumnos = new int[alumnos.size()];
+		
+		
+		//List<Integer> _alumnos = new ArrayList<Integer>();
+		
+		for(int i = 0; i< alumnos.size(); i ++) {
+			_alumnos[i] = (int) alumnos.get(i);
+		}
+		
+		return _alumnos;
 	}
 }

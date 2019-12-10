@@ -1,5 +1,6 @@
 package com.alumno.app.bo.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,4 +71,17 @@ public class AlumnoBoImpl implements AlumnoBo {
 		dao.actualizarAlumno(alumno);
 	}
 
+	@Override
+	public List<Alumno> alumnosAsociados(int id_materia) {
+		// TODO Auto-generated method stub
+		int[] id_s = dao.alumnosAsociados(id_materia);
+		List<Alumno> alumnos = new ArrayList<Alumno>();
+		
+		for (int i= 0; i< id_s.length ; i ++) {
+			Alumno a = dao.consultaAlumno(id_s[i]);
+			System.out.println(a);
+			alumnos.add(a);
+		}
+		return alumnos;
+	}
 }

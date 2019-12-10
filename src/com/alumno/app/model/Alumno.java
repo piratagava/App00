@@ -1,5 +1,6 @@
 package com.alumno.app.model;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import javax.persistence.Column;
@@ -12,7 +13,12 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="Alumno")
-public class Alumno {
+public class Alumno implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
