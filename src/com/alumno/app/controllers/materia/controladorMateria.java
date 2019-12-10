@@ -87,5 +87,10 @@ public class controladorMateria {
 	public @ResponseBody Materia consultaMaterias(@PathVariable int id_materia) {
 		return materiaBo.consultarMateria(id_materia);
 	}
-
+	
+	@RequestMapping(value = "/materiasAsociadas/{id_alumno}", method = RequestMethod.GET)
+	public @ResponseBody List<Materia> materiasAsociadas(@PathVariable int id_alumno) {
+		return materiaBo.materiasAsociadas(id_alumno);
+	}
+	
 }

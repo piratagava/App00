@@ -1,4 +1,5 @@
 package com.alumno.app.bo.impl;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,5 +50,18 @@ public class MateriaBoImpl implements MateriaBo {
 	@Override
 	public void actualizar(Materia materia) {
 		dao.actualizar(materia);
+	}
+
+	@Override
+	public List<Materia> materiasAsociadas(int id_alumno) {
+		int[] idsMaterias = dao.materiasAsociadas(id_alumno);
+		List<Materia> materias = new ArrayList<Materia>();
+		
+		for (int i = 0; i < idsMaterias.length; i ++) {
+			Materia a = dao.consultarMateria(idsMaterias[i]);
+			materias.add(a);
+		}
+		
+		return materias;
 	}
 }

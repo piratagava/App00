@@ -52,4 +52,17 @@ public class MateriaDaoImpl implements MateriaDao {
 		Session actualizar= entity.unwrap(Session.class);
 		actualizar.update(materia);
 	}
+
+	@Override
+	public int[] materiasAsociadas(int id_alumno) {
+		Session session = entity.unwrap(Session.class);
+		String sql = "SELECT id_materia FROM AlumnoMateria WHERE id_alumno = " + id_alumno + ";";
+		List materias = session.createSQLQuery(sql).list();
+		int [] idsMaterias = new int[materias.size()];
+		
+		for(int i = 0; i < materias.size(); i ++) {
+			idsMaterias[i] = (int) materias.get(i);
+		}
+		return idsMaterias;
+	}
 }

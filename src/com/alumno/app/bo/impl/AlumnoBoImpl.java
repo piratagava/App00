@@ -79,7 +79,6 @@ public class AlumnoBoImpl implements AlumnoBo {
 		
 		for (int i= 0; i< id_s.length ; i ++) {
 			Alumno a = dao.consultaAlumno(id_s[i]);
-			System.out.println(a);
 			alumnos.add(a);
 		}
 		return alumnos;

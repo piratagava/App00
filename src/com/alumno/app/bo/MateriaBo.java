@@ -19,6 +19,9 @@ public interface MateriaBo {
 	
 	public Materia consultarMateria(int id_materia);
 	
+	
 	//metodo que permite la actualizacion de datos
 	public void actualizar(Materia materia);
+	
+	public List<Materia> materiasAsociadas(int id_alumno);
 }

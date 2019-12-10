@@ -25,4 +25,5 @@ public interface MateriaDao {
 	//metodo que permite la actualizacion de datos
 	public void actualizar(Materia materia);
 	
+	public int[] materiasAsociadas(int id_alumno);
 }
