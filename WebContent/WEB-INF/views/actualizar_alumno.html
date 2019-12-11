@@ -9,9 +9,16 @@
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
         <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
         <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+       
+	
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.min.js"></script>
+        
     </head>
     
-    <body>
+<body ng-app="muestra" ng-controller="controlador">
         <!--PÃ¡gina editar alumno-->
         <div data-role="page" id="editar_alumno">
             <!--Encabezado-->
@@ -56,16 +63,39 @@
                         <input id="btnEditarAlumno" type="button" data-theme="b" data-icon="check" value="Guardar"/>
                     </form>
     
-                    <aside id="divLienzo" class="ui-block-b"> 
+                    <aside id="divLienzo" class="ui-block-b" style="width: 580px;"> 
                         <img id="imgFoto" width="100%" src="#"/>    
-                    </aside>        
-                </div>                
-            </section>
+                    </aside>     
+                    
+                   
+                    
+                	 <table class="table table-bordered table-responsive-md table-striped text-center">											
+						<thead>
+							<tr>								
+								<th>Materia que Cursa Actualmente</th>							
+							</tr>
+						</thead>				    
+		
+					<tr ng-repeat="dato in materias">	
+					<!-- checando las filas ng-model=vincula la vista al modelo-->				
+					<td>																	
+						<span>{{dato.nombre}}</span>
+					</td>			
+			</tr>							
+			</table>		               
+       	 </div>          
+     
+       </section>
         </div>
     </body>
 
-    <script>
-    'use strict'
+    <script type="text/javascript">
+    
+    var app = angular.module('muestra', []);
+	app.controller('controlador', function($scope, $http) {
+	//response señala que el parametro contendran los datos de respuesta
+	
+
 	window.addEventListener('load', () => {   	
 	    
 		obtenerDatosAlumno("listarAlumno");
@@ -82,6 +112,12 @@
 		let alumnoSeleccionado = document.querySelector("#comboAlumnos");
 		alumnoSeleccionado.addEventListener('change', () => {
             let id_alumno = alumnoSeleccionado.value
+            
+            //obtenemos la consulta del alumno con las materias que cursa
+            $http.get("materiasAsociadas/"+id_alumno).then(function(response) {
+          		$scope.materias = response.data;              		
+          	  });
+            
             if (id_alumno > 0) consultarAlumno("consultaAlumno/"+id_alumno);
         });
 		
@@ -436,5 +472,11 @@
          
          return url;
     }
+      
+
+});
+	
+    
+
     </script>
 </html>
