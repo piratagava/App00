@@ -68,10 +68,9 @@ public class Alumno_MateriaDaoImpl implements Alumno_MateriaDao {
 		String sql3 = "select numMaxCupo from Materia where id_materia = " + id_materia + ";";
 		List _disponible =  session.createSQLQuery(sql3).list();
 		int disponible = (int)_disponible.get(0);
-		System.out.print("");
+		//System.out.print("");
 		if (disponible <= 0) return numeroDeOcupadas.intValue();
 		else return cupoInicial;
-		
 	} 
 	
 }
