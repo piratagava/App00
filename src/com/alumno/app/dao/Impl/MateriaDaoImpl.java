@@ -69,7 +69,7 @@ public class MateriaDaoImpl implements MateriaDao {
 	
 	public int cupoInicial(int id_materia) {
 		Session session = entity.unwrap(Session.class);
-		String sql = "select count(*) from Materia where id_materia = " + id_materia + ";";
+		String sql = "select count(*) from AlumnoMateria where id_materia = " + id_materia + ";";
 		
 		List _numMateriaOcupadas = session.createSQLQuery(sql).list();
 		BigInteger numMaxCupo = (BigInteger)_numMateriaOcupadas.get(0);
@@ -77,8 +77,9 @@ public class MateriaDaoImpl implements MateriaDao {
 		
 		String sql2 = "select numMaxCupo from Materia where id_materia = " + id_materia + ";";
 		List _numMaxCupo = session.createSQLQuery(sql2).list();
-		int numeroMaxCupo =  (int) _numMaxCupo.get(0);
+		if (_numMaxCupo.size() <= 0) return 0;
 		
+		int numeroMaxCupo =  (int) _numMaxCupo.get(0);
 		return numeroMaxCupo + numeroMateriaOcupadas;
 	}
 }
