@@ -55,7 +55,7 @@ public class Alumno_MateriaDaoImpl implements Alumno_MateriaDao {
 	}
 	
 	@Override
-	public BigInteger materiasOcupadas(int id_materia) {
+	public int materiasOcupadas(int id_materia) {
 		Session session = entity.unwrap(Session.class);
 		String sql = "select count(*) from AlumnoMateria where id_materia = " + id_materia + ";";
 		List numero = session.createSQLQuery(sql).list();
@@ -63,10 +63,10 @@ public class Alumno_MateriaDaoImpl implements Alumno_MateriaDao {
 		String sql2 = "select numMaxCupo from Materia where id_materia = " + id_materia + ";";
 		List ocupo = session.createSQLQuery(sql2).list();
 		
-		BigInteger diponibles = (BigInteger)ocupo.get(0);
+		int diponibles =  (int) ocupo.get(0);
 		BigInteger ocupados = (BigInteger) numero.get(0);
-		
-		return diponibles.subtract(ocupados);
+		if (diponibles <= 0) return (int) ocupados.intValue();
+		return diponibles + (int) ocupados.intValue();
 	} 
 	
 }
