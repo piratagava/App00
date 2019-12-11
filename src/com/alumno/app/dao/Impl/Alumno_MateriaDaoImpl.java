@@ -58,15 +58,20 @@ public class Alumno_MateriaDaoImpl implements Alumno_MateriaDao {
 	public int materiasOcupadas(int id_materia) {
 		Session session = entity.unwrap(Session.class);
 		String sql = "select count(*) from AlumnoMateria where id_materia = " + id_materia + ";";
-		List numero = session.createSQLQuery(sql).list();
+		List _numeroDeOcupadas = session.createSQLQuery(sql).list();
+		BigInteger numeroDeOcupadas =  (BigInteger) _numeroDeOcupadas.get(0);
 		
 		String sql2 = "select cupoInicial from Materia where id_materia = " + id_materia + ";";
-		List ocupo = session.createSQLQuery(sql2).list();
+		List _cupoInicial = session.createSQLQuery(sql2).list();
+		int cupoInicial = (int) _cupoInicial.get(0);
 		
-		int diponibles =  (int) ocupo.get(0);
-		BigInteger ocupados = (BigInteger) numero.get(0);
-		if (diponibles <= 0) return (int) ocupados.intValue();
-		return diponibles - (int) ocupados.intValue();
+		String sql3 = "select numMaxCupo from Materia where id_materia = " + id_materia + ";";
+		List _disponible =  session.createSQLQuery(sql3).list();
+		int disponible = (int)_disponible.get(0);
+		System.out.print("");
+		if (disponible <= 0) return numeroDeOcupadas.intValue();
+		else return cupoInicial;
+		
 	} 
 	
 }
