@@ -66,7 +66,7 @@ public class Alumno_MateriaDaoImpl implements Alumno_MateriaDao {
 		int diponibles =  (int) ocupo.get(0);
 		BigInteger ocupados = (BigInteger) numero.get(0);
 		if (diponibles <= 0) return (int) ocupados.intValue();
-		return diponibles + (int) ocupados.intValue();
+		return diponibles - (int) ocupados.intValue();
 	} 
 	
 }
