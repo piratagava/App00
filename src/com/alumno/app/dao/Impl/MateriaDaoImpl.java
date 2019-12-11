@@ -65,4 +65,14 @@ public class MateriaDaoImpl implements MateriaDao {
 		}
 		return idsMaterias;
 	}
+	
+	public int cupoInicial(int id_materia) {
+		Session session = entity.unwrap(Session.class);
+		String sql2 = "select cupoInicial from Materia where id_materia = " + id_materia + ";";
+		List ocupo = session.createSQLQuery(sql2).list();
+		
+		int cupoInicial =  (int) ocupo.get(0);
+		
+		return cupoInicial;
+	}
 }

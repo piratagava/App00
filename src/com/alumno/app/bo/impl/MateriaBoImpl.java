@@ -64,4 +64,10 @@ public class MateriaBoImpl implements MateriaBo {
 		
 		return materias;
 	}
+
+	@Override
+	public int cupoInicial(int id_materia) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

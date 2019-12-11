@@ -26,4 +26,7 @@ public interface MateriaDao {
 	public void actualizar(Materia materia);
 	
 	public int[] materiasAsociadas(int id_alumno);
+	
+	public int cupoInicial(int id_materia);
+	
 }

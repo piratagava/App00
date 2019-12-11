@@ -24,4 +24,6 @@ public interface MateriaBo {
 	public void actualizar(Materia materia);
 	
 	public List<Materia> materiasAsociadas(int id_alumno);
+	
+	public int cupoInicial(int id_materia);
 }

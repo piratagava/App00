@@ -20,17 +20,31 @@ public class Materia {
 	@Column(name="numMaxCupo")
 	private int numMaxCupo;
 	
+	@Column(name="cupoInicial")
+	private int cupoInicial;
+	
+	
 	public  Materia() {
 		
 	}
-
-	public Materia(int id_materia, String nombre, int numMaxCupo) {
+	
+	
+	public Materia(int id_materia, String nombre, int numMaxCupo, int cupoInicial) {
 		super();
 		this.id_materia = id_materia;
 		this.nombre = nombre;
 		this.numMaxCupo = numMaxCupo;
+		this.cupoInicial = cupoInicial;
 	}
-
+	
+	public int getCupoInicial() {
+		return this.cupoInicial;
+	}
+	
+	public void setCupoInicial(int cupoInicial) {
+		this.cupoInicial = cupoInicial;
+	}
+	
 	public int getId_materia() {
 		return id_materia;
 	}

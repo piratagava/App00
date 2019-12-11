@@ -93,4 +93,8 @@ public class controladorMateria {
 		return materiaBo.materiasAsociadas(id_alumno);
 	}
 	
+	@RequestMapping(value = "/cupoInicial/{id_materis}", method = RequestMethod.GET)
+	public @ResponseBody int cupoInicial(@PathVariable int id_materia) {
+		return materiaBo.cupoInicial(id_materia);
+	}
 }

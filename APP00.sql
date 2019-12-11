@@ -1,6 +1,6 @@
 drop database APP00;
 create database APP00;
-  use APP00;
+use APP00;
 
 
 CREATE TABLE Alumno (
@@ -20,6 +20,7 @@ CREATE TABLE Materia (
   id_materia INT NOT NULL AUTO_INCREMENT,
   nombre VARCHAR(100) NOT NULL,
   numMaxCupo INT NOT NULL,
+  cupoInicial INT NOT NULL,
   PRIMARY KEY (id_materia));
 
 
