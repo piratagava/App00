@@ -1,5 +1,6 @@
 package com.alumno.app.dao.Impl;
 
+import java.math.BigInteger;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -68,11 +69,16 @@ public class MateriaDaoImpl implements MateriaDao {
 	
 	public int cupoInicial(int id_materia) {
 		Session session = entity.unwrap(Session.class);
-		String sql2 = "select cupoInicial from Materia where id_materia = " + id_materia + ";";
-		List ocupo = session.createSQLQuery(sql2).list();
+		String sql = "select count(*) from Materia where id_materia = " + id_materia + ";";
 		
-		int cupoInicial =  (int) ocupo.get(0);
+		List _numMateriaOcupadas = session.createSQLQuery(sql).list();
+		BigInteger numMaxCupo = (BigInteger)_numMateriaOcupadas.get(0);
+		int numeroMateriaOcupadas = numMaxCupo.intValue();
 		
-		return cupoInicial;
+		String sql2 = "select numMaxCupo from Materia where id_materia = " + id_materia + ";";
+		List _numMaxCupo = session.createSQLQuery(sql2).list();
+		int numeroMaxCupo =  (int) _numMaxCupo.get(0);
+		
+		return numeroMaxCupo + numeroMateriaOcupadas;
 	}
 }
