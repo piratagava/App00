@@ -48,7 +48,7 @@
                     <input  type="number" id="iptNumMaxCupo" required="required" max="99" min="1" pattern="^[0-9]{1,2}$"/>
                     
                     
-                    <label>Cupo Inicial</label>
+                    <label>Cupo Maximo</label>
                     <input type="number" id="iptCupoInicial" readonly="readonly"/>
                     
                    <!--  <label>Cupos Disponibles</label>
@@ -65,8 +65,7 @@
 								<th>Nombre</th>
 								<th>Apellido Paterno</th>
 								<th>Apellido Materno</th>
-								<th>Correo</th>
-							
+								<th>Correo</th>							
 							</tr>
 						</thead>				    	
 			<tr ng-repeat="dato in alumno">	
@@ -129,32 +128,15 @@
           		   });         	
           	  });
               
-          /*    
-              //obtiene materias que ya han sido ocupadas
-              $http.get("materiasOcupadas/"+id_materia).then(function(response) {
-            		$scope.alumno = response.data;
-            		
-            		//obtengo el numero que manda la consulta
-            		let numero= $scope.alumno = response.data;
-            	    document.getElementById("iptTotal").value=numero;
-            	    
-            	    document.getElementById("iptNumMaxCupo").value=numero;
-           	});
-              
-          */
-          
-          
           //obtener cupo inicial              
           $http.get("cupoInicial/"+id_materia).then(function(response) {        
        	  $scope.alumno = response.data;      
-       	  console.log($scope.alumno = response.data)
+       	 // console.log($scope.alumno = response.data)
       		//obtengo el numero que manda la consulta
       		let numero= $scope.alumno = response.data;      	  
        	   document.getElementById("iptCupoInicial").value=response.data;
         	    
         });
-          
-            
                             
               if (id_materia > 0)	consultarMateria("listarConsultaMateria/"+id_materia);
           });
@@ -162,8 +144,6 @@
       });  
       
 	
-	 
-      
       let consultaAlumnosAsociados = (ruta) => {
       	fetch(ruta,{
       		method : 'GET',
@@ -228,13 +208,11 @@
           let nombre = document.getElementById("iptNombreMateria").value;
           let numMaxCupo = document.getElementById("iptNumMaxCupo").value;
           let idMateria = document.getElementById("iptIdMateria").value;
-         // let iptTotal = document.getElementById("iptTotal").value=numero;
-        //pendienteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+          
           let materia = {
               "nombre" : nombre,
               "numMaxCupo" : numMaxCupo,
-          	  "id_materia" : idMateria,
-        // 	  "cupoInicial": numMaxCupo
+          	  "id_materia" : idMateria        
           }
           console.log(materia)
           let valido = validarDatosMateria(materia);
@@ -311,8 +289,7 @@
           then(respuesta => {
               return respuesta.json();
           }).then ((data) => {
-              desplegarComboMaterias(data);
-              //document.getElementById("iptCupoInicial").value=data.cupoInicial;
+              desplegarComboMaterias(data);             
           }).
           catch(error => {
               alert(error);
