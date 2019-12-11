@@ -44,15 +44,16 @@
                     <label>Nombre de la Materia:</label>
                     <input type="text" id="iptNombreMateria" required="required" pattern="^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$"/>
                   
-                    <label>Actualizar Cupos</label>
+                    <label>Cupos Actuales Disponibles</label>
                     <input  type="number" id="iptNumMaxCupo" required="required" max="99" min="1" pattern="^[0-9]{1,2}$"/>
                     
                     
                     <label>Cupo Inicial</label>
                     <input type="number" id="iptCupoInicial" readonly="readonly"/>
                     
-                    <label>Cupos Disponibles</label>
-                    <input type="number" id="iptTotal" readonly="readonly"/>
+                   <!--  <label>Cupos Disponibles</label>
+                    input type="number" id="iptTotal" readonly="readonly"/>
+                    -->
 					
                     <input data-icon="edit" data-theme="b" type="button" id="btnEditarMateria" value="Editar">
                 </form>
@@ -113,7 +114,7 @@
           materiaSeleccionada.addEventListener('change', () => {           
               let id_materia = materiaSeleccionada.value
       		
-              //Obtiene los alumnos que actualmente 
+              //Por id_materia obtiene los alumnos que estan asignadas a las materias
               $http.get("alumnosAsociados/"+id_materia).then(function(response) {
           		$scope.alumno = response.data;          
           		var contenido=$scope.alumno.contenido = response.data;
@@ -128,7 +129,7 @@
           		   });         	
           	  });
               
-              
+          /*    
               //obtiene materias que ya han sido ocupadas
               $http.get("materiasOcupadas/"+id_materia).then(function(response) {
             		$scope.alumno = response.data;
@@ -138,14 +139,15 @@
             	    document.getElementById("iptTotal").value=numero;
             	    
             	    document.getElementById("iptNumMaxCupo").value=numero;
-            	  });
+           	});
               
-            
+          */
+          
+          
           //obtener cupo inicial              
-          $http.get("cupoInicial/"+id_materia).then(function(response) {
-        		
-       	  $scope.alumno = response.data;
-      	
+          $http.get("cupoInicial/"+id_materia).then(function(response) {        
+       	  $scope.alumno = response.data;      
+       	  console.log($scope.alumno = response.data)
       		//obtengo el numero que manda la consulta
       		let numero= $scope.alumno = response.data;      	  
        	   document.getElementById("iptCupoInicial").value=response.data;
@@ -227,12 +229,12 @@
           let numMaxCupo = document.getElementById("iptNumMaxCupo").value;
           let idMateria = document.getElementById("iptIdMateria").value;
          // let iptTotal = document.getElementById("iptTotal").value=numero;
-          
+        //pendienteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
           let materia = {
               "nombre" : nombre,
               "numMaxCupo" : numMaxCupo,
           	  "id_materia" : idMateria,
-          	  "cupoInicial": numMaxCupo
+        // 	  "cupoInicial": numMaxCupo
           }
           console.log(materia)
           let valido = validarDatosMateria(materia);

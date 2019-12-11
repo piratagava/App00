@@ -32,13 +32,10 @@
 
 <script>
         window.addEventListener('load', () => {
-            //let paginaAlumnoMateria = document.querySelector("#asociar_materia");
-            //paginaAlumnoMateria.addEventListener('click', ()=> {
-                recibirDatosMaterias("listarMateria");
-                recibirDatosAlumnos("listarAlumno");        
-            //});    
-            //Evento cambio de materia
             
+        	recibirDatosMaterias("listarMateria");
+            recibirDatosAlumnos("listarAlumno"); 
+          
             let alumnoSeleccionado = document.querySelector("#comboAlumnos");
             
             alumnoSeleccionado.addEventListener('change', () => {
@@ -84,40 +81,10 @@
 	     		}else{         				            			
        			
 	     			input.setAttribute("disabled","disabled");
-           	 }
-	      }
-	            	/*
-	            	if(bandera==true){
-	            		if(id_alumno==alumnoMateria[1]){
-		            		//alert("entro el if id_alumno son iguales")
-		            		
-		            		bandera=true;		            		
-		            	}else if(id_alumno!==alumnoMateria[1]){
-		            		//alert("entro el else if diferente de id_alumno")
-		            		           		
-		            		bandera=false;	
-		            		input.setAttribute("disabled","disabled");
-		            	}else{
-		            		//alert("ningun caso")
-		            		
-		            		bandera=false;
-		            	}
-
-	            		
-	            	}else if(bandera==false){
-	            		if(id_alumno!==alumnoMateria[1]){
-	            			input.setAttribute("disabled","disabled");	
-	            		}else if(id_alumno==alumnoMateria[1]){
-		            		alert("entro el if id_alumno son iguales")
-		            		contador++;
-		            		bandera=true;		            		
-		            	}
-	            	}	
-	            	*/
+           		 }
+	      		}     		            
 	            
-	            });
-	            
-	       	 
+	            });	         
 	          
 	        })
 	        .catch( error => alert(error));
