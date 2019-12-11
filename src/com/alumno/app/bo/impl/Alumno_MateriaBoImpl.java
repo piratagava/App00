@@ -149,7 +149,7 @@ public class Alumno_MateriaBoImpl implements Alumno_MateriaBo {
 	}
 
 	@Override
-	public BigInteger materiasOcupadas(int id_materia) {
+	public int materiasOcupadas(int id_materia) {
 		// TODO Auto-generated method stub
 		return dao.materiasOcupadas(id_materia);
 	}

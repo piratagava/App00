@@ -22,6 +22,6 @@ public interface Alumno_MateriaBo {
 
 	public List<Materia> ObtieneNumMaxMateria(int id_alumno);
 	
-	public BigInteger materiasOcupadas(int id_materia);
+	public int materiasOcupadas(int id_materia);
 
 }

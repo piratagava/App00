@@ -60,10 +60,13 @@ public class Alumno_MateriaDaoImpl implements Alumno_MateriaDao {
 		String sql = "select count(*) from AlumnoMateria where id_materia = " + id_materia + ";";
 		List numero = session.createSQLQuery(sql).list();
 		
+		String sql2 = "select numMaxCupo from Materia where id_materia = " + id_materia + ";";
+		List ocupo = session.createSQLQuery(sql2).list();
 		
-		BigInteger ocupadas = (BigInteger) numero.get(0); 
+		BigInteger diponibles = (BigInteger)ocupo.get(0);
+		BigInteger ocupados = (BigInteger) numero.get(0);
 		
-		return ocupadas;
+		return diponibles.subtract(ocupados);
 	} 
 	
 }

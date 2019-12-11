@@ -20,7 +20,7 @@ public interface Alumno_MateriaDao {
 
 	public List<Materia> ObtieneNumMaxMateria(int id_alumno);
 	
-	public BigInteger materiasOcupadas(int id_materia);
+	public int materiasOcupadas(int id_materia);
 	
 		
 }

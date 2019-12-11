@@ -79,7 +79,7 @@ public class controladorAlumno_Materia {
 	}
 	
 	@RequestMapping(value = "/materiasOcupadas/{id_materia}", method = RequestMethod.GET)
-	public @ResponseBody BigInteger materiasOcupadas(@PathVariable int id_materia) {
+	public @ResponseBody int materiasOcupadas(@PathVariable int id_materia) {
 		return alumno_materiaBo.materiasOcupadas(id_materia);
 	}
 }
