@@ -1,6 +1,9 @@
 package com.alumno.app.dao.Impl;
 
+import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -50,5 +53,17 @@ public class Alumno_MateriaDaoImpl implements Alumno_MateriaDao {
 		Session session = entity.unwrap(Session.class);
 		return session.createQuery("from Materia where id_materia=" + id_materia).list();		
 	}
-
+	
+	@Override
+	public BigInteger materiasOcupadas(int id_materia) {
+		Session session = entity.unwrap(Session.class);
+		String sql = "select count(*) from AlumnoMateria where id_materia = " + id_materia + ";";
+		List numero = session.createSQLQuery(sql).list();
+		
+		
+		BigInteger ocupadas = (BigInteger) numero.get(0); 
+		
+		return ocupadas;
+	} 
+	
 }

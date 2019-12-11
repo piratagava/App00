@@ -1,6 +1,8 @@
 package com.alumno.app.dao;
 
+import java.math.BigInteger;
 import java.util.List;
+import java.util.Map;
 
 import com.alumno.app.model.AlumnoMateria;
 import com.alumno.app.model.Materia;
@@ -17,7 +19,8 @@ public interface Alumno_MateriaDao {
 	public void eliminarAlumnoMateria(AlumnoMateria alumnoMateria);
 
 	public List<Materia> ObtieneNumMaxMateria(int id_alumno);
-
+	
+	public BigInteger materiasOcupadas(int id_materia);
 	
 		
 }

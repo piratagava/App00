@@ -1,7 +1,9 @@
 package com.alumno.app.controllers.alumno_materia;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,5 +77,9 @@ public class controladorAlumno_Materia {
 		List<AlumnoMateria> lista = alumno_materiaBo.getIDAllAlumnosMAterias(id_alumno);
 		return lista;
 	}
-
+	
+	@RequestMapping(value = "/materiasOcupadas/{id_materia}", method = RequestMethod.GET)
+	public @ResponseBody BigInteger materiasOcupadas(@PathVariable int id_materia) {
+		return alumno_materiaBo.materiasOcupadas(id_materia);
+	}
 }

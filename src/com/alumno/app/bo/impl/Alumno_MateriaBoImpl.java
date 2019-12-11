@@ -1,7 +1,9 @@
 package com.alumno.app.bo.impl;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.annotation.HttpConstraint;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,6 +146,12 @@ public class Alumno_MateriaBoImpl implements Alumno_MateriaBo {
 	@Transactional
 	public List<Materia> ObtieneNumMaxMateria(int id_alumno) {
 		return dao.ObtieneNumMaxMateria(id_alumno);
+	}
+
+	@Override
+	public BigInteger materiasOcupadas(int id_materia) {
+		// TODO Auto-generated method stub
+		return dao.materiasOcupadas(id_materia);
 	}
 
 }
