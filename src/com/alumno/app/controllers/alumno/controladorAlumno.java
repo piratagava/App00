@@ -25,8 +25,7 @@ public class controladorAlumno {
 	private AlumnoBo alumnoBo;
 
 	// Variables de clases, global, local, pendiente
-	ModelAndView mav = new ModelAndView();
-
+	
 	// permite iniciar index.html
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String IniciarIndex() {
@@ -50,10 +49,8 @@ public class controladorAlumno {
 	// prepara la vista en este caso index para poder agregar un nuevo registro de
 	// tipo persona (objeto)
 	@RequestMapping(value = "/alta_alumno", method = RequestMethod.GET)
-	public ModelAndView Agregar() {
-		mav.addObject(new Alumno());
-		mav.setViewName("alta_alumno");
-		return mav;
+	public String Agregar() {
+		return "alta_alumno";
 	}
 
 	// agrega Alumno mediante peticion post y lo serializa en json

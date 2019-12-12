@@ -17,11 +17,9 @@ public class AlumnoDaoImpl implements AlumnoDao {
 
 	@Override
 	public void crearAlumno(Alumno alumno) {
-		entity.persist(alumno);
-		System.out.print("AGREGANDO PERSONA CORRECTA \n");
-		boolean exist = entity.contains(alumno);
-		System.out.print("VERIFICANDO SI ESTRA DENTRO DE LA PERSISTENCIA " + exist + "\n");
-
+		Session session = entity.unwrap(Session.class);
+		session.persist(alumno);
+		
 	}
 
 	@SuppressWarnings("unchecked")
@@ -45,7 +43,10 @@ public class AlumnoDaoImpl implements AlumnoDao {
 	public int [] alumnosAsociados(int id_materia) {
 		Session session = entity.unwrap(Session.class);
 		
-		String sql = "select Alumno.id_alumno from Alumno inner join AlumnoMateria where Alumno.id_alumno = AlumnoMateria.id_alumno and AlumnoMateria.id_materia = " + id_materia + ";";
+		//String sql = "select Alumno.id_alumno from Alumno inner join AlumnoMateria where Alumno.id_alumno = AlumnoMateria.id_alumno and AlumnoMateria.id_materia = " + id_materia + ";";
+		
+		
+		String sql = "select id_alumno from AlumnoMateria where id_materia = " + id_materia  + ";";
 		List alumnos = session.createSQLQuery(sql).list();
 		
 		int[] _alumnos;

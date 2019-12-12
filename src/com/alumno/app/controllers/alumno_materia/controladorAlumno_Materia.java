@@ -32,9 +32,6 @@ public class controladorAlumno_Materia {
 	@Autowired
 	private Alumno_MateriaBo alumno_materiaBo;
 
-	// se crea una "vista" a partir de un modelo
-	private ModelAndView mav = new ModelAndView();
-
 	// regresa una lista en objetos json
 	@RequestMapping(value = "/listarAlumnoMateria", method = RequestMethod.GET)
 	public @ResponseBody List<AlumnoMateria> muestraAlumnoMateria() {
@@ -44,19 +41,13 @@ public class controladorAlumno_Materia {
 
 	// prepara la vista para poder crear nuevo objeto de tipo Materia
 	@RequestMapping(value = "/asignar_materias", method = RequestMethod.GET)
-	public ModelAndView AgregarAlumnoMateria() {
-		mav.addObject(new AlumnoMateria());
-		mav.setViewName("asignar_materias");
-		return mav;
+	public String AgregarAlumnoMateria() {
+		return "asignar_materias";
 	}
 
 	// crea el registro de asociacion alumno y materia
 	@RequestMapping(value = "/asignar_materias", method = RequestMethod.POST)
 	public @ResponseBody String  guardarAlumnoMateria(@RequestBody List<AlumnoMateria> obtner) {
-		// try{
-		// }catch (Error e) {
-		// System.out.println("ERROR /n"+e.getMessage());
-		// return e.getMessage();
 		try {
 			alumno_materiaBo.crearAlumno_Materia(obtner);
 			return "201";			
@@ -67,7 +58,7 @@ public class controladorAlumno_Materia {
 		}
 	}
 
-	// }
+	
 
 	// retornamos una lista de materias asociadas a los alumnos
 	// pathvariable indica que el id la obtiene mediante url desde el front que esta
@@ -81,5 +72,10 @@ public class controladorAlumno_Materia {
 	@RequestMapping(value = "/materiasOcupadas/{id_materia}", method = RequestMethod.GET)
 	public @ResponseBody int materiasOcupadas(@PathVariable int id_materia) {
 		return alumno_materiaBo.materiasOcupadas(id_materia);
+	}
+	
+	@RequestMapping(value = "/eliminarAsociacion", method = RequestMethod.DELETE)
+	public @ResponseBody boolean eliminarAsociacion(@RequestBody AlumnoMateria alumnoMateria) {
+		return alumno_materiaBo.eliminarAsociacion(alumnoMateria);
 	}
 }
