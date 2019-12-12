@@ -46,17 +46,11 @@
                   
                     <label>Cupos Actuales Disponibles</label>
                     <input  type="number" id="iptNumMaxCupo" required="required" max="99" min="1" pattern="^[0-9]{1,2}$"/>
-                    
-                    
+                                        
                     <label>Cupo Maximo</label>
                     <input type="number" id="iptCupoInicial" readonly="readonly"/>
-                    
-                   <!--  <label>Cupos Disponibles</label>
-                    input type="number" id="iptTotal" readonly="readonly"/>
-                    -->
-					
+                                    
                     <input data-icon="edit" data-theme="b" type="button" id="btnEditarMateria" value="Editar">
-                    
                     
                 </form>
             </section>    
@@ -72,7 +66,6 @@
 							</tr>
 						</thead>				    	
 			<tr ng-repeat="dato in alumno">	
-					<!-- checando las filas ng-model=vincula la vista al modelo-->				
 					<td>				
 						{{dato.nombre}}													
 					</td>
@@ -108,34 +101,23 @@
 	  window.addEventListener('load', () => {
           obtenerDatosMaterias("listarMateria");
    
-          let materiaSeleccionada = document.querySelector("#comboMaterias");
-          
+          let materiaSeleccionada = document.querySelector("#comboMaterias");          
           materiaSeleccionada.addEventListener('change', () => {           
               
-        	  let id_materia = materiaSeleccionada.value
+        	  let id_materia = materiaSeleccionada.value   
         	  
               //Por id_materia obtiene los alumnos que estan asignadas a las materias
-              $http.get("alumnosAsociados/"+id_materia).then(function(response) {
-          		$scope.alumno = response.data;          
-          		
-          		angular.forEach($scope.alumno, function(obtiene){         		   	
-                    let input = obtiene.contenido;	            		
-    	           	console.log(input)
-    	           	          		            	    
-            	    //let urlImagen = cargarBufferJPGE(obtiene.contenido);
-                	//desplegarFoto2(urlImagen);
-                	$scope.alumno.contenido = input;
-    	            //$scope.alumno.contenido = 'data:image/jpeg;base64,' + obtiene.contenido ;
-          		   });
-          	  });
+          $http.get("alumnosAsociados/"+id_materia).then(function(response) {
+     		$scope.alumno = response.data;          		
+      	  });
               
-          //obtener cupo inicial              
+          //obtener consulta de cupo inicial        
           $http.get("cupoInicial/"+id_materia).then(function(response) {        
        	  $scope.alumno = response.data;      
        		//obtengo el numero que manda la consulta
       		let numero= $scope.alumno = response.data;      	  
        	   document.getElementById("iptCupoInicial").value=response.data;        	   
-        });
+      	  });
                             
               if (id_materia > 0)	consultarMateria("listarConsultaMateria/"+id_materia);
           });
@@ -180,8 +162,7 @@
       	});
       }
       
-    
-      
+         
       //desplegarMateria
       let desplegarMateria = (materia) => {
 	    	/**
@@ -365,51 +346,7 @@
           //EvENTOS
           let accionGrabarAlumnoMateria = document.querySelector("#btnGrabarAlumnoMaterias");
           accionGrabarAlumnoMateria.addEventListener('click', capturarDatosAlumnoMateria);
-      }        
-    
-      //desplegarFoto
-      let desplegarFoto2 = (url) => {
-          /**
-          * Despliega la foto de alumno una vez haya sido seleccionada.
-          */
-          
-          let lienzo = document.querySelector("#divLienzo");
-          
-          while (lienzo.firstChild) {
-              lienzo.removeChild(lienzo.firstChild);
-          }
-
-          /**
-          * Contiene la información de todos los archivos seleccionado
-          */
-            
-          let foto = document.createElement('img');
-          foto.setAttribute("width", "100%");
-          foto.setAttribute("id", "imgFoto");
-          //foto.src = URL.createObjectURL(url);
-          foto.src = url
-          lienzo.appendChild(foto);
-          
-      }
-
-
-      let cargarBufferJPGE = (jpg64) => {
-      	 let decodedData = window.atob(jpg64);
-           let buffer = new ArrayBuffer(jpg64.length);
-           let view = new Uint8Array(buffer);
-           for (let i = 0; i < jpg64.length; i ++) {
-           	view[i] = decodedData.charCodeAt(i);
-           }
-           
-           let entradaFoto = document.querySelector('#iptFoto');
-          // console.log(entradaFoto.files)
-           let file = new File([view],"foto.jpeg", {type: 'image/jpeg'});
-
-           let url = URL.createObjectURL(file);
-           
-           return url;
-      }
-      
+      }             
 
 });
     </script>

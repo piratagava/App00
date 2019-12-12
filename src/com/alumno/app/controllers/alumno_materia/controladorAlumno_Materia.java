@@ -52,19 +52,9 @@ public class controladorAlumno_Materia {
 
 	// crea el registro de asociacion alumno y materia
 	@RequestMapping(value = "/asignar_materias", method = RequestMethod.POST)
-	public @ResponseBody String  guardarAlumnoMateria(@RequestBody List<AlumnoMateria> obtner) {
-		// try{
-		// }catch (Error e) {
-		// System.out.println("ERROR /n"+e.getMessage());
-		// return e.getMessage();
-		try {
+	public @ResponseBody Boolean  guardarAlumnoMateria(@RequestBody List<AlumnoMateria> obtner) {		
 			alumno_materiaBo.crearAlumno_Materia(obtner);
-			return "201";			
-		} catch (Exception e) {
-			log.warn("La materia ya existe en la base de datos");
-			log.error(e.getMessage());
-			return "existe un error";
-		}
+			return true;					
 	}
 
 	// }
