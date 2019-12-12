@@ -68,28 +68,58 @@
                         <input id="btnEditarAlumno" type="button" data-theme="b" data-icon="check" value="Guardar"/>
                     </form>
     
-                    <aside id="divLienzo" class="ui-block-b" style="width: 560px;"> 
-                        <img id="imgFoto" width="100%" src="#"/>    
+                    <aside id="divLienzo" class="ui-block-b" style="width: 320px;"> 
+                        <img id="imgFoto" width="30%" />    
                     </aside>     
-                    
-                   
-                    
-                	 <table class="table table-bordered table-responsive-md table-striped text-center">											
-						<thead>
-							<tr>								
-								<th>Materia que Cursa Actualmente</th>							
-							</tr>
-						</thead>				    
+                                      		              
+       	 </div>
+       	 
+       	 <div>
+       	 	 <table class="ui-block-b" style="width: 30%; height: 120px;">											
+					<thead>
+						<tr>						
+							<th>ID Materia</th>						
+							<th>Nombre de la Materia</th>													
+						</tr>
+					</thead>				    
 		
-					<tr ng-repeat="dato in materias">	
-					<!-- checando las filas ng-model=vincula la vista al modelo-->				
+				<tr data-ng-repeat="dato in materia">	
+					<!-- checando las filas ng-model=vincula la vista al modelo-->									
+					<td>																	
+						<span>{{dato.id_materia}}</span>
+					</td>	
+					
 					<td>																	
 						<span>{{dato.nombre}}</span>
-					</td>			
-			</tr>							
-			</table>		               
-       	 </div>          
-     
+					</td>	
+					
+					</tr>								
+			</table>	
+				 </div>  
+		<!-- Muestra tabla de botones para eliminar la materia a partir de la consulta -->
+			<table>											
+					<thead>
+						<tr>													
+							<th>Seleccione la Materia a eliminar</th>						
+						</tr>
+					</thead>				    
+		
+				<tr data-ng-repeat="dato in materias">										 	
+					<td>												
+  <button type="button" data-ng-click="eliminar(dato.id_alumnoMateria,dato.id_alumno,dato.id_materia)" style="height: 28px; width: 225px;" class="btn btn-danger">Eliminar Materia con id {{dato.id_materia}}</button>  
+					</td>
+				</tr>		
+						
+			</table>
+				
+				
+			<!-- esta seccion solo se creara las materias con el div -->	
+			<div id="trabajarEnMaterias">
+			 <p data-ng-repeat="elemento in materia" > 
+  				<input type="checkbox"/>{{elemento.id_materia}} 
+ 				<input type="checkbox"/>{{elemento.nombre}}
+			</div>				      
+				
        </section>
         </div>
     </body>
@@ -120,10 +150,27 @@
             
             //obtenemos la consulta del alumno con las materias que cursa
             $http.get("materiasAsociadas/"+id_alumno).then(function(response) {
-          		$scope.materias = response.data;              		
+          		$scope.materia = response.data;              		
           	  });
             
+            //trae sus datos del alumno que seleccione y coloca en el input text
             if (id_alumno > 0) consultarAlumno("consultaAlumno/"+id_alumno);
+            
+            //Trae dependiendo el alumno la asociacion con materias solo id¨s           
+            $http.get("consultarAlumno/"+id_alumno).then(function(response) {
+				$scope.materias =response.data;
+			});
+            
+            
+            //aqui se esta implementando los chekbox
+            let m = localStorage.getItem("Materias")            
+            let materias = JSON.parse(m);
+            //limpia los input :P
+        	desplegarMaterias(materias);	
+                         	
+            if (id_alumno > 0)	buscarAlumnoMateria("consultarAlumno/"+id_alumno); 
+            
+            
         });
 		
 		
@@ -476,7 +523,43 @@
          let url = URL.createObjectURL(file);
          
          return url;
-    }      
+    }    
+    
+    
+	//llamamos boton ng-click para eliminar, pasando por parametro el id_persona
+	 $scope.eliminar = function(id_alumnoMateria,id_alumno,id_materia){	 
+	 var confirmar = confirm(" ¡¡ CONFIRME PARA BORRAR SU REGISTRO !! ");
+		if (confirmar == true){			
+		location.reload(true);			
+		
+		var registra = $scope.materias={};
+		
+		var alumnoMateria =id_alumnoMateria;
+		var alumno =id_alumno;
+		var materia =id_materia;
+		
+	//reasignamos los datos enviados a nuestro json ......numero si
+		registra.id_alumnoMateria = alumnoMateria;
+		registra.id_alumno=alumno;
+		registra.id_materia=materia;
+			
+		console.log(registra)		
+		
+		//coloque delete en ves de post
+       $http.delete("eliminarAsociacion", registra)
+        .success(function(res){
+    		location.reload(true);
+		 })
+		 .error(function(res){
+			 alert("No pudo ser eliminada la materia");
+		 }); 
+		
+	}else{
+	
+	}
+  }
+	
+
 
 });
 	

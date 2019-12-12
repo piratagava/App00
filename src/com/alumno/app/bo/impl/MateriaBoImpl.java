@@ -68,6 +68,6 @@ public class MateriaBoImpl implements MateriaBo {
 	@Override
 	public int cupoInicial(int id_materia) {
 		// TODO Auto-generated method stub
-		return 0;
+		return dao.cupoInicial(id_materia);
 	}
 }

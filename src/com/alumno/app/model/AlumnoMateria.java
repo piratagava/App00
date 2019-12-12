@@ -1,5 +1,7 @@
 package com.alumno.app.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +11,12 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "AlumnoMateria")
-public class AlumnoMateria {
+public class AlumnoMateria implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -55,8 +62,5 @@ public class AlumnoMateria {
 		this.id_materia = id_materia;
 	}
 
-	@Override
-	public String toString() {
-		return  ""+getId_materia();
-	}
+
 }

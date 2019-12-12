@@ -20,14 +20,10 @@ public class controladorMateria {
 	@Autowired
 	private MateriaBo materiaBo;
 
-	private ModelAndView mav = new ModelAndView();
-
 	// prepara la vista index para agregar nuevo objeto de tipo materia
 	@RequestMapping(value = "/registrar_materia", method = RequestMethod.GET)
-	public ModelAndView AgregarMateria() {
-		mav.addObject(new Materia());
-		mav.setViewName("registrar_materia");
-		return mav;
+	public String AgregarMateria() {
+		return "registrar_materia";
 	}
 
 	// agrega registro de nueva materia

@@ -154,4 +154,10 @@ public class Alumno_MateriaBoImpl implements Alumno_MateriaBo {
 		return dao.materiasOcupadas(id_materia);
 	}
 
+	@Override
+	public boolean eliminarAsociacion(AlumnoMateria alumnoMateria) {
+		// TODO Auto-generated method stub
+		return dao.eliminarAsociacion(alumnoMateria);
+	}
+
 }
