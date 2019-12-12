@@ -56,6 +56,8 @@
                     -->
 					
                     <input data-icon="edit" data-theme="b" type="button" id="btnEditarMateria" value="Editar">
+                    
+                    
                 </form>
             </section>    
              <div>
@@ -65,7 +67,8 @@
 								<th>Nombre</th>
 								<th>Apellido Paterno</th>
 								<th>Apellido Materno</th>
-								<th>Correo</th>							
+								<th>Correo</th>	
+								<th>Foto</th>						
 							</tr>
 						</thead>				    	
 			<tr ng-repeat="dato in alumno">	
@@ -85,16 +88,13 @@
 					<td>											
 						{{dato.correoElectronico}}
 					</td>
+								
+					<td>	    
+  						<img style="width: 50px; height: 50px;" data-ng-src="data:image/jpeg;base64,{{alumno.conte}}" />
+					</td>					
 				
-				<!-- pendiente lienzo foto no muestra -->
-					
 			</tr>		
-				</table>
-				<!--  funciona
-				   <aside id="divLienzo"> 
-                        <img id="imgFoto" width="100%" src="#"/>    
-                   </aside>}
-                --> 
+				</table>				
 			</div>   
         </div>
     </body>
@@ -104,38 +104,37 @@
     var app = angular.module('muestra', []);
 	app.controller('controlador', function($scope, $http) {
 	//response señala que el parametro contendran los datos de respuesta
-
+	
 	  window.addEventListener('load', () => {
           obtenerDatosMaterias("listarMateria");
    
           let materiaSeleccionada = document.querySelector("#comboMaterias");
           
           materiaSeleccionada.addEventListener('change', () => {           
-              let id_materia = materiaSeleccionada.value
-      		
+              
+        	  let id_materia = materiaSeleccionada.value
+        	  
               //Por id_materia obtiene los alumnos que estan asignadas a las materias
               $http.get("alumnosAsociados/"+id_materia).then(function(response) {
           		$scope.alumno = response.data;          
-          		var contenido=$scope.alumno.contenido = response.data;
-          		angular.forEach($scope.alumno, function(obtiene){
-          		   	
+          		
+          		angular.forEach($scope.alumno, function(obtiene){          		   	
                     let input = obtiene.contenido;	            		
-    	           //	console.log(input)
+    	           	console.log(input)
     	           	          		            	    
-            	    //let urlImagen = cargarBufferJPGE(alumno.contenido);
+            	    //let urlImagen = cargarBufferJPGE(obtiene.contenido);
                 	//desplegarFoto2(urlImagen);
-                	
-          		   });         	
+                	$scope.alumno.conte = obtiene.contenido;
+    	            //$scope.alumno.contenido = 'data:image/jpeg;base64,' + obtiene.contenido ;
+          		   });
           	  });
               
           //obtener cupo inicial              
           $http.get("cupoInicial/"+id_materia).then(function(response) {        
        	  $scope.alumno = response.data;      
-       	 // console.log($scope.alumno = response.data)
-      		//obtengo el numero que manda la consulta
+       		//obtengo el numero que manda la consulta
       		let numero= $scope.alumno = response.data;      	  
-       	   document.getElementById("iptCupoInicial").value=response.data;
-        	    
+       	   document.getElementById("iptCupoInicial").value=response.data;        	   
         });
                             
               if (id_materia > 0)	consultarMateria("listarConsultaMateria/"+id_materia);
@@ -192,8 +191,7 @@
 	    	document.getElementById("iptNumMaxCupo").value = materia.numMaxCupo;
 	    	document.getElementById("iptIdMateria").value = materia.id_materia;
 	    	
-	    	//Envento actualizar materia
-	        
+	    	//Envento actualizar materia	        
 	        let btnEditarMateria = document.querySelector("#btnEditarMateria");
 	    	btnEditarMateria.addEventListener('click', () => {
 	    		capturarDatosMateria()
