@@ -1,15 +1,29 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>Editar Alumno</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        
+        <title> Editar Alumno </title>
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
         <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
         <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+       
+       <!-- Boostrap -->
+       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+       
+	
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.min.js"></script>
+        
     </head>
     
-    <body>
+<body ng-app="muestra" ng-controller="controlador">
         <!--PÃ¡gina editar alumno-->
         <div data-role="page" id="editar_alumno">
             <!--Encabezado-->
@@ -20,13 +34,16 @@
 
             <!--Contenido-->
             <section data-role="content">
-                <h2>Editar Alumno</h2>
+                <h2>Edita Alumno</h2>
                 <label> Seleccione al alumno:</label>
                 <select id="comboAlumnos">
 
                 </select>
                 <div class="ui-grid-a">
                     <form class="ui-block-a" data-ajax="false" autocomplete="on">                    
+                      <!-- campo oculto para enviar id de la persona actualizar -->
+                      <input id="iptIdalumno" type="hidden" placeholder="Id_Alumno">
+                      
                         <label> Nombre: </label>
                         <input id="iptNombre" type="text" placeholder="Nombre del alumno" required="required" pattern="^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$"/>
                         
@@ -51,24 +68,116 @@
                         <input id="btnEditarAlumno" type="button" data-theme="b" data-icon="check" value="Guardar"/>
                     </form>
     
-                    <aside id="divLienzo" class="ui-block-b"> 
-                        <img width="100%" src="#"/>    
-                    </aside>        
-                </div>                
-            </section>
+                    <aside id="divLienzo" class="ui-block-b" style="width: 320px;"> 
+                        <img id="imgFoto" width="30%" />    
+                    </aside>     
+                                      		              
+       	 </div>
+       	 
+       	 <div>
+       	 	 <table class="ui-block-b" style="width: 30%; height: 120px;">											
+					<thead>
+						<tr>						
+							<th>ID Materia</th>						
+							<th>Nombre de la Materia</th>													
+						</tr>
+					</thead>				    
+		
+				<tr data-ng-repeat="dato in materia">	
+					<!-- checando las filas ng-model=vincula la vista al modelo-->									
+					<td>																	
+						<span>{{dato.id_materia}}</span>
+					</td>	
+					
+					<td>																	
+						<span>{{dato.nombre}}</span>
+					</td>	
+					
+					</tr>								
+			</table>	
+				 </div>  
+		<!-- Muestra tabla de botones para eliminar la materia a partir de la consulta -->
+			<table>											
+					<thead>
+						<tr>													
+							<th>Seleccione la Materia a eliminar</th>						
+						</tr>
+					</thead>				    
+		
+				<tr data-ng-repeat="dato in materias">										 	
+					<td>												
+  <button type="button" data-ng-click="eliminar(dato.id_alumnoMateria,dato.id_alumno,dato.id_materia)" style="height: 28px; width: 225px;" class="btn btn-danger">Eliminar Materia con id {{dato.id_materia}}</button>  
+					</td>
+				</tr>		
+						
+			</table>
+				
+				
+						      
+				
+       </section>
         </div>
     </body>
 
-    <script>
-    'use strict'
+    <script type="text/javascript">
+    
+    var app = angular.module('muestra', []);
+	app.controller('controlador', function($scope, $http) {
+	//response señala que el parametro contendran los datos de respuesta
+	
+
 	window.addEventListener('load', () => {   	
 	    
 		obtenerDatosAlumno("listarAlumno");
-	
+		
+		//EVENTO DE CAMBIO DE FOTO
+	    let inputFoto = document.querySelector('#iptFoto');
+        inputFoto.addEventListener('change', () => {
+            if (desplegarFoto() == false) {
+                inputFoto.value = "";
+            }
+        });
+        
+        //EVENTO CAMBIO DE ALUMNO
 		let alumnoSeleccionado = document.querySelector("#comboAlumnos");
 		alumnoSeleccionado.addEventListener('change', () => {
             let id_alumno = alumnoSeleccionado.value
+            
+            //obtenemos la consulta del alumno con las materias que cursa
+            $http.get("materiasAsociadas/"+id_alumno).then(function(response) {
+          		$scope.materia = response.data;              		
+          	  });
+            
+            //trae sus datos del alumno que seleccione y coloca en el input text
             if (id_alumno > 0) consultarAlumno("consultaAlumno/"+id_alumno);
+            
+            //Trae dependiendo el alumno la asociacion con materias solo id¨s           
+            $http.get("consultarAlumno/"+id_alumno).then(function(response) {
+				$scope.materias =response.data;
+			});
+            
+            
+          
+            
+        });
+		
+		
+		let accionEditar = document.querySelector("#btnEditarAlumno");   	 	
+        accionEditar.addEventListener('click', capturarDatosAlumno);
+        
+		//evento el cual se dispara cuando el input de la fecha de nacimiento pierde el focus.
+        let accionEdad = document.querySelector("#iptFechaNacimiento");    
+        accionEdad.addEventListener("blur", () => {
+        
+            let _fechaNacimiento = document.getElementById("iptFechaNacimiento").value;
+            let fechaNacimiento = new Date(_fechaNacimiento)
+            let edad = calcularEdad(fechaNacimiento);
+            if (edad <= 0 || isNaN(fechaNacimiento.getFullYear())) {
+                alert("La fecha de nacimiento no puede ser mayor o igual al años actual.")
+                document.getElementById("iptEdad").value = 0;
+            } else {
+                document.getElementById("iptEdad").value = edad  + " Años.";
+            }
         });
     });
     
@@ -95,8 +204,8 @@
     	let otnMateria = ``;
     	let i = 0;   	
     	lstAlumnos.forEach(alumno => {
-    		if (i == 0) otnMateria += `<option value="0">SELECCIONE LA MATERIA.</option>`
-			otnMateria += `<option value=${alumno.id_alumno}>${alumno.nombre}</option>` 
+    		if (i == 0) otnMateria += `<option value="0">SELECCIONE AL ALUMNO.</option>`
+			otnMateria += `<option value=${alumno.id_alumno}>${alumno.nombre} ${alumno.apellidoPaterno} ${alumno.apellidoMaterno}</option>` 
     		i ++;
     	
     	});
@@ -126,60 +235,114 @@
     //
     let desplegarAlumno = (alumno) => {
     	/**
-    	* Desplegará los datos de la materia, en el cual se mostrará el nombre de la materia y el número máximo de cupos
+    	* Desplegará los datos deL Alumno
     	**/
+    	document.getElementById("iptIdalumno").value = alumno.id_alumno;
     	document.getElementById("iptNombre").value = alumno.nombre;
     	document.getElementById("iptApellido1").value = alumno.apellidoPaterno;
     	document.getElementById("iptApellido2").value = alumno.apellidoMaterno;
     	document.getElementById("iptFechaNacimiento").value = alumno.fechaNacimiento;
-    	document.getElementById("iptCorreo").value = alumno.correoElectronico;	    	
+    	document.getElementById("iptCorreo").value = alumno.correoElectronico;	 
+    	document.getElementById("iptEdad").value = calcularEdad(new Date(alumno.fechaNacimiento));
+    	let urlImagen = cargarBufferJPGE(alumno.contenido);
+    	desplegarFoto2(urlImagen);
     	
-    	//aqui hacer conversion de imganen para obtenerlo y mostrarlo
-        
-    		//pendiente foto t
+    	localStorage.clear();
+    	localStorage.setItem("Foto", alumno.contenido);    	    	
 	}
+   
     
+    //desplegarFoto
+    let desplegarFoto2 = (url) => {
+        /**
+        * Despliega la foto de alumno una vez haya sido seleccionada.
+        */
+        
+        let lienzo = document.querySelector("#divLienzo");
+        
+        while (lienzo.firstChild) {
+            lienzo.removeChild(lienzo.firstChild);
+        }
+
+        /**
+        * Contiene la información de todos los archivos seleccionado
+        */
+          
+        let foto = document.createElement('img');
+        foto.setAttribute("width", "100%");
+        foto.setAttribute("id", "imgFoto");
+        //foto.src = URL.createObjectURL(url);
+        foto.src = url
+        lienzo.appendChild(foto);
+        
+    }
     
   //capturarDatosAlumno
     let capturarDatosAlumno = () => {
         /**
         * Captura los datos de los alumno, y valida que al menos hayan sido capturados los datos.
         */
+        let id_alumno = document.getElementById("iptIdalumno").value;
         let nombre = document.getElementById("iptNombre").value;
         let apellidoPaterno = document.getElementById("iptApellido1").value;
         let apellidoMaterno = document.getElementById("iptApellido2").value;
         let fechaNacimiento = document.getElementById("iptFechaNacimiento").value;
         let correoElectronico = document.getElementById("iptCorreo").value;
+        let foto = document.getElementById("iptFoto").value;
         
-
-        let lector = new FileReader();
-        let entradaFoto = document.querySelector('#iptFoto');
-        let archivo = entradaFoto.files;
-        let blob = new Blob(archivo, {type : 'image/jpeg'})
-        console.log(archivo)
-        
-
-        lector.readAsBinaryString(blob);
-        lector.onload = () => {
-            let jpge64 = window.btoa(lector.result);
+        if (foto == "") {
+        	let alumno = {
+                	"id_alumno" : id_alumno,
+                    "nombre" : nombre,
+                    "apellidoPaterno" : apellidoPaterno,
+                    "apellidoMaterno" : apellidoMaterno,
+                    "fechaNacimiento" : new Date(fechaNacimiento),
+                    "correoElectronico" : correoElectronico,
+                    "contenido" : localStorage.getItem("Foto")
+                }
+				
+        		console.log(alumno)
+        	
+                let valido = validarDatosAlumno(alumno);
+                
+                if (valido === 1 ) {
+                    enviarDatosAlumno("actualizar_alumno", alumno);
+                } else {
+                    alert("Capture todos los campos.")
+                }
+        } else {
+            let lector = new FileReader();
+            let entradaFoto = document.querySelector('#iptFoto');
+            let archivo = entradaFoto.files;
             
-            let alumno = {
-                "nombre" : nombre,
-                "apellidoPaterno" : apellidoPaterno,
-                "apellidoMaterno" : apellidoMaterno,
-                "fechaNacimiento" : new Date(fechaNacimiento),
-                "correoElectronico" : correoElectronico,
-                "contenido" : jpge64
-            }
+            //valida
+            let blob = new Blob(archivo, {type : 'image/jpeg'})
+            console.log(archivo)
 
-            let valido = validarDatosAlumno(alumno);
-            
-            if (valido === 1 ) {
-                enviarDatosAlumno("alta_alumno", alumno);
-            } else {
-                alert("Capture todos los campos.")
-            }
+            lector.readAsBinaryString(blob);
+            lector.onload = () => {
+                let jpge64 = window.btoa(lector.result);
+                
+                let alumno = {
+                	"id_alumno" : id_alumno,
+                    "nombre" : nombre,
+                    "apellidoPaterno" : apellidoPaterno,
+                    "apellidoMaterno" : apellidoMaterno,
+                    "fechaNacimiento" : new Date(fechaNacimiento),
+                    "correoElectronico" : correoElectronico,
+                    "contenido" : jpge64
+                }
+
+                let valido = validarDatosAlumno(alumno);
+                
+                if (valido === 1 ) {
+                    enviarDatosAlumno("actualizar_alumno", alumno);
+                } else {
+                    alert("Capture todos los campos.")
+                }
+            }        	
         }
+
     }
 
     //desplegarFoto
@@ -197,8 +360,10 @@
         * Contiene la información de todos los archivos seleccionado
         */
         let archivo = entradaFoto.files;    
+        console.log(archivo)
         let foto = document.createElement('img');
         foto.setAttribute("width", "100%");
+        foto.setAttribute("id", "imgFoto");
         let valido = validarFotoAlumno(archivo[0])
         
         if (valido == 1) {
@@ -229,7 +394,7 @@
         */
         console.log(datosAlumno)
         fetch(ruta, {
-            method : 'POST',
+            method : 'PUT',
             body : JSON.stringify(datosAlumno),
             headers : {
                 'Content-Type' : 'application/json'
@@ -253,7 +418,7 @@
         /**
         * Valida que los datos del alumno no esten vacios.
         */
-        let valido = 64;
+        let valido = 32;
 
         if (alumno["nombre"].length > 0 ) {
             let validaNombre = /^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$/
@@ -301,7 +466,6 @@
             }
             
         };
-        if (alumno["contenido"].length > 0) valido >>= 1;
         console.log(valido);
         return valido;
     }
@@ -331,5 +495,71 @@
 
         return edad;
 	}
+
+    let cargarBufferJPGE = (jpg64) => {
+    	 let decodedData = window.atob(jpg64);
+         let buffer = new ArrayBuffer(jpg64.length);
+         let view = new Uint8Array(buffer);
+         for (let i = 0; i < jpg64.length; i ++) {
+         	view[i] = decodedData.charCodeAt(i);
+         }
+         
+         let entradaFoto = document.querySelector('#iptFoto');
+         console.log(entradaFoto.files)
+         let file = new File([view],"foto.jpeg", {type: 'image/jpeg'});
+
+         let url = URL.createObjectURL(file);
+         
+         return url;
+    }    
+    
+    
+	//llamamos boton ng-click para eliminar, pasando por parametro el id_persona
+	 $scope.eliminar = function(id_alumnoMateria,id_alumno,id_materia){	 
+	 var confirmar = confirm(" ¡¡ CONFIRME PARA BORRAR SU REGISTRO !! ");
+		if (confirmar == true){			
+		location.reload(true);			
+		var registra = $scope.materias={};		
+		var alumnoMateria =id_alumnoMateria;
+		var alumno =id_alumno;
+		var materia =id_materia;
+		
+	//reasignamos los datos enviados a nuestro json ......numero si
+		registra.id_alumnoMateria = alumnoMateria;
+		registra.id_alumno=alumno;
+		registra.id_materia=materia;
+			
+		console.log(registra)		
+		
+		//coloque delete en ves de post
+       $http.post("eliminarAsociacion", registra)
+        .success(function(res){
+    		location.reload(true);
+		 });
+		
+	
+		
+		//var url = 'eliminarAsociacion';
+
+		//$http.delete(url, registra).then(function (response) {
+			//location.reload(true);
+		//}, function (response) {
+			//location.reload(true);
+	
+		//});
+		
+		
+		
+	}else{
+	
+	}
+  }
+	
+
+
+});
+	
+    
+
     </script>
 </html>

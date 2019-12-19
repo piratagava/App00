@@ -1,16 +1,30 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
+    	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>Editar Alumno</title>
+        
+        <title>Editar Materia</title>
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
         <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
         <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+        
+        	<!-- Esto es Boostrap -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous" />
+	
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.min.js"></script>
+
     </head>
 
-    <body>
-        <!--PÃ¡gina editar materia-->
+<body ng-app="muestra" ng-controller="controlador">
+        <!--Página editar materia-->
         <div data-role="page" id="editar_materia">
             <!--Encabezado-->
             <header data-role="header" data-theme="b">
@@ -20,256 +34,322 @@
                 
             <!--Contenido-->
             <section data-role="content">
-                <h2>Editar Alumno</h2>
+                <h2>Editar Materia</h2>
                 <label> Seleccione la materia:</label>
                 <select id="comboMaterias">                                        
                         
                 </select>
                     
-                <form data-ajax="false">
-                    <label>Clave:</label>
-                    <input type="text" id="iptIdMateria" disabled="disabled"/>
+                <form data-ajax="false">                   
+                    <input type="text" id="iptIdMateria" />
                                         
                     <label>Nombre de la Materia:</label>
                     <input type="text" id="iptNombreMateria" required="required" pattern="^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$"/>
-                    <label>N&uacutemero de Cupos M&aacuteximo</label>
-                    <input type="number" id="iptNumMaxCupo" required="required" max="99" min="1" pattern="^[0-9]{1,2}$"/>
+                  
+                    <label>Cupos Actuales Disponibles</label>
+                    <input  type="number" id="iptNumMaxCupo" required="required" max="99" min="1" pattern="^[0-9]{1,2}$"/>
+                                        
+                    <label>Cupo Maximo</label>
+                    <input type="number" id="iptCupoInicial" readonly="readonly"/>
+                                    
                     <input data-icon="edit" data-theme="b" type="button" id="btnEditarMateria" value="Editar">
+                    
                 </form>
             </section>    
+             <div>
+            <table class="table table-bordered table-responsive-md table-striped text-center">											
+						<thead>
+							<tr>								
+								<th>Nombre</th>
+								<th>Apellido Paterno</th>
+								<th>Apellido Materno</th>
+								<th>Correo</th>	
+								<th>Foto</th>						
+							</tr>
+						</thead>				    	
+			<tr ng-repeat="dato in alumno">	
+					<td>				
+						{{dato.nombre}}													
+					</td>
+					
+					<td>						
+						{{dato.apellidoPaterno}}
+					</td>
+					
+					<td>											
+						{{dato.apellidoMaterno}}
+					</td>
+					
+					<td>											
+						{{dato.correoElectronico}}
+					</td>
+								
+					<td>	    
+  				<img style="width: 50px; height: 50px;" data-ng-src="data:image/jpeg;base64,{{dato.contenido}}" />
+					</td>					
+				
+			</tr>		
+				</table>				
+			</div>   
         </div>
     </body>
 
     <script>
-        window.addEventListener('load', () => {
-            //
-            //let paginaEditarMateria = document.querySelector("#editar_materia");
-            //paginaEditarMateria.addEventListener('click', () => {
-            obtenerDatosMaterias("listarMateria");
-            //});
-            let materiaSeleccionada = document.querySelector("#comboMaterias");
-            
-            materiaSeleccionada.addEventListener('change', () => {
-            
-                //let m = localStorage.getItem("Materias")
-                //recibirDatosMaterias("listarMateria");
-                //let materias = JSON.parse(m);
-                
-                let id_materia = materiaSeleccionada.value
-                //limpiar el fieldset :P
-                //desplegarMaterias(materias);	
-                //buscarMateriasOcupadas("listarCupoMaximoPorAlumno", id_alumno)
-                
-                
-                if (id_materia > 0)	consultarMateria("listarConsultaMateria/"+id_materia);
-            });
-            
-        });  
-      	//consultarMateria
-        let consultarMateria = (ruta) => {
-        	fetch(ruta, {
-        	    method : 'GET',
-        	    headers : {
-        	    	'Content-Type' : 'application/json'
-        	    }
-        	}).
-        	then(respuesta => {
-        	    return respuesta.json();
-        	}).then ((data) => {
-        	    desplegarMateria(data);
-        	}).
-        	catch(error => {
-        	    alert(error);
-        	});
-        }
-        //desplegarMateria
-        let desplegarMateria = (materia) => {
+   
+    var app = angular.module('muestra', []);
+	app.controller('controlador', function($scope, $http) {
+	//response señala que el parametro contendran los datos de respuesta
+	
+	  window.addEventListener('load', () => {
+          obtenerDatosMaterias("listarMateria");
+   
+          let materiaSeleccionada = document.querySelector("#comboMaterias");          
+          materiaSeleccionada.addEventListener('change', () => {           
+              
+        	  let id_materia = materiaSeleccionada.value   
+        	  
+              //Por id_materia obtiene los alumnos que estan asignadas a las materias
+          $http.get("alumnosAsociados/"+id_materia).then(function(response) {
+     		$scope.alumno = response.data;          		
+      	  });
+              
+          //obtener consulta de cupo inicial        
+          $http.get("cupoInicial/"+id_materia).then(function(response) {        
+       	  $scope.alumno = response.data;      
+       		//obtengo el numero que manda la consulta
+      		let numero= $scope.alumno = response.data;      	  
+       	   document.getElementById("iptCupoInicial").value=response.data;        	   
+      	  });
+                            
+              if (id_materia > 0)	consultarMateria("listarConsultaMateria/"+id_materia);
+          });
+          
+      });  
+      
+	
+      let consultaAlumnosAsociados = (ruta) => {
+      	fetch(ruta,{
+      		method : 'GET',
+      		headers : {
+      			'Content-Type' : 'application/json'
+      		}
+      	}).
+      	then (respuesta => {
+      		return respuesta.json();
+      	}).
+      	then ((data) =>{
+      		desplegarAlumnosAsociados(data);
+      	}).
+      	catch(error => {
+      		alert(error);
+      	});
+      }
+      
+
+    	//consultarMateria
+      let consultarMateria = (ruta) => {
+      	fetch(ruta, {
+      	    method : 'GET',
+      	    headers : {
+      	    	'Content-Type' : 'application/json'
+      	    }
+      	}).
+      	then(respuesta => {
+      	    return respuesta.json();
+      	}).then ((data) => {
+      	    desplegarMateria(data);
+      	}).
+      	catch(error => {
+      	    alert(error);
+      	});
+      }
+      
+         
+      //desplegarMateria
+      let desplegarMateria = (materia) => {
 	    	/**
-	    	* DesplegarÃ¡ los datos de la materia, en el cual se mostrarÃ¡ el nombre de la materia y el nÃºmero mÃ¡ximo de cupos
+	    	* Desplegará los datos de la materia, en el cual se mostrará el nombre de la materia y el número máximo de cupos
 	    	**/
 	    	document.getElementById("iptNombreMateria").value = materia.nombre;
 	    	document.getElementById("iptNumMaxCupo").value = materia.numMaxCupo;
 	    	document.getElementById("iptIdMateria").value = materia.id_materia;
 	    	
-	    	//Envento actualizar materia
-	        
+	    	//Envento actualizar materia	        
 	        let btnEditarMateria = document.querySelector("#btnEditarMateria");
 	    	btnEditarMateria.addEventListener('click', () => {
 	    		capturarDatosMateria()
 	    	});
-    	}
-        
-      //caputurarDatosMateria
-        let capturarDatosMateria = () => {
-        /**
-        * Captura los datos de las materia y confirma que al menos hayan sido capturados los datos.
-        */
-            let nombre = document.getElementById("iptNombreMateria").value;
-            let numMaxCupo = document.getElementById("iptNumMaxCupo").value;
-            let idMateria = document.getElementById("iptIdMateria").value;
-            
-            
-            let materia = {
-                "nombre" : nombre,
-                "numMaxCupo" : numMaxCupo,
-            	"id_materia" : idMateria
-            }
-            console.log(materia)
-            let valido = validarDatosMateria(materia);
-                
-            if (valido === 1 ) {
-            	enviarDatosMateria("editar_materia", materia);	
-            } else {
-                alert("Capture todos los campos.")
-            }
-    	}
-        let validarDatosMateria = (materia) => {
-            /**
-            * Valida que los datos de la materia no esten vacios.
-            */
-            let valido = 4;
-            if (materia["nombre"].length > 0) {
-                let validaMateria = /^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$/
-                let esValido = validaMateria.exec(materia["nombre"]);
-                
-                if (esValido == null) {
-                    alert("El nombre de la materia no ha sido validado.");
-                } else {
-                    valido >>= 1;		
-                }
-            }
-            if (materia["numMaxCupo"].length > 0) {
-                let validaNumMaxCupo = /^[0-9]{1,2}$/
-                let esValido = validaNumMaxCupo.exec(materia["numMaxCupo"]);
-                
-                if (esValido == null || materia["numMaxCupo"] <= 0) {
-                    alert("El nÃºmero de cupos no ha sido validado.");
-                } else {
-                    valido >>= 1;		
-                }
-            } 
-            
-            console.log(valido);
-            return valido;
-        }
+  	}
+      
+    //caputurarDatosMateria
+      let capturarDatosMateria = () => {
+      /**
+      * Captura los datos de las materia y confirma que al menos hayan sido capturados los datos.
+      */
+          let nombre = document.getElementById("iptNombreMateria").value;
+          let numMaxCupo = document.getElementById("iptNumMaxCupo").value;
+          let idMateria = document.getElementById("iptIdMateria").value;
+          
+          let materia = {
+              "nombre" : nombre,
+              "numMaxCupo" : numMaxCupo,
+          	  "id_materia" : idMateria        
+          }
+          console.log(materia)
+          let valido = validarDatosMateria(materia);
+              
+          if (valido === 1 ) {
+          	enviarDatosMateria("editar_materia", materia);	
+          } else {
+              alert("Capture todos los campos.")
+          }
+  	}
+      let validarDatosMateria = (materia) => {
+          /**
+          * Valida que los datos de la materia no esten vacios.
+          */
+          let valido = 4;
+          if (materia["nombre"].length > 0) {
+              let validaMateria = /^[A-Z\u00C0-\u00DCa-z\u00E0-\u00FC0-9\s]{1,99}$/
+              let esValido = validaMateria.exec(materia["nombre"]);
+              
+              if (esValido == null) {
+                  alert("El nombre de la materia no ha sido validado.");
+              } else {
+                  valido >>= 1;		
+              }
+          }
+          if (materia["numMaxCupo"].length > 0) {
+              let validaNumMaxCupo = /^[0-9]{1,2}$/
+              let esValido = validaNumMaxCupo.exec(materia["numMaxCupo"]);
+              
+              if (esValido == null || materia["numMaxCupo"] <= 0) {
+                  alert("El número de cupos no ha sido validado.");
+              } else {
+                  valido >>= 1;		
+              }
+          } 
+          
+          console.log(valido);
+          return valido;
+      }
 		//enviarDatosMateria        
-        let enviarDatosMateria = (ruta,datosMateria) => {
-            /**
-            * Envia un objecto json al servidor con los datos de la materia.
-            */
-            fetch(ruta, {
-                method : "PUT",
-                body : JSON.stringify(datosMateria),
-                headers : {
-                    'Content-Type' : 'application/json'
-                }
-            }).
-            then(respuesta => {
-                console.log(respuesta);
-                if (respuesta.ok == true) {
-                    if (respuesta.status == 200) alert("La materia ha sido actualizada.")
-                    location.reload("/");
-                } else {
-                    alert("No se ha podido actualizar la materia.");
-                }
-                
-            }).
-            catch(error => alert(error));
-        } 
-        
-        
-        /////////////////////////////////////////////////////////////////////////
-        
-       
-        //obtenerDatosMateria
-        let obtenerDatosMaterias = (ruta) => {
-            fetch(ruta, {
-            method : 'GET',
-            headers : {
-                'Content-Type' : 'application/json'
-                }
-            }).
-            then(respuesta => {
-                return respuesta.json();
-            }).then ((data) => {
-                desplegarComboMaterias(data);
-            }).
-            catch(error => {
-                alert(error);
-            });
+      let enviarDatosMateria = (ruta,datosMateria) => {
+          /**
+          * Envia un objecto json al servidor con los datos de la materia.
+          */
+          fetch(ruta, {
+              method : "PUT",
+              body : JSON.stringify(datosMateria),
+              headers : {
+                  'Content-Type' : 'application/json'
+              }
+          }).
+          then(respuesta => {
+              console.log(respuesta)
+              if (respuesta.ok == true) {
+                  alert("La materia ha sido actualizada.");
+                  location.reload("/");
+              } else {
+                  alert("No se ha podido actualizar la materia.");
+              }
+              
+          }).
+          catch(error => alert(error));
+      } 
+      
+     
+      //obtenerDatosMateria
+      let obtenerDatosMaterias = (ruta) => {
+          fetch(ruta, {
+          method : 'GET',
+          headers : {
+              'Content-Type' : 'application/json'
+              }
+          }).
+          then(respuesta => {
+              return respuesta.json();
+          }).then ((data) => {
+              desplegarComboMaterias(data);             
+          }).
+          catch(error => {
+              alert(error);
+          });
 	    }  
 		
-        let desplegarComboMaterias = (lstMaterias) => {
-        	/**
-        	* DesplegarÃ¡ las materias que esten registradas, las cuales se mostrarÃ¡n en un compotente combox.
-        	*/
-        	let otnMateria = ``;
-        	let i = 0;
-        	
-        	lstMaterias.forEach(materia => {
-        		
-        		if (i == 0) otnMateria += `<option value="0">SELECCIONE LA MATERIA.</option>`
-    			otnMateria += `<option value=${materia.id_materia}>${materia.nombre}</option>` 
-        		i ++;
-        	
-        	});
-        	
-        	let comboMaterias = document.querySelector("#comboMaterias");
-        	let sltMaterias = `<select>${otnMateria}</select>`;
-        	comboMaterias.innerHTML = sltMaterias; 
-        }
-     
-        
-        //actualizarDatosMateria
-        let actualizarDatosMateria = (ruta, datosMateria) => {
-            /**
-            * Envia un objecto json al servidor con los datos de la materia.
-            */
-            fetch(ruta, {
-                method : "PUT",
-                body : JSON.stringify(datosMateria),
-                headers : {
-                    'Content-Type' : 'application/json'
-                }
-            }).
-            then(respuesta => {
-                console.log(respuesta);
-                if (respuesta.ok == true) {
-                    alert("La materia ha sido actualizada.");
-                    location.reload("/");
-                } else {
-                    alert("La materia no ha sido actualizada");
-                }
-                
-            }).
-            catch(error => alert(error));
-   	    }
-        //desplegarMaterias
-        let desplegarMaterias = (lstMaterias) => {
-            /**
-            * DesplegarÃ¡ las materias que esten registrados en un componenye
-            */
-            let iptMaterias = ``;
-            let fieldMaterias = document.querySelector("#fieldMaterias");
-            
-            lstMaterias.forEach((materia) => {
-                iptMaterias += `
-                <input type="checkbox" name=${materia.nombre} id=${materia.id_materia} />
-                <label for=${materia.id_materia}>${materia.nombre}</label> `
-            });
-            
-            let fdtMaterias = `
-                <fieldset data-role="controlgroup" >
-                <legend>Seleccione la materia:</legend>
-                ${iptMaterias}
-                <button type="button" id="btnGrabarAlumnoMaterias" data-theme="b" data-icon="refresh"> Grabar AsociaciÃ³n </button>
-            `
-            fieldMaterias.innerHTML = fdtMaterias;
-            $("#fieldMaterias").trigger("create");
-            
-            //EvENTOS
-            let accionGrabarAlumnoMateria = document.querySelector("#btnGrabarAlumnoMaterias");
-            accionGrabarAlumnoMateria.addEventListener('click', capturarDatosAlumnoMateria);
-        }         
+      let desplegarComboMaterias = (lstMaterias) => {
+      	/**
+      	* Desplegará las materias que esten registradas, las cuales se mostrarán en un compotente combox.
+      	*/
+      	let otnMateria = ``;
+      	let i = 0;
+      	
+      	lstMaterias.forEach(materia => {
+      		
+      		if (i == 0) otnMateria += `<option value="0">SELECCIONE LA MATERIA.</option>`
+  			otnMateria += `<option value=${materia.id_materia}>${materia.nombre}</option>` 
+      		i ++;
+      	
+      	});
+      	
+      	let comboMaterias = document.querySelector("#comboMaterias");
+      	let sltMaterias = `<select>${otnMateria}</select>`;
+      	comboMaterias.innerHTML = sltMaterias; 
+      }
+   
+      
+      //actualizarDatosMateria
+      let actualizarDatosMateria = (ruta, datosMateria) => {
+          /**
+          * Envia un objecto json al servidor con los datos de la materia.
+          */
+          fetch(ruta, {
+              method : "PUT",
+              body : JSON.stringify(datosMateria),
+              headers : {
+                  'Content-Type' : 'application/json'
+              }
+          }).
+          then(respuesta => {
+              console.log(respuesta);
+              if (respuesta.ok == true) {
+                  alert("La materia ha sido actualizada.");
+                  location.reload("/");
+              } else {
+                  alert("La materia no ha sido actualizada");
+              }
+              
+          }).
+          catch(error => alert(error));
+ 	    }
+      //desplegarMaterias
+      let desplegarMaterias = (lstMaterias) => {
+          /**
+          * Desplegará las materias que esten registrados en un componenye
+          */
+          let iptMaterias = ``;
+          let fieldMaterias = document.querySelector("#fieldMaterias");
+          
+          lstMaterias.forEach((materia) => {
+              iptMaterias += `
+              <input type="checkbox" name=${materia.nombre} id=${materia.id_materia} />
+              <label for=${materia.id_materia}>${materia.nombre}</label> `
+          });
+          
+          let fdtMaterias = `
+              <fieldset data-role="controlgroup" >
+              <legend>Seleccione la materia:</legend>
+              ${iptMaterias}
+              <button type="button" id="btnGrabarAlumnoMaterias" data-theme="b" data-icon="refresh"> Grabar Asociación </button>
+          `
+          fieldMaterias.innerHTML = fdtMaterias;
+          $("#fieldMaterias").trigger("create");
+          
+          //EvENTOS
+          let accionGrabarAlumnoMateria = document.querySelector("#btnGrabarAlumnoMaterias");
+          accionGrabarAlumnoMateria.addEventListener('click', capturarDatosAlumnoMateria);
+      }             
+
+});
     </script>
 </html>  

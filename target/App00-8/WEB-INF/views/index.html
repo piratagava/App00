@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    	<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>APP ID-00</title>
+        
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
         <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
         <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js" ></script>
      </head>
 
     <body>
-        <!--P√°gina Principal-->
+        <!--P·gina Principal-->
         <div data-role="page" id="index">
             
-            <!--Men√∫ Lateral Principal-->
+            <!--Men˙ Lateral Principal-->
             <nav data-role="panel" id="menu" data-display="overlay">
                 <h2>Men&uacute Principal</h2>
                 <ul data-role="listview">
@@ -20,8 +23,7 @@
                     <li data-role="list-divider">Alumnos</li>
                     <li><a href="alta_alumno" rel="external">Dar de alta Alumno</a></li>
                     <li><a href="asignar_materias" id="registrar_alumno_materia" rel="external">Asignar Materias</a></li>
-                    <li><a href="actualizar_alumno" rel="external">Editar Alumno</a></li>
-
+                    <li><a href="actualizar_alumno" rel="external">Editar Alumno</a></li>                 
                     <li data-role="list-divider">Materias</li>
                     <li><a href="registrar_materia" rel="external">Registrar Materia</a></li>
                     <li><a href="editar_materia" id="editar_materia" rel="external">Editar Materia</a></li>
@@ -40,7 +42,7 @@
             </main>
 
 
-            <!--Pie de p√°gina-->
+            <!--Pie de p·gina-->
             <footer style="text-align:center" data-role="footer" data-theme="b" data-position="fixed" >
                 <small>2019 &copy; APP'S </small>
                 <br />
@@ -65,7 +67,7 @@
     //desplegarAlumnos
     let desplegarAlumnos = (lstAlumnos) => {
         /**
-        * Desplegar√° los alumnos que esten registrados en un componente combox.
+        * Desplegar· los alumnos que esten registrados en un componente combox.
         */
         let otnAlumno = ``;
         

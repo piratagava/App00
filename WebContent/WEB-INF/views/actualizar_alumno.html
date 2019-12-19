@@ -113,12 +113,7 @@
 			</table>
 				
 				
-			<!-- esta seccion solo se creara las materias con el div -->	
-			<div id="trabajarEnMaterias">
-			 <p data-ng-repeat="elemento in materia" > 
-  				<input type="checkbox"/>{{elemento.id_materia}} 
- 				<input type="checkbox"/>{{elemento.nombre}}
-			</div>				      
+						      
 				
        </section>
         </div>
@@ -162,14 +157,7 @@
 			});
             
             
-            //aqui se esta implementando los chekbox
-            let m = localStorage.getItem("Materias")            
-            let materias = JSON.parse(m);
-            //limpia los input :P
-        	desplegarMaterias(materias);	
-                         	
-            if (id_alumno > 0)	buscarAlumnoMateria("consultarAlumno/"+id_alumno); 
-            
+          
             
         });
 		
@@ -531,9 +519,7 @@
 	 var confirmar = confirm(" ¡¡ CONFIRME PARA BORRAR SU REGISTRO !! ");
 		if (confirmar == true){			
 		location.reload(true);			
-		
-		var registra = $scope.materias={};
-		
+		var registra = $scope.materias={};		
 		var alumnoMateria =id_alumnoMateria;
 		var alumno =id_alumno;
 		var materia =id_materia;
@@ -546,13 +532,23 @@
 		console.log(registra)		
 		
 		//coloque delete en ves de post
-       $http.delete("eliminarAsociacion", registra)
+       $http.post("eliminarAsociacion", registra)
         .success(function(res){
     		location.reload(true);
-		 })
-		 .error(function(res){
-			 alert("No pudo ser eliminada la materia");
-		 }); 
+		 });
+		
+	
+		
+		//var url = 'eliminarAsociacion';
+
+		//$http.delete(url, registra).then(function (response) {
+			//location.reload(true);
+		//}, function (response) {
+			//location.reload(true);
+	
+		//});
+		
+		
 		
 	}else{
 	

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+ <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <link rel="stylesheet"
@@ -11,7 +12,7 @@
 </head>
 
 <body>
-	<!--PÃ¡gina alumno-materia -->
+	<!--Página alumno-materia -->
 	<div data-role="page" id="asignar_materias" data-dom-cache="false">
 		<!--Encabezado-->
 		<header data-role="header" data-theme="b">
@@ -32,13 +33,10 @@
 
 <script>
         window.addEventListener('load', () => {
-            //let paginaAlumnoMateria = document.querySelector("#asociar_materia");
-            //paginaAlumnoMateria.addEventListener('click', ()=> {
-                recibirDatosMaterias("listarMateria");
-                recibirDatosAlumnos("listarAlumno");        
-            //});    
-            //Evento cambio de materia
             
+        	recibirDatosMaterias("listarMateria");
+            recibirDatosAlumnos("listarAlumno"); 
+          
             let alumnoSeleccionado = document.querySelector("#comboAlumnos");
             
             alumnoSeleccionado.addEventListener('change', () => {
@@ -84,40 +82,10 @@
 	     		}else{         				            			
        			
 	     			input.setAttribute("disabled","disabled");
-           	 }
-	      }
-	            	/*
-	            	if(bandera==true){
-	            		if(id_alumno==alumnoMateria[1]){
-		            		//alert("entro el if id_alumno son iguales")
-		            		
-		            		bandera=true;		            		
-		            	}else if(id_alumno!==alumnoMateria[1]){
-		            		//alert("entro el else if diferente de id_alumno")
-		            		           		
-		            		bandera=false;	
-		            		input.setAttribute("disabled","disabled");
-		            	}else{
-		            		//alert("ningun caso")
-		            		
-		            		bandera=false;
-		            	}
-
-	            		
-	            	}else if(bandera==false){
-	            		if(id_alumno!==alumnoMateria[1]){
-	            			input.setAttribute("disabled","disabled");	
-	            		}else if(id_alumno==alumnoMateria[1]){
-		            		alert("entro el if id_alumno son iguales")
-		            		contador++;
-		            		bandera=true;		            		
-		            	}
-	            	}	
-	            	*/
+           		 }
+	      		}     		            
 	            
-	            });
-	            
-	       	 
+	            });	         
 	          
 	        })
 	        .catch( error => alert(error));
@@ -217,7 +185,7 @@
         let buscarAlumnoMateria = (ruta) => {
             /**
             * Busca las materias las cuales esten asociadas al alumno.
-            * Si no tiene asociada materias, el sistema deberÃ¡ regresar una lista vacia.
+            * Si no tiene asociada materias, el sistema deberá regresar una lista vacia.
             */
             fetch(ruta, {
                 method : 'GET',
@@ -247,8 +215,7 @@
                     input.removeAttribute("data-cacheval");	
                     
                 });
-                console.log("mensaje")
-                  
+                
                 $("#fieldMaterias").trigger("create");
                 //obtiene id_alumno para mostrar las materias en cupoMax=0
                 let alumnoSeleccionado = document.querySelector("#comboAlumnos");
@@ -279,6 +246,7 @@
             }). 
             then( data => {
                 alert("Se han actualizado las materias del alumno.");
+                location.reload("/");
             })
             .catch( error => alert(error));
         }
@@ -286,7 +254,7 @@
       //desplegarMaterias
         let desplegarMaterias = (lstMaterias) => {
             /**
-            * DesplegarÃ¡ las materias que esten registrados en un componenye
+            * Desplegará las materias que esten registrados en un componenye
             */
             let iptMaterias = ``;
             let fieldMaterias = document.querySelector("#fieldMaterias");
@@ -301,7 +269,7 @@
                 <fieldset data-role="controlgroup" >
                 <legend>Seleccione la materia:</legend>
                 ${iptMaterias}
-                <button type="button" id="btnGrabarAlumnoMaterias" data-theme="b" data-icon="refresh"> Grabar AsociaciÃ³n </button>
+                <button type="button" id="btnGrabarAlumnoMaterias" data-theme="b" data-icon="refresh"> Grabar Asociacion </button>
             `
             fieldMaterias.innerHTML = fdtMaterias;
             $("#fieldMaterias").trigger("create");
@@ -313,7 +281,7 @@
         
         let desplegarAlumnos = (lstAlumnos) => {
             /**
-            * DesplegarÃ¡ los alumnos que esten registrados en un componente combox.
+            * Desplegará los alumnos que esten registrados en un componente combox.
             */
             let otnAlumno = ``;
             

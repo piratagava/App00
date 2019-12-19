@@ -23,5 +23,6 @@ public interface Alumno_MateriaDao {
 	public int materiasOcupadas(int id_materia);
 	
 	public boolean eliminarAsociacion(AlumnoMateria alumnoMateria);
+	
 		
 }
