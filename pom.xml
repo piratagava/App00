@@ -506,7 +506,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<dependency>
 			<groupId>org.jasypt</groupId>
 			<artifactId>jasypt</artifactId>
-			<version>1.7</version>
+			<version>1.9.2</version>
 			<scope>compile</scope>
 		</dependency>
 
